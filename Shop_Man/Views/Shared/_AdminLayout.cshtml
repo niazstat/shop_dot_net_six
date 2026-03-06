@@ -1,0 +1,370 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title</title>
+
+
+    <link href="~/assets2/styles/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/assets2/styles/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/assets2/chosen/bootstrap-chosen.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/assets2/styles/responsive.dataTables.min.css" />
+    <link href="~/assets2/styles/main.07a59de7b920cd76b874.css" rel="stylesheet" />
+    <link href="~/assets2/styles/toastr.min.css" rel="stylesheet" />
+
+    <link href="~/assets2/styles/SnackBar.css" rel="stylesheet" />
+
+    <link href="~/flatpickr/flatpickr_dist_flatpickr.min.css" rel="stylesheet" />
+
+
+
+
+    <script src="~/assets2/scripts/jquery-3.3.1.js"></script>
+
+    <script src="~/assets2/scripts/sweetalert2.js"></script>
+    <link href="~/assets2/styles/datepicker.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.table2excel.min.js"></script>
+
+    <script src="~/flatpickr/flatpickr.js"></script>
+
+    <script src="~/assets2/scripts/jquery.dataTables.min.js"></script>
+    <script src="~/assets2/scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/assets2/scripts/dataTables.buttons.min.js"></script>
+    <script src="~/assets2/scripts/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets2/chosen/chosen.jquery.js"></script>
+    <script src="~/assets2/scripts/jszip.min.js"></script>
+    <script src="~/assets2/scripts/pdfmake.min.js"></script>
+    <script src="~/assets2/scripts/vfs_fonts.js"></script>
+    <script src="~/assets2/scripts/buttons.html5.min.js"></script>
+    <script src="~/assets2/scripts/buttons.print.min.js"></script>
+    <script src="~/assets2/scripts/buttons.colVis.min.js"></script>
+
+
+    <script src="~/assets2/scripts/bootstrap-datepicker.js"></script>
+    <script src="~/assets2/scripts/dataTables.responsive.min.js"></script>
+    <script src="~/assets2/scripts/main.07a59de7b920cd76b874.js"></script>
+    <script src="~/assets2/scripts/toastr.min.js"></script>
+    <script src="~/assets2/scripts/echarts.min.js"></script>
+    <script src="~/WEBURL.js"></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KPV89JBM');</script>
+    <!-- End Google Tag Manager -->
+
+
+    <style type="text/css">
+        table.dataTable thead .sorting,
+        table.dataTable thead .sorting_asc,
+        table.dataTable thead .sorting_desc {
+            background-image: none !important;
+        }
+
+            table.dataTable thead .sorting::before,
+            table.dataTable thead .sorting_asc::before,
+            table.dataTable thead .sorting_desc::before,
+            table.dataTable thead .sorting_asc_disabled::before,
+            table.dataTable thead .sorting_desc_disabled::before {
+                right: 1rem !important;
+            }
+
+        .dropdown-overflow {
+            max-height: 250px;
+            overflow: auto;
+        }
+
+        .chosen-single {
+            border-radius: .25rem !important;
+            border: 1px solid #ced4da;
+        }
+
+        .chosen-container-single .chosen-single span {
+            padding: .375rem 0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+        }
+
+        .chosen-container-single .chosen-single {
+            height: calc(2.25rem + 2px) !important;
+        }
+
+        #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            background-color: #333; /* Black background color */
+            color: #fff; /* White text color */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+        }
+    </style>
+
+    <style>
+        .modal-backdrop {
+            z-index: -1;
+        }
+    </style>
+    <style>
+        .input-validation-error {
+            border-color: red;
+            background-color: #fee;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+
+        /*.table tr td {
+                height: 10px;
+
+            }*/
+
+        /*tr {
+            line-height: 5px;
+            min-height: 5px;
+            height: 10px;
+        }*/
+        .form-group row {
+            line-height: 1
+        }
+
+        .form-group {
+            margin-bottom: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KPV89JBM"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="app-container app-theme-gray app-sidebar-full">
+        <div class="app-main">
+            <div class="app-sidebar-wrapper">
+                <div class="app-sidebar bg-midnight-bloom sidebar-text-light">
+                    <div class="app-header__logo">
+                        <a href="Dashboard.aspx" data-toggle="tooltip" data-placement="bottom" title="DAILY SALES"></a>
+
+                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                    @await Component.InvokeAsync("NavigationMenu")
+                </div>
+            </div>
+            <div class="app-sidebar-overlay d-none animated fadeIn"></div>
+            <div class="app-main__outer">
+                <div class="app-main__inner">
+                    <div class="header-mobile-wrapper">
+                        <div class="app-header__logo">
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="KeroUI Admin Template" class="logo-src"></a>
+                            <button type="button" class="hamburger hamburger--elastic mobile-toggle-sidebar-nav">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
+                                </span>
+                            </button>
+                            <div class="app-header__menu">
+                                <span>
+                                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                                        <span class="btn-icon-wrapper">
+                                            <i class="fa fa-ellipsis-v fa-w-6"></i>
+                                        </span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="app-header">
+                        <div class="page-title-heading" style="text-transform: capitalize;">
+                            @RenderSection("HeadingText", required: false)
+                        </div>
+                        <div class="app-header-right">
+                      
+                            <div class="header-btn-lg pr-0">
+                                <div class="widget-content p-0">
+                                    <div class="widget-content-wrapper">
+                                        <div class="widget-content-left">
+                                            <div class="btn-group">
+                                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+
+                                                    <img width="42" class="rounded" src="./../assets/images/user-image/<%=userImage %>" alt="">
+                                                    <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                                </a>
+                                                <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
+                                             
+                                                    <div class="scroll-area-xs" style="height: 150px;">
+                                                        <div class="scrollbar-container ps">
+                                                            <ul class="nav flex-column">
+                                                             
+                                                                <li class="nav-item">
+                                                                    <a href="javascript:void(0);" class="nav-link">
+                                                                        Recover Password
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item-header nav-item">
+                                                                    My Account
+                                                                </li>
+                                                           
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item-divider mb-0 nav-item"></li>
+                                                    </ul>
+                                                    <div class="grid-menu grid-menu-2col">
+                                                        <div class="no-gutters row">
+                                                            <div class="col-sm-6">
+                                                                <a href="@Url.Action("Profiles", "Admin")" class=" btn-icon-vertical btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-alternate">
+                                                                    <i class="pe-7s-user icon-gradient bg-amy-crisp btn-icon-wrapper mb-2"></i>
+                                                                    Profile
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <a  href="@Url.Action("Logout", "Home")" class="btn-icon-vertical btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger">
+                                                                    <i class="pe-7s-refresh-2 icon-gradient bg-love-kiss btn-icon-wrapper mb-2"></i>
+                                                                    <b>Log Out</b>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="nav flex-column">
+                                                        <li class="nav-item-divider nav-item">
+                                                        </li>
+                                                        <li class="nav-item-btn text-center nav-item">
+                                                            <button class="btn-wide btn btn-primary btn-sm" onclick="$('.dropdown-menu').removeClass('show');">
+                                                                Close
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="app-header-overlay d-none animated fadeIn"></div>
+
+                    </div>
+                    <div class="container-fluid">
+                        @RenderBody()
+                    </div>
+              
+                </div>
+                <div class="app-wrapper-footer">
+                    <div class="app-footer">
+                        <div class="">
+                            <div class="app-footer__inner">
+
+                                <div class="app-footer-right">
+                                    <ul class="header-megamenu nav">
+                                        <li class="nav-item">
+                                            <div class="badge badge-success ml-0 ml-1">
+                                                <script>document.write(new Date().getFullYear());</script> All rights reserved |  by <a href="#" target="_blank"></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <style>
+        table.dataTable thead .sorting,
+        table.dataTable thead .sorting_asc,
+        table.dataTable thead .sorting_desc {
+            background-image: none !important;
+        }
+
+            table.dataTable thead .sorting::before,
+            table.dataTable thead .sorting_asc::before,
+            table.dataTable thead .sorting_desc::before,
+            table.dataTable thead .sorting_asc_disabled::before,
+            table.dataTable thead .sorting_desc_disabled::before {
+                right: 1rem !important;
+            }
+
+        .dropdown-overflow {
+            max-height: 250px;
+            overflow: auto;
+        }
+
+        .chosen-single {
+            border-radius: .25rem !important;
+            border: 1px solid #ced4da;
+        }
+
+        .chosen-container-single .chosen-single span {
+            padding: .375rem 0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+        }
+
+        .chosen-container-single .chosen-single {
+            height: calc(2.25rem + 2px) !important;
+        }
+    </style>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "500",
+            "timeOut": "2000",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "slideDown",
+            "hideMethod": "slideUp"
+        };
+
+    </script>
+</body>
+</html>
+
+
+

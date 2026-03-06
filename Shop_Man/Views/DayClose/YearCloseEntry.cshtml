@@ -1,0 +1,438 @@
+﻿
+@{
+    ViewData["Title"] = "YearCloseEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/js/views/dayclose/yearcloseentry.js"></script>
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::বছর/ইয়ার ক্লোজ এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label"> বছর/ইয়ার :</label>
+
+    </div>
+    <div class="col-md-2">
+        <input type="number" class="form-control-sm form-control" id="txtYear">
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-danger" id="btnSearchdate"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="col-md-2">
+        <input class="btn btn-gradient-success" type="button" value="Edit or New Entry" id="btnEditorNewEntry" />
+    </div>
+
+    <div class="col-md-2">
+        <input class="btn btn-danger" type="button" value="View Last Entry" id="btnLastEntry" />
+    </div>
+
+    <div class="col-sm-1">
+        <input type="button" value="< Prev" class="btn btn-secondary " id="btnPrev" />
+    </div>
+    <div class="col-sm-1">
+        <input type="button" value="Next >" class="btn btn-secondary" id="btnNext" />
+    </div>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+        Modal View
+    </button>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoiceSales" id="btnViewModel2">
+        Modal View
+    </button>
+</div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">সিরিয়াল নং :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtInvoiceNo" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বছর/ইয়ার তারিখ :</label>
+                        <div class="col-sm-2">
+                            <input type="text" disabled class="form-control" data-date-format="dd-mm-yyyy" id="txtDateEntry" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" disabled class="form-control" id="txtDateEntryTime" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">পূর্বের ব্যাল্যান্স :</label>
+                        <div class="col-sm-3">
+                            <input disabled type="number" class="form-control" id="txtPrevBalance" />
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">
+                            মোট  গ্রহণ:
+                        </label>
+                        <div class="col-sm-3">
+                            <input disabled type="number" class="form-control" id="txtTotalReceive" />
+
+
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="button" value="View Details" class="btn btn-gradient-info " id="btnRecvDetails" />
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মোট  প্রদান :</label>
+                        <div class="col-sm-3">
+                            <input disabled type="number" class="form-control" id="txtTotalPayment" />
+
+
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="button" value="View Details" class="btn btn-gradient-info " id="btnPayDetails" />
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Add/Less :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtAddLess" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> ব্যাল্যান্স :</label>
+                        <div class="col-sm-3">
+                            <input disabled type="number" class="form-control" id="txtBalance" />
+
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input type="button" value="View Details" class="btn btn-gradient-info " id="btnBalDetails" />
+
+
+                        </div>
+
+                    </div>
+                    <br />
+                    <br />
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট বিক্রয় :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalSell" />
+
+
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট বিক্রয়  জোড়া :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalSellQty" />
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট বিক্রয় রিটার্ন :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalSellReturn" />
+
+
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট বিক্রয় রিটার্ন  জোড়া :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalSellQtyReturn" />
+
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input type="button"  value="View Item Stock" class="btn btn-gradient-alternate " id="btnViewItemStock" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট ক্রয় :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalBuy" />
+
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট ক্রয় জোড়া :</label>
+                        <div class="col-sm-3">
+                            <input type="number" class="form-control" id="txtTotalBuyQty" />
+
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input type="button" style="display:none" value="View Details" class="btn btn-gradient-info " id="btnBalDetailsSales" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">নোট  :</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="txtNote" />
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-editstatus="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+                <input type="button" value="Report" class="btn btn-block btn-gradient-success" id="btnReport" />
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+                            <th>সি নং :</th>
+                            <th>ইয়ার</th>
+                            <th>পূর্বের ব্যাল্যান্স</th>
+                            <th>গ্রহণ</th>
+                            <th>প্রদান </th>
+                            <th>Add/Less</th>
+                            <th>ব্যাল্যান্স</th>
+
+                            <th>বিক্রয় </th>
+                            <th>বিক্রয় Qty</th>
+                            <th>রিটার্ন </th>
+                            <th>রিটার্ন Qty</th>
+                            <th>ক্রয়  </th>
+                            <th>ক্রয়  Qty</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalInvoice" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="button" class="btn btn-outline-primary" value="Create PDF"
+                       id="btPrint" onclick="createPDF()" />
+            </div>
+            <div class="modal-body" id="tab">
+                <style>
+
+
+                    .tblClass {
+                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                        width: 100%;
+                        font-size: 0.8em;
+                        font-weight: normal;
+                    }
+
+                    .headerAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-top: 1px solid black;
+                        font-size: 0.8em;
+                        text-align: center;
+                    }
+
+                    .TDRightLeftBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .headerRightBorder {
+                        border-right: 1px solid black;
+                        border-top: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDRightBorder {
+                        border-right: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+                </style>
+
+                <table class="tblClass" id="tblOrderBill">
+
+
+                    <thead>
+
+                        <tr>
+                            <td colspan="6" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 16px; border-top:1px solid black;">
+                                <span id="spHeaderBill">@TempData["CompanyName"]</span>
+                            </td>
+                        </tr>
+
+
+                        <tr><td colspan="6" class="TDRightLeftBorder" style="text-align:center;  font-size:12px;"><span id="spAddressBill">@TempData["CompanyAddress"]</span></td></tr>
+                        <tr><td colspan="6" class="TDRightLeftBorder" style="text-align:center;  font-size:12px;"><span>বছর/ইয়ার রিপোর্ট, বছর/ইয়ার </span><span id="spDate"></span></td></tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align:center; border-left:1px solid black; "><span>বছর/ইয়ার ক্লোজ নং</span></td>
+                            <td colspan="2" style="text-align:left;  "><span id="spDayCloseNo"></span></td>
+
+                            <td style="text-align:right;  "><span></span></td>
+                            <td style="        text-align: left;
+        border-right: 1px solid black;"></td>
+                        </tr>
+
+
+
+                    </thead>
+
+
+
+
+                    <tr>
+                        <th class="headerAllBorder" style="border-bottom:1px solid black;">SL</th>
+                        <th class="headerRightBorder" style="width:10%">Date</th>
+                        <th class="headerRightBorder">Type</th>
+                        <th class="headerRightBorder">Description</th>
+                        <th class="headerRightBorder">Receive<br /> Amount</th>
+                        <th class="headerRightBorder">Payment <br /> Amount</th>
+                    </tr>
+
+
+
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

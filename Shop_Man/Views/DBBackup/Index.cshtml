@@ -1,0 +1,24 @@
+﻿@model ResultObj
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Database Backup ::.
+    </div>
+
+}
+
+<div class="card text-center ">
+    <div style="padding:2px;">
+
+        <p>
+            <h1 class="text-dark"> @Model.ResultMessage</h1>
+        </p>
+
+    </div>
+
+</div>

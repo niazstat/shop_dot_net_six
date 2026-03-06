@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewData["Title"] = "GetProductStockWithValueViewModel";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/js/views/companyproduct/getproductstockwithvalueviewmodel.js"></script>
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Stock Report with Value ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Select Product Name:</label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selProdNames"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkProdName" class="form-check-input">
+                                All ProdName
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:10px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Select Article:</label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selArticle"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkAllArticles" class="form-check-input">
+                                All Article
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row" style="margin-bottom:10px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Select Size:</label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selSize"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkAllSizes" class="form-check-input">
+                                All Size
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row flex-sm-row">
+
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+
+
+
+                    <div class="col-md-3">
+                        <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btCurrentStock" data-type="current">Current Stock</a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btCurrentStockValue" data-type="current">Current Stock with Value</a>
+                    </div>
+
+                    <div class="col-md-3">
+                        <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btDateWiseStockValue" data-type="current">date wise Stock with Value</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

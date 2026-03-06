@@ -1,0 +1,484 @@
+﻿
+@{
+    ViewData["Title"] = "EmployeeExpensesLimitEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::স্টাফ খরচ লিমিট এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">সিরিয়াল নং :</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="txtSlNo">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">আইডি নং :</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="TxtIDNo">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> নাম(*):</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtName">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মায়ের নাম :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtMotherName">
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> বেতন:</label>
+                        <div class="col-sm-4">
+                            <input type="number" disabled class="form-control" id="txtSalary" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> যোগদান তারিখ:</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" data-date-format="dd-mm-yyyy" id="txtJoiningDate" />
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> খরচ লিমিট(*):</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="txtMaxSalary" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="button" data-employeeID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" data-employeeID="0" />
+                        </div>
+
+                    </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <span id="spInfo">
+
+                                </span>
+                            </div>
+                        </div>
+
+
+</form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>সি নং</th>
+
+                            <th>আইডি</th>
+                            <th> নাম</th>
+                            <th>পদবী</th>
+                            <th>মোবাইল</th>
+                            <th>যোগদান তারিখ</th>
+
+                            <th>খরচ লিমিট</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var tableCust;
+    $(document).ready(function () {
+
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+
+        $("#txtJoiningDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtJoiningDate");
+        });
+
+        $("#txtDateOfBirth").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateOfBirth");
+        });
+
+
+
+        LoadDefaultData();
+
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "employeeID" },
+
+                { "data": "generatedCode" },
+                { "data": "name" },
+                { "data": "designation.name" },
+                { "data": "mobile1" },
+                { "data": "joiningDateFormated" },
+                { "data": "maxSalaryLimit" },
+
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.employeeID + '\')">Update Limit</button>';
+                    }
+                }
+            ]
+        });
+
+
+
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/GetEmployeeEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+
+                  
+
+                    tableCust.rows.add(data.employees).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+        $("#btnSaveCust").click(function () {
+            $("#spInfo").html('');
+
+            let _employeeID = $(this).attr("data-employeeID");
+
+
+            let _salary = $("#txtMaxSalary").val();
+
+
+         
+      
+
+            if (_salary == '') { _salary = '0';}
+            var employee = {
+                "EmployeeID": parseInt(_employeeID),
+                "MaxSalaryLimit":parseFloat( _salary),
+                
+
+            }
+
+            console.log(employee);
+
+
+
+
+            $("#spInfo").html('<strong style="color:blue">Savng Data Please wait.. !</strong>');
+
+
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/UpdateEmployeeExpnsesLimit",
+
+                data: JSON.stringify(employee),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtInvoiceNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+
+        });
+
+
+
+        function ClearControlAfterSave() {
+
+
+            $("#btnSaveCust").attr("data-employeeID", "0");
+
+            $("#btnSaveCust").val("Save");
+
+            $("#txtName").val('');
+
+            $("#txtDesignation").val('');
+
+
+            $("#txtMotherName").val('');
+
+
+            $("#txtFatherName").val('');
+
+
+            $("#txtMobileNo").val('');
+
+            $("#txtHouseNo").val('');
+
+            $("#txtSalary").val('0');
+
+            $("#txtRoadNo").val('');
+
+
+            $("#txtJoiningDate").val(today);
+
+            $("#txtCurrentAddress").val('');
+
+            $("#txtPermanentAddress").val('');
+
+            $("#selReligion").val('');
+
+
+            $("#txtVillage").val('');
+
+            $("#txtMaxSalary").val('0');
+
+          
+
+
+
+        }
+
+
+
+        function GetDataValue(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[data-id="' + value + '"]');
+            var endval = val.attr('value');
+            return endval;
+        }
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+    });
+
+
+
+
+    function editCustomer(id) {
+        // ClearControl();
+
+        var employee = {
+            "employeeID": id
+        }
+        // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Employee/GetEmployee",
+
+            data: JSON.stringify(employee),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                }
+                else {
+
+                        var _obj = data.obj;
+
+                        $("#spInfo").html(data.resultMessage);
+                        $("#btnSaveCust").val('Update');
+                        $("#btnSaveCust").attr('data-employeeID', _obj.employeeID);
+
+
+
+
+                        $("#txtName").val(_obj.name);
+
+                        $("#txtDesignation").val(_obj.designation.name);
+
+
+                        $("#txtMotherName").val(_obj.motherName);
+
+
+                    $("#txtMaxSalary").val(_obj.maxSalaryLimit);
+
+
+
+                        $("#TxtIDNo").val(_obj.generatedCode);
+                        $("#txtSlNo").val(_obj.employeeID);
+                  
+                      
+
+                        $("#txtSalary").val(_obj.salary);
+
+                       
+                    $("#txtJoiningDate").val(_obj.joiningDateFormated);
+
+
+
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+    }
+
+
+
+</script>
+
+

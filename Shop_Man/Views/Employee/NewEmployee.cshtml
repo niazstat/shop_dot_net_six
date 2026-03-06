@@ -1,0 +1,1064 @@
+﻿
+@{
+    ViewData["Title"] = "NewEmployee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::স্টাফ তথ্য এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-1">
+        <label for="inputEmail3" class="col-form-label">নাম :</label>
+
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtNameSearch">
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtCustomerSearch" list="dltxtCustName" />
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearch"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtCustomerSearch" list="dltxtCustName" />
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearch"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">সিরিয়াল নং :</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="txtSlNo">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">আইডি নং :</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="TxtIDNo">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> নাম(*):</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtName">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মায়ের নাম :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtMotherName">
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> পদবী(*):</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txtDesignation" list="dlDesignation" />
+                            <datalist id="dlDesignation">
+
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    data-toggle="modal" data-target="#modalDesignation"   id="btnDesignationEdit" >
+                                Edit
+                            </button>
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বাবার নাম :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtFatherName" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোবাইল:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtMobileNo" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বাড়ী নং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtHouseNo" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> বেতন(*):</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="txtSalary" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">রোড নং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtRoadNo" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> যোগদান তারিখ:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" data-date-format="dd-mm-yyyy" id="txtJoiningDate" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">পুরুষ/মহিলা</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="selMaleFemale">
+                                <option value=""></option>
+                                <option value="পুরুষ">
+                                    পুরুষ
+                                </option>
+                                <option value="মহিলা">
+                                    মহিলা
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> বর্তমান ঠিকানা(*):</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtCurrentAddress">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> স্থায়ী ঠিকানা:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtPermanentAddress">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> ধর্ম:</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="selReligion">
+                                <option value=""></option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddist">Buddist</option>
+                                <option value="Christian">Christian</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">গ্রাম:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtVillage">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> রক্তের গ্রুপ:</label>
+                        <div class="col-sm-4">
+                            
+
+                            <select class="form-control" id="selBloodGroup">
+                                <option value=""></option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            
+                            </select>
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">থানা:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtThana">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> ভোটার আইডি নং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtNID">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">জেলা:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtDistrict">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> জন্ম তারিখ:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" data-date-format="dd-mm-yyyy" id="txtDateOfBirth">
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বিভাগ:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtDivision">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-employeeID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" data-employeeID="0" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>সি নং</th>
+
+                            <th>আইডি</th>
+                            <th> নাম</th>
+                            <th>পদবী</th>
+                            <th>মোবাইল</th>
+                            <th>যোগদান তারিখ</th>
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalDesignation" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Designation/পদবী</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">পদবী নাম</label>
+                                <input name="CategoryName" id="txtDesigNameEdit" placeholder="Name" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-designationid="0" type="button" id="btnSavedesig" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tbldesig" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var tableCust;
+    $(document).ready(function () {
+
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+
+        $("#txtJoiningDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtJoiningDate");
+        });
+
+        $("#txtDateOfBirth").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateOfBirth");
+        });
+
+
+        $("#txtJoiningDate").val(today);
+        $("#txtDateOfBirth").val(today);
+        LoadDefaultData();
+
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "employeeID" },
+
+                { "data": "generatedCode" },
+                { "data": "name" },
+                { "data": "designation.name" },
+                { "data": "mobile1" },
+                { "data": "joiningDateFormated" },
+
+
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.employeeID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.employeeID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+
+
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/GetEmployeeEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+
+                    BinddlDesignation(data.designations);
+
+                    tableCust.rows.add(data.employees).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+    
+
+        $("#btnSaveCust").click(function () {
+            $("#spInfo").html('');
+
+            let _employeeID = $(this).attr("data-employeeID");
+
+
+            let _name = $("#txtName").val();
+
+            let _desigName = $("#txtDesignation").val();
+            let _desigID = GetDataID(_desigName, "#dlDesignation");
+
+            let _motherName = $("#txtMotherName").val();
+
+
+            let _fatherName = $("#txtFatherName").val();
+
+
+            let _mobile = $("#txtMobileNo").val();
+
+            let _houseNo = $("#txtHouseNo").val();
+
+            let _salary = $("#txtSalary").val();
+
+            let _txtRoadNo = $("#txtRoadNo").val();
+
+
+            let _txtJoiningDate = $("#txtJoiningDate").val();
+
+            let _txtCurrentAddress = $("#txtCurrentAddress").val();
+
+            let _txtPermanentAddress = $("#txtPermanentAddress").val();
+
+            let _selReligion = $("#selReligion").val();
+
+
+            let _txtVillage = $("#txtVillage").val();
+
+            let _selBloodGroup = $("#selBloodGroup").val();
+
+            let _txtThana = $("#txtThana").val();
+            let _txtNID = $("#txtNID").val();
+
+            let _txtDistrict = $("#txtDistrict").val();
+
+            let _txtDateOfBirth = $("#txtDateOfBirth").val();
+
+            let _txtDivision = $("#txtDivision").val();
+            let _selMaleFemale = $("#selMaleFemale").val();
+
+            if (_desigID == undefined || _desigID == null || _desigID == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Designation!</strong>');
+
+                $("#txtDesignation").focus();
+                return;
+            }
+
+            if (_name == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Name!</strong>');
+
+                $("#txtName").focus();
+                return;
+            }
+            if (_mobile == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Mobile!</strong>');
+
+                $("#txtMobileNo").focus();
+                return;
+            }
+            if (_txtCurrentAddress == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Currrent Address!</strong>');
+
+                $("#txtCurrentAddress").focus();
+                return;
+            }
+
+            if (_salary == '') { _salary = '0';}
+            var employee = {
+                "EmployeeID": parseInt(_employeeID),
+                "Name": _name,
+                "FatherName": _fatherName,
+                "MotherName": _motherName,
+                "Designation": { "DesignationID": _desigID },
+
+                "PermanentAddress": _txtPermanentAddress,
+                "CurrentAddress": _txtCurrentAddress,
+
+                "JoiningDate": _txtJoiningDate,
+                "DateOfBirth": _txtDateOfBirth,
+                "Mobile1": _mobile,
+                "Salary": parseFloat(_salary),
+                "Religion": _selReligion,
+                "BloodGroup": _selBloodGroup,
+                "NID": _txtNID,
+                "Village": _txtVillage,
+                "Thana": _txtThana,
+                "District": _txtDistrict,
+                "Division": _txtDivision,
+                "MaleFemale": _selMaleFemale,
+                "IsLedgerClose": false,
+                "RoadNo": _txtRoadNo,
+                "HouseNo": _houseNo
+
+            }
+
+            console.log(employee);
+
+
+
+
+            $("#spInfo").html('<strong style="color:blue">Savng Data Please wait.. !</strong>');
+
+
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/SaveEmployee",
+
+                data: JSON.stringify(employee),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtInvoiceNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+
+        });
+
+
+        $("#btnSavedesig").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr('data-designationid');
+            $("#spInfo2").html('');
+
+            var _desigName = $("#txtDesigNameEdit").val();
+
+            if (_desigName == '') {
+                $("#txtDesigNameEdit").addClass("input-validation-error");
+                $("#spInfo2").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+            var designation = {
+                "DesignationID": _id,
+                "Name": _desigName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/SaveDesignation",
+
+                data: JSON.stringify(designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+                  
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        ClearDesigControl();
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BinddlDesignation(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+        function BinddlDesignation(_obj) {
+            $("#dlDesignation option").remove();
+            $("#tbldesig tr:gt(0)").remove();
+            $.each(_obj, function (i, prodData) {
+
+                $("#dlDesignation").append(' <option data-id="' + prodData.designationID + '" data-custID="' + prodData.designationID + '" value="' + prodData.name + '" />');
+                $("#tbldesig").append('<tr> <td>' + prodData.designationID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-designationID=' + prodData.designationID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button > <button data-for="delete" data-designationID=' + prodData.designationID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+
+            });
+
+        }
+
+        function ClearDesigControl() {
+            $("#btnSavedesig").attr('data-designationid','0');
+            $("#btnSavedesig").val('Save');
+            $("#txtDesigNameEdit").val('');
+        }
+
+
+        $("#tbldesig").on('click', 'tr td button', function (e) {
+
+            $("#btnSavedesig").val('Save');
+            $("#btnSavedesig").attr('data-designationid', '0');
+
+
+            $("#txtDesigNameEdit").val('');
+
+            $("#spInfo2").html('');
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-designationid");
+            var designation = {
+                "Designationid": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadDesignationForEdit(designation);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Category?')) {
+                    // Save it!
+                    DeleteDesignation(designation)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+        });
+
+
+   function LoadDesignationForEdit(_obj) {
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/GetDesignation",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    $("#btnSavedesig").val('Update');
+                    $("#btnSavedesig").attr('data-designationid', data.designationID);
+
+
+                    $("#txtDesigNameEdit").val(data.name);
+
+                    $("#spInfo2").html('');
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        function DeleteDesignation(_designation) {
+
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/DeleteDesignation",
+
+                data: JSON.stringify(_designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtCatNameEdit").val('');
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                
+                        BinddlDesignation(data.obj);
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+        function ClearControlAfterSave() {
+
+
+            $("#btnSaveCust").attr("data-employeeID", "0");
+
+            $("#btnSaveCust").val("Save");
+
+            $("#txtName").val('');
+
+            $("#txtDesignation").val('');
+
+
+            $("#txtMotherName").val('');
+
+
+            $("#txtFatherName").val('');
+
+
+            $("#txtMobileNo").val('');
+
+            $("#txtHouseNo").val('');
+
+            $("#txtSalary").val('0');
+
+            $("#txtRoadNo").val('');
+
+
+            $("#txtJoiningDate").val(today);
+
+            $("#txtCurrentAddress").val('');
+
+            $("#txtPermanentAddress").val('');
+
+            $("#selReligion").val('');
+
+
+            $("#txtVillage").val('');
+
+            $("#selBloodGroup").val('');
+
+            $("#txtThana").val('');
+            $("#txtNID").val('');
+
+            $("#txtDistrict").val('');
+
+            $("#txtDateOfBirth").val(today);
+
+            $("#txtDivision").val('');
+            $("#selMaleFemale").val('');
+
+
+
+        }
+
+
+
+        function GetDataValue(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[data-id="' + value + '"]');
+            var endval = val.attr('value');
+            return endval;
+        }
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+    });
+
+
+
+
+    function editCustomer(id) {
+        // ClearControl();
+
+        var employee = {
+            "employeeID": id
+        }
+        // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Employee/GetEmployee",
+
+            data: JSON.stringify(employee),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                }
+                else {
+                 
+                        var _obj = data.obj;
+
+                        $("#spInfo").html(data.resultMessage);
+                        $("#btnSaveCust").val('Update');
+                        $("#btnSaveCust").attr('data-employeeID', _obj.employeeID);
+
+
+
+
+                        $("#txtName").val(_obj.name);
+
+                        $("#txtDesignation").val(_obj.designation.name);
+
+
+                        $("#txtMotherName").val(_obj.motherName);
+
+
+                        $("#txtFatherName").val(_obj.fatherName);
+
+                        $("#TxtIDNo").val(_obj.generatedCode);
+                        $("#txtSlNo").val(_obj.employeeID);
+                        //generatedCode
+                        $("#txtMobileNo").val(_obj.mobile1);
+
+                        $("#txtHouseNo").val(_obj.houseNo);
+
+                        $("#txtSalary").val(_obj.salary);
+
+                        $("#txtRoadNo").val(_obj.roadNo);
+
+
+                        $("#txtJoiningDate").val(_obj.joiningDateFormated);
+
+                        $("#txtCurrentAddress").val(_obj.currentAddress);
+
+                        $("#txtPermanentAddress").val(_obj.permanentAddress);
+
+                        $("#selReligion").val(_obj.religion);
+
+
+                        $("#txtVillage").val(_obj.village);
+
+                        $("#selBloodGroup").val(_obj.bloodGroup);
+
+                        $("#txtThana").val(_obj.thana);
+                        $("#txtNID").val(_obj.nid);
+
+                        $("#txtDistrict").val(_obj.district);
+
+                        $("#txtDateOfBirth").val(_obj.dateOfBirthFormated);
+
+                        $("#txtDivision").val(_obj.division);
+                        $("#selMaleFemale").val(_obj.maleFemale);
+
+
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+    }
+
+    function deleteCustomer(id) {
+
+        // ClearControl();
+
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+
+
+
+        var employee = {
+            "employeeID": id
+        }
+
+        //alert(id);
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Employee/DeleteEmployee",
+
+            data: JSON.stringify(employee),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    //ClearControl();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+
+                    //ClearControlAfterSave();
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+
+                }
+
+
+
+
+
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+</script>

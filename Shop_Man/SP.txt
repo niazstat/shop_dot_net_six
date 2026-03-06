@@ -1,0 +1,5 @@
+SELECT        A.Name, B.CustomerID, B.YearName, B.CustomerNo, B.CustomerSubCategoryName, B.Name AS CustomerName, B.ShopName, B.OpeningBalance, B.SalesAmount, B.TotalSackNoFee, B.TransportCost, B.PackingCost, 
+                         B.AddLessAmount, B.ReceiveAmount, B.CashReceiveAmount, B.CheckRecev, B.CheckPayment, B.CashPayment, B.AdjustAmount, B.ReturnAmount, B.ClosingShortAmount, B.RejectGoodsAmount, B.ClosingAmount, 
+                         B.YearCloseDate
+FROM            dbo.Customer AS A INNER JOIN
+                         dbo.YearCloseCustomerSumms AS B ON A.CustomerID = B.CustomerID

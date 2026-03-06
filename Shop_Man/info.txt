@@ -1,0 +1,233 @@
+
+CREATE PROCEDURE SP_Customer_Close_SizeDetails(  @yearName int,@custID int)
+AS
+BEGIN
+
+Select D.ArticleID,D.Name As ArticleName,E.SizeID,E.Name As SizeName,B.SalesQtyInPair from SalesHeads A inner join SalesDetailss B on A.SalesHeadID=B.SalesHeadID 
+
+inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID
+
+inner join Articles D on C.ArticleID=D.ArticleID inner join Size E on c.SizeID=E.SizeID
+
+where A.GeneratedSalesNo  in (
+
+SELECT 
+AutoNo
+   
+
+  FROM [OrderManagementDB].[dbo].[YearCloseCustomerDetailses]
+
+
+  where Type='Sales' and CustomerID=@custID and DATEPART(YEAR,YearCloseDate)=@yearName
+
+  )
+
+
+END
+GO
+
+============================
+update YearCloseCustomerDetailses set PurchaseAmount =B.BuyAmount
+
+ from YearCloseCustomerDetailses A 
+
+inner join 
+
+
+(
+Select A.SalesHeadID,A.GeneratedSalesNo,  SUM(B.SalesQtyInPair*(B.SalesRate-B.CommissionRate)) as SalesAmount,
+
+SUM(B.SalesQtyInPair*(B.BuyRate)) as BuyAmount
+
+from SalesHeads A inner join SalesDetailss B on A.SalesHeadID=B.SalesHeadID
+
+group by A.SalesHeadID,A.GeneratedSalesNo
+) B on A.AutoNo=B.GeneratedSalesNo
+
+where A.Type='Sales'
+
+
+==============================
+dotnet ef migrations add AddColorProperty
+dotnet ef database update
+
+------############################-------======================
+ALTER  PROCEDURE [dbo].[SP_Entry_YearClose] (@compID int,@userID int,@yearName int)
+AS
+BEGIN
+
+
+
+
+declare @SlNo int;
+
+declare @note  varchar(1000);
+	set @note='';
+
+
+Select  @SlNo=ISNULL( MAX(SlNo),0)+1 from YearCloses
+
+
+if exists (Select * from YearCloses  where YearName=@yearName)
+		Begin
+		Select top(1) @slNO=SlNo from YearCloses  where YearName=@yearName
+		
+		END
+
+
+
+if not exists (Select * from YearCloses  where YearName=@yearName-1)
+			Begin
+
+			RAISERROR('Previous Date Missing',16,1)
+			set @note='Previous Date Missing';
+			return;
+			END
+
+if  exists (Select * from YearCloses  where YearName=@yearName)
+			Begin
+
+			RAISERROR('ALready Processed, Please Delete first,Then Process again',16,1)
+			
+			return;
+			END
+
+
+
+
+------------------
+
+INSERT INTO YearItemStockCloses([SlNo],[YearName],[CompanyProductID],[OpBalance],[PurchaseQty],[PurchaseAmount],[SalesQty],[SalesAmount],[ReturnQty],[ReturnAmount],[ClosingBalance],[EntryDate],[CompanyID],[UserId],[IsAllowEdit],[LastUpdateTime],[UpdateUserID])
+
+
+Select @SlNo,@yearName,CompanyProductID, SUM( OpQty) OpQty,SUM( PurchaseQtyInPair) PurchaseQtyInPair ,SUM(  NetPurAmount) as NetPurAmount
+ ,SUM( SalesQty) SalesQty,SUM(NetSalesAmount) NetSalesAmount,SUM(RetQty) RetQty,SUM( NetRetAmount) as NetRetAmount,0,getdate(),@compID,@userID,0,getdate(),@userID  from  (
+
+
+
+Select CompanyProductID,OpBalance as OpQty ,0 PurchaseQtyInPair ,0  NetPurAmount
+ ,0 SalesQty,0 as NetSalesAmount,0as RetQty,0 as NetRetAmount from YearItemStockCloses   where   YearName= @yearName-1
+
+  union all
+
+ Select  B.CompanyProductID,0 as OpQty ,SUM(B.PurchaseQtyInPair) PurchaseQtyInPair ,SUM( (B.PurchaseRate-B.CommissionRate)*B.PurchaseQtyInPair) NetPurAmount
+ ,0 SalesQty,0 as NetSalesAmount,0as RetQty,0 as NetRetAmount
+
+
+ from PurchaseHeads A inner join PurchaseDetails B on A.PurchaseHeadID=B.PurchaseHeadID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.PurchaseDate)=@yearName
+
+ group by B.CompanyProductID
+
+ union all
+
+
+ Select   B.CompanyProductID,0 as OpQty , 0 PurchaseQtyInPair ,0 NetPurAmount
+ ,SUM(B.SalesQtyInPair) SalesQty,SUM( (B.SalesRate-B.CommissionRate)*B.SalesQtyInPair ) as NetSalesAmount,0as RetQty,0 as NetRetAmount
+
+ from SalesHeads A inner join SalesDetailss B on A.SalesHeadID=B.SalesHeadID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.SalesDate)=@yearName
+
+ group by B.CompanyProductID
+
+
+ union all
+
+ Select 
+
+  B.CompanyProductID,0 as OpQty , 0 PurchaseQtyInPair ,0 NetPurAmount
+ ,0 SalesQty,0  as NetSalesAmount,SUM(B.ReyurnQtyInPair) as RetQty,SUM((B.RetRate-B.ReturnCommissionRate)*B.ReyurnQtyInPair) as NetRetAmount
+
+
+ from SalesReturns A inner join SalesReturnDetails B on A.SalesReturnID=B.SalesReturnID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.ReturnDate)=@yearName
+
+ 
+ group by B.CompanyProductID
+
+
+ )
+ A
+ group by CompanyProductID
+
+
+
+
+
+
+INSERT INTO YearItemStockCloseDetails( YearName,[dDate],[TranType],[CompanyProductID],[ArticleName],[SizeName],[PurInv],[PurQty],[NetPurRate],[NetPurAmount])
+
+
+ Select  @yearName,A.PurchaseDate,'PURCHASE' ,B.CompanyProductID, ISNULL(E.Name,''),ISNULL(F.Name,'') ,A.GeneratedPurchaseHeadNo ,B.PurchaseQtyInPair ,B.PurchaseRate-B.CommissionRate NetPurchaseRate, (B.PurchaseRate-B.CommissionRate)*B.PurchaseQtyInPair NetPurAmount
+
+
+
+ from PurchaseHeads A inner join PurchaseDetails B on A.PurchaseHeadID=B.PurchaseHeadID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.PurchaseDate)=@yearName
+
+
+
+
+
+
+
+
+INSERT INTO YearItemStockCloseDetails( YearName,[dDate],[TranType],[CompanyProductID],[ArticleName],[SizeName],SalesInv,[SalesQty],[NetSalesRate],[NetSalesAmount])
+
+
+Select @yearName,A.SalesDate ,'SALES',  B.CompanyProductID,ISNULL(E.Name,''),ISNULL(F.Name,'') ,A.GeneratedSalesNo , B.SalesQtyInPair SalesQty,(B.SalesRate-B.CommissionRate) NetSalesRate,
+(B.SalesRate-B.CommissionRate)*B.SalesQtyInPair NetSalesAmount
+
+ from SalesHeads A inner join SalesDetailss B on A.SalesHeadID=B.SalesHeadID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.SalesDate)=@yearName
+
+
+
+ INSERT INTO YearItemStockCloseDetails( YearName,[dDate],[TranType],[CompanyProductID],[ArticleName],[SizeName],RetInvNo,[RetQtyQty],[NetRetRate],[NetRetAmount])
+
+
+Select  @yearName,A.ReturnDate ,'RETURN',B.CompanyProductID ,ISNULL(E.Name,''),ISNULL(F.Name,'') ,A.GeneratedReturnNo RetInvNo,B.ReyurnQtyInPair,(B.RetRate-B.ReturnCommissionRate) as NetReturnRate,(B.RetRate-B.ReturnCommissionRate)*B.ReyurnQtyInPair NetReturnAmount
+
+ from SalesReturns A inner join SalesReturnDetails B on A.SalesReturnID=B.SalesReturnID
+ inner join CompanyProducts C on B.CompanyProductID=C.CompanyProductID  
+ 
+ left outer join ProdNames D on C.ProdNameID=D.ProdNameID
+  left outer join Articles E on C.ArticleID=E.ArticleID
+ left outer join Size F on C.SizeID=F.SizeID
+ where  DATEPART( YEAR,A.ReturnDate)=@yearName
+
+
+
+
+
+
+
+
+END
+----------------------------------
+=====#############################==========================================================

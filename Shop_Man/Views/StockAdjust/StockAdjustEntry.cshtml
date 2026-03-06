@@ -1,0 +1,1123 @@
+﻿
+@{
+    ViewData["Title"] = "StockAdjustEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::স্টক এডজাস্ট এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<link href="~/css/paper.css" rel="stylesheet" />
+<style type="text/css" media="print">
+    @@page {
+        /* this affects the margin in the printer settings */
+
+        size: A5;
+        margin: 0;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+
+    @@media print {
+        @@page {
+            size: A5;
+            margin: 0;
+        }
+    }
+</style>
+
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">বিল নম্বর:</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="mb-2 form-control-sm form-control" id="txtBIllNo">
+                        </div>
+
+                        <div class="col-sm-1">
+                            <input type="button" value="Edit" class="btn btn-danger btn-block" id="btnEdit" />
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="View" class="btn btn-dark btn-block" id="btnView" />
+                            <button type="button" class="btn  btn-primary" style="display:none;"
+                                    data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+                                Modal View
+                            </button>
+                        </div>
+
+                        <div class="col-sm-1">
+
+                        </div>
+
+                        <div class="col-sm-2"><input type="button" value="Add New" class="btn btn-danger btn-block" id="btnAddNewCust" /></div>
+                        <div class="col-sm-1">
+
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input data-tab="24" type="button" data-salesHeadID="0" data-salesDetailsID="0" value="Save" class="btn  btn-info btn-block" id="btnSaveCust" />
+
+
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">তারিখ:</label>
+                        <div class="col-sm-2">
+                            <input type="text" data-tab="1" autocomplete="off" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2" />
+                            @*<input type="text" disabled class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">*@
+                        </div>
+                        <div class="col-sm-2">
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">পণ্যের নাম</label>
+                            <input autocomplete="off" data-tab="5" id="txtProName" type="text" class="form-control-sm form-control" list="dltxtProName" />
+                            <datalist id="dltxtProName"></datalist>
+
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">আর্টিকেল</label>
+                            <input data-tab="6" autocomplete="off" id="txtArcticle" type="text" class="form-control-sm form-control" list="dltxtArcticle" />
+                            <datalist id="dltxtArcticle"></datalist>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">সাইজ</label>
+                            <input autocomplete="off" id="txtSize" disabled type="text" class="form-control-sm form-control" list="dltxtSize" />
+                            <datalist id="dltxtSize"></datalist>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="exampleCity">জোড়া</label>
+                            <input min="0" data-tab="7" autocomplete="off" id="txtPair" type="text" class="form-control-sm form-control" />
+
+                        </div>
+                        <div class="col-md-1">
+
+                            <label for="exampleCity"></label>
+                            <br />
+                            <input data-tab="8" type="button" data-salesHeadID="0" data-salesDetailsID="0" data-companyProductID="0" data-slno="0" value="Add" class="btn btn-success" id="btnAdd" />
+
+
+
+                        </div>
+
+                        <div class="col-md-1">
+                            <label for="exampleCity">মোট জোড়া</label>
+                            <input type="number" disabled autocomplete="off" id="txtTotalpair" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <label for="exampleCity">নোট</label>
+                            <input autocomplete="off" id="txtNote1" type="text" class="form-control-sm form-control" />
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+
+                <table id="tblProdItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                    <thead>
+                        <tr>
+                            <th style="display:none">CommProductID</th>
+                            <th>সি নং</th>
+                            <th>পণ্যের নাম</th>
+                            <th>আর্টিকেল</th>
+
+                            <th>সাইজ</th>
+
+
+                            <th>ডজন</th>
+
+                            <th>
+
+                            </th>
+                            <th>
+
+
+                            </th>
+                        </tr>
+
+
+
+
+                    </thead>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var specialChars = [
+        '০',
+        '১',
+        '২',
+        '৩',
+        '৪',
+        '৫',
+        '৬',
+        '৭',
+        '৮',
+        '৯',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '.',
+        '.',
+        '-',
+        '-'
+    ];
+    var BeagaliToEnglish = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '.': '.',
+        '.': '.',
+
+        '-': '-',
+        '-': '-'
+
+    }
+
+    var EnglisgToBengali = {
+        '০': '০',
+        '১': '১',
+        '২': '২',
+        '৩': '৩',
+        '৪': '৪',
+        '৫': '৫',
+        '৬': '৬',
+        '৭': '৭',
+        '৮': '৮',
+        '৯': '9',
+        '0': '০',
+        '1': '১',
+        '2': '২',
+        '3': '৩',
+        '4': '৪',
+        '5': '৫',
+        '6': '৬',
+        '7': '৭',
+        '8': '৮',
+        '9': '৯',
+        '.': '.',
+        '.': '.',
+        '-': '-',
+        '-': '-'
+
+    }
+
+
+    function ConvertBanglaToEnglish(_str) {
+        var res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            res += BeagaliToEnglish[_arr[i]];
+        }
+        return res;
+    }
+
+    function ConvertEnglishToBengali(_str) {
+        var _res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            _res += EnglisgToBengali[_arr[i]];
+        }
+        return _res;
+    }
+
+    var datePicker1;
+
+
+    var BillNo_PDF = '';
+
+
+    var PROD_NAMES = [];
+    var COMP_PRODUCTS = [];
+
+    $(document).ready(function () {
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+        datePicker1 = flatpickr("#txtDate2", { dateFormat: "d-M-Y" });
+        datePicker1.setDate(date);
+
+
+
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "StockAdjust/GetSalesEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+
+                    PROD_NAMES = data.prodNames;
+
+                    BindProdName(data.prodNames);
+
+                    // BinSubCategoryTable(data.customerSubCategorys);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+        LoadDefaultData();
+
+
+
+
+        function BindProdName(_subcatList) {
+
+            $("#dltxtProName option").remove();
+
+            $.each(_subcatList, function (i, prodData) {
+
+                $("#dltxtProName").append(' <option data-id="' + prodData.prodNameID + '" data-prodNameID="' + prodData.prodNameID + '" value="' + prodData.name + '" />');
+
+
+            });
+
+        }
+
+
+
+        $("#txtProName").bind('input', function () {
+
+
+            GetItemsInProName();
+        });
+
+
+
+        function GetItemsInProName() {
+            $("#dltxtArcticle option").remove();
+            $("#txtArcticle").val('');
+            $("#btnAdd").attr('data-companyproductid', '0');
+            COMP_PRODUCTS = [];
+            var _val = $("#txtProName").val();
+
+            var _prodNameID = GetDataID(_val, "#dltxtProName");
+
+            if (_prodNameID != undefined) {
+
+                var _prodName = {
+                    "ProdNameID": _prodNameID
+                }
+
+                LoadItemsInProName(_prodName);
+            }
+        }
+
+
+        function LoadItemsInProName(_obj) {
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/GetCompanyProductByProdName",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    COMP_PRODUCTS = data;
+                    BIndArticleAndSize(data);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        }
+
+
+
+        function BIndArticleAndSize(_objList) {
+
+            $.each(_objList, function (i, prodData) {
+
+                var _value = prodData.article.name + ' | ' + prodData.size.name;
+
+                $("#dltxtArcticle").append(' <option  data-article="' + prodData.article.name + '" data-id="' + prodData.companyProductID + '" data-companyProductID="' + prodData.companyProductID + '" value="' + _value + '" />');
+
+
+            });
+        }
+
+
+
+
+        $("#txtArcticle").bind('input', function () {
+
+
+
+            $("#txtSize").val('');
+
+
+
+
+
+            $("#btnAdd").attr('data-companyproductid', '0');
+
+            var _thisVal = $(this).val();
+
+            var _comProductID = GetDataID(_thisVal, "#dltxtArcticle");
+
+            if (_comProductID != undefined) {
+                BindSizeAndUOM(_comProductID);
+            }
+
+
+            if (_thisVal.includes('|')) {
+                //alert(_thisVal);
+                var _artName = _thisVal.split('|')[0];
+                $("#txtArcticle").val($.trim(_artName));
+            }
+        });
+
+
+
+
+
+
+        function BindSizeAndUOM(_comProductID) {
+            console.log(_comProductID);
+            var _singleObj = COMP_PRODUCTS.find(_prod => _prod.companyProductID == _comProductID);
+            if (!(_singleObj == undefined || _singleObj == null)) {
+                $("#txtSize").val(_singleObj.size.name);
+
+
+                $("#btnAdd").attr('data-companyproductid', _comProductID);
+
+            }
+        }
+
+
+
+        $("input").on('keypress', function (event) {
+
+            // alert('ok');
+            var _currentTab = $(this).attr("data-tab");
+            var _id = $(this).attr("id");
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                if (_currentTab != undefined) {
+                    if (_id !== 'btnAdd') {
+                        var _nextTab = parseInt(_currentTab) + 1;
+                        $('input[data-tab="' + _nextTab + '"]').focus();
+                    }
+                }
+            }
+
+
+        });
+
+
+
+        $("#btnAdd").click(function () {
+
+            $("#spInfo").html('');
+
+            let _salesHeadID3 = $("#btnSaveCust").attr("data-salesheadid");
+            //let _salesHeadID3 = $(this).attr("data-salesheadid");
+            let _salesDetailsID3 = $(this).attr("data-salesdetailsid");
+
+            let _rowSlNo = $(this).attr('data-slno');
+
+            let _comProductID = $(this).attr('data-companyproductid');
+
+            let _prodName = $("#txtProName").val();
+            let _articleName = $("#txtArcticle").val();
+            let _sizeName = $("#txtSize").val();
+
+
+            let _pairQty = ConvertBanglaToEnglish($("#txtPair").val());
+
+
+            if (_comProductID == undefined || _comProductID == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Item.</strong>');
+                return;
+            }
+            if (parseInt(_comProductID) < 1) {
+                $("#spInfo").html('<strong style="color:red">Invalid Item..</strong>');
+                return;
+            }
+
+            if (_prodName == '' || _prodName == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Item Name</strong>');
+                return;
+            }
+
+            if (_articleName == '' || _articleName == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Article</strong>');
+                return;
+            }
+
+
+            if (_sizeName == '' || _sizeName == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Size</strong>');
+                return;
+            }
+
+
+            if (_pairQty == '' || _pairQty == null || isNaN(_pairQty)) {
+                $("#spInfo").html('<strong style="color:red">Invalid Qty</strong>');
+                $("#txtPair").focus();
+                return;
+            }
+
+            if (parseFloat(_pairQty) == 0) {
+                $("#spInfo").html('<strong style="color:red">Invalid Qty</strong>');
+                $("#txtPair").focus();
+                return;
+            }
+
+
+
+
+
+            console.log('ProdID ' + _comProductID);
+            let _singleObj = COMP_PRODUCTS.find(_prod => _prod.companyProductID == _comProductID);
+            if (_singleObj == undefined || _singleObj == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Item...</strong>');
+
+                return;
+
+            }
+
+
+            if (parseInt(_salesHeadID3) > 0) {
+
+                var salesDetails = {
+                    "StockAdjustDetailsID": _salesDetailsID3,
+                    "StockAdjustHeadID": _salesHeadID3,
+                    "CompanyProductID": _comProductID,
+                    "AdjustQtyInPair": _pairQty,
+                }
+
+
+                $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "StockAdjust/InsertStockadjustDetails",
+
+                    data: JSON.stringify(salesDetails),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        // HideGateOverlay();
+                        if (parseInt(data.resultID) > 0) {
+                            $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                            console.log(data);
+                            clearItemAfterAdd();
+
+
+                            $("#btnSaveCust").removeAttr('disabled');
+                            $("#btnAdd").removeAttr('disabled');
+                            $("#txtBIllNo").val(data.obj.generatedStockAdjustNo);
+                            $("#spInfo").html('');
+                            ClearControlAfterSave();
+
+                            $("#btnSaveCust").val('Update');
+                            BindData(data.obj, '');
+
+                            $("#txtProName").focus();
+                        }
+                        else {
+                            $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                        }
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+
+            }
+            else {
+
+
+
+                if (parseInt(_rowSlNo) > 0) {
+
+                    $("#tblProdItem tr:gt(0)").each(function (i, row) {
+
+                        let _currentSL = parseFloat($(this).find('td[controlname="SlNo"]').text());
+
+                        if (_currentSL == _rowSlNo) {
+
+                            $(this).html('');
+
+                            $(this).html('<td style="display:none;" controlname="CommProductID">' + _comProductID + '</td> <td controlname="SlNo">' + _rowSlNo + '</td> <td  controlname="ProdName">' + _singleObj.prodName.name + '</td> <td controlname="ArticleName">' + _singleObj.article.name + '</td> <td></td><td controlname="SizeName">' + _singleObj.size.name + '</td> <td controlname="PairQty">' + _pairQty + '</td><td><button data-salesheadid="0" data-salesdetailsid="0" data-companyproductid="' + _comProductID + '" data-slno="' + _rowSlNo + '" data-for="edit" class="mb-2 mr-2 btn-dashed btn btn-outline-info"> Edit</button></td> <td><button   data-salesheadid="0" data-salesdetailsid="0" data-companyproductid="' + _comProductID + '" data-slno="' + _rowSlNo + '"  data-for="delete" class="mb-2 mr-2  btn-dashed btn btn-outline-danger"> Delete</button></td>');
+                        }
+
+                    });
+                }
+                else {
+                    let _slNo = $('#tblProdItem').find('tr').length;
+
+                    $("#tblProdItem").append('<tr> <td style="display:none;" controlname="CommProductID">' + _comProductID + '</td> <td controlname="SlNo">' + _slNo + '</td> <td  controlname="ProdName">' + _singleObj.prodName.name + '</td> <td controlname="ArticleName">' + _singleObj.article.name + '</td><td controlname="SizeName">' + _singleObj.size.name + '</td> <td controlname="PairQty">' + _pairQty + '</td><td><button data-salesheadid="0" data-salesdetailsid="0" data-companyproductid="' + _comProductID + '" data-slno="' + _slNo + '" data-for="edit" class="mb-2 mr-2 btn-dashed btn btn-outline-info"> Edit</button></td> <td><button   data-salesheadid="0" data-salesdetailsid="0" data-companyproductid="' + _comProductID + '" data-slno="' + _slNo + '"  data-for="delete" class="mb-2 mr-2  btn-dashed btn btn-outline-danger"> Delete</button></td></tr>');
+                    $("#txtProName").focus();
+
+                }
+                CalCulateTotalQty();
+
+            }
+        });
+
+
+
+        $("#btnSaveCust").click(function () {
+            $("#spInfo").html('');
+
+
+            let _ssalesHeadID = $(this).attr('data-salesheadid');
+
+            let _salesDate = $("#txtDate2").val();
+
+            let _note1 = $("#txtNote1").val();
+
+
+            var _allLines = [];
+            var _single_line = {};
+
+            $("#tblProdItem tr:gt(0)").each(function (i, row) {
+                let _pair2 = parseFloat($(this).find('td[controlname="PairQty"]').text());
+
+
+
+
+                let _comProductID = parseInt($(this).find('td[controlname="CommProductID"]').text());
+
+                _single_line = {
+                    "CompanyProductID": _comProductID,
+                    "AdjustQtyInPair": _pair2,
+
+                }
+
+                _allLines.push(_single_line);
+            });
+
+            var salesHead = {
+                "StockAdjustHeadID": _ssalesHeadID,
+                "StockAdjustDetailsList": _allLines,
+
+                "AdjustDate": _salesDate,
+
+                "Note1": _note1,
+
+            }
+
+            console.log(salesHead);
+
+
+            if (_allLines.length == 0) {
+                $("#spInfo").html('<strong style="color:red">No Data Found !</strong>');
+                return;
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Savng Data Please wait.. !</strong>');
+
+            let _methodName = "";
+            if (parseInt(_ssalesHeadID) > 0) {
+                _methodName = "UpdateStockAdjust";
+
+            }
+            else {
+                _methodName = "SaveStockAdjust";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "StockAdjust/" + _methodName,
+
+                data: JSON.stringify(salesHead),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtBIllNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+
+                        $("#btnSaveCust").attr('disabled', 'disabled');
+                        $("#btnAdd").attr('disabled', 'disabled');
+                        BindData(data.obj, 'disabled');
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+
+        });
+
+
+        function BindData(_obj, _disabledStr) {
+
+            console.log(_obj);
+            $("#txtBIllNo").val(_obj.generatedStockAdjustNo);
+            $("#txtDate2").val(_obj.adjustDateFormated);
+
+            $("#txtNote1").val(_obj.note1);
+
+
+            $("#btnSaveCust").val('Update');
+            $("#btnSaveCust").attr('data-salesheadid', _obj.stockAdjustHeadID);
+
+            BindTableRows(_obj.stockAdjustDetailsList, _disabledStr)
+
+            CalCulateTotalQty();
+
+        }
+
+        function BindTableRows(_objlist, disabledStr) {
+
+            console.log(_objlist);
+            $("#tblProdItem tr:gt(0)").remove();
+
+            $(_objlist).each(function (i, _singleObj) {
+
+                $("#tblProdItem").append('<tr> <td style="display:none;" controlname="CommProductID">' + _singleObj.companyProduct.companyProductID + '</td> <td controlname="SlNo">' + (i + 1) + '</td> <td  controlname="ProdName">' + _singleObj.prodName.name + '</td> <td controlname="ArticleName">' + _singleObj.article.name + '</td><td controlname="SizeName">' + _singleObj.size.name + '</td>  <td controlname="PairQty">' + _singleObj.adjustQtyInPair + '</td><td><button data-salesheadid="' + _singleObj.stockAdjustHeadID + '" data-salesdetailsid="' + _singleObj.stockAdjustDetailsID + '" data-companyproductid="' + _singleObj.companyProduct.companyProductID + '" data-slno="' + (i + 1) + '" data-for="edit" class="mb-2 mr-2 btn-dashed btn btn-outline-info"  ' + disabledStr + '> Edit</button></td> <td><button   data-salesheadid="' + _singleObj.stockAdjustHeadID + '" data-salesdetailsid="' + _singleObj.stockAdjustDetailsID + '" data-companyproductid="' + _singleObj.companyProduct.companyProductID + '" data-slno="' + (i + 1) + '"  data-for="delete" class="mb-2 mr-2  btn-dashed btn btn-outline-danger" ' + disabledStr + '> Delete</button></td></tr>');
+            });
+
+            CalCulateTotalQty();
+
+        }
+
+        function CalCulateTotalQty() {
+
+            let _totQty2 = 0
+
+            $("#tblProdItem tr:gt(0)").each(function (i, row) {
+                _totQty2 += parseFloat($(this).find('td[controlname="PairQty"]').text());
+
+
+            });
+
+            $("#txtTotalpair").val(_totQty2.toFixed(2));
+
+
+        }
+
+
+        function ClearControlAfterSave() {
+            clearItemAfterAdd();
+
+            $("#btnSaveCust").val('Save');
+            $("#btnSaveCust").attr('data-salesheadid', "0");
+            $("#btnSaveCust").attr('data-salesdetailsid', "0");
+
+            $("#tblProdItem tr:gt(0)").remove();
+
+
+            $("#btnAdd").removeAttr("disabled");
+
+            CalCulateTotalQty();
+
+
+        }
+
+
+
+
+        function clearItemAfterAdd() {
+            $("#txtArcticle").val('');
+
+
+            $("#txtPair").val('');
+            $("#txtSize").val('');
+            $("#txtPair").val('0');
+
+
+
+
+            $("#btnAdd").val('Add');
+
+            $("#btnAdd").attr('data-salesheadid', "0");
+            $("#btnAdd").attr('data-salesdetailsid', "0");
+            $("#btnAdd").attr('data-companyproductid', "0");
+            $("#btnAdd").attr('data-slno', "0");
+
+
+        }
+
+
+        $("#tblProdItem").on('click', 'tr td button', function (e) {
+
+            $("#spInfo").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            //ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            let _for = $(this).attr("data-for");
+            let _slNo = $(this).attr("data-slno");
+
+            let _comProductID = $(this).attr("data-companyproductid");
+            let _salesHeadID = $(this).attr("data-salesheadid");
+            let _salesDetailsID = $(this).attr("data-salesdetailsid");
+
+
+            let _pairQty = parseFloat($(this).parent("td").parent("tr").find('td[controlname="PairQty"]').text());
+
+
+
+
+            let _prodName = $(this).parent("td").parent("tr").find('td[controlname="ProdName"]').text();
+            let _articleName = $(this).parent("td").parent("tr").find('td[controlname="ArticleName"]').text();
+            let _sizeName = $(this).parent("td").parent("tr").find('td[controlname="SizeName"]').text();
+
+
+
+
+            if (_for == 'edit') {
+
+                $("#btnAdd").val('Update');
+
+
+                $("#btnAdd").attr('data-salesheadid', _salesHeadID);
+                $("#btnAdd").attr('data-salesdetailsid', _salesDetailsID);
+                $("#btnAdd").attr('data-companyproductid', _comProductID);
+                $("#btnAdd").attr('data-slno', _slNo);
+
+                $("#txtArcticle").val(_articleName);
+
+                $("#txtSize").val(_sizeName);
+                $("#txtPair").val(_pairQty);
+
+
+                $("#txtProName").val(_prodName);
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete This Item?')) {
+                    // Save it!
+                    if (parseInt(_salesDetailsID) > 0) {
+                        let salesDetails = {
+                            "StockAdjustDetailsID": _salesDetailsID,
+                            "StockAdjustHeadID": _salesHeadID,
+                            "CompanyProductID": _comProductID,
+
+                        };
+
+
+
+
+
+                        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                        $.ajax({
+                            type: "POST",
+                            url: WEB_URL + "StockAdjust/DeleteStockAdjustDetails",
+
+                            data: JSON.stringify(salesDetails),
+                            dataType: "JSON",
+                            contentType: "application/json;charset=utf-8",
+                            success: function (data) {
+                                if (parseInt(data.resultID) > 0) {
+                                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                                    console.log(data);
+                                    clearItemAfterAdd();
+
+
+                                    $("#btnSaveCust").removeAttr('disabled');
+                                    $("#btnAdd").removeAttr('disabled');
+                                    $("#txtBIllNo").val(data.obj.generatedStockAdjustNo);
+                                    $("#spInfo").html('');
+                                    ClearControlAfterSave();
+
+                                    $("#btnSaveCust").val('Update');
+                                    BindData(data.obj, '');
+
+                                }
+                                else {
+                                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                                }
+
+
+                            },
+                            error: function (a, b, c) {
+                                //  HideGateOverlay();
+                                alert(a, c);
+                            }
+                        });
+
+                    }
+                    else {
+
+                        $(this).parent("td").parent("tr").remove();
+
+                        CalCulateTotalQty();
+
+                    }
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+
+        });
+
+
+
+
+
+
+        $("#btnAddNewCust").click(function () {
+
+            $("#btnSaveCust").removeAttr('disabled');
+
+            clearItemAfterAdd();
+            ClearControlAfterSave();
+
+            CalCulateTotalQty();
+
+
+        });
+
+
+
+        $("#btnEdit").click(function () {
+
+            $("#spInfo").html('');
+            let _salesNo = ConvertBanglaToEnglish($("#txtBIllNo").val());
+            if (_salesNo == '' || _salesNo == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Sales No</strong>');
+                $("#txtBIllNo").focus();
+                return;
+            }
+            var salesHead22 = {
+                "GeneratedStockAdjustNo": _salesNo
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "StockAdjust/GetStockAdjustByAdjustNo",
+
+                data: JSON.stringify(salesHead22),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (data.resultID == -1) {
+                        ClearControlAfterSave();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#btnSaveCust").removeAttr('disabled');
+                        $("#btnAdd").removeAttr('disabled');
+                        $("#txtBIllNo").val(data.obj.generatedSalesNo);
+                        $("#spInfo").html('');
+                        ClearControlAfterSave();
+
+                        $("#btnSaveCust").val('Update');
+                        BindData(data.obj, '');
+
+
+                    }
+
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        });
+
+
+
+
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+    });
+
+
+
+</script>

@@ -1,0 +1,307 @@
+﻿
+@{
+    ViewData["Title"] = "Expense Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Expense Report ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Select Expense Head:</label>
+                    <div class="col-sm-6">
+                        <select    id="selCust"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkCashSales" class="form-check-input">
+                                All Expense Heads
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label"> Receive / Payment:</label>
+                    <div class="col-sm-3">
+
+                        <select class="form-control" id="selRecvPay">
+                            <option value="All">All</option>
+                            <option value="Receive">
+                                Receive
+                            </option>
+                            <option value="Payment">
+                                Payment
+                            </option>
+                        </select>
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input name="type" id="chkSumm" type="radio" class="form-check-input">
+
+                                Summary
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input name="type" id="chkDetails" type="radio" class="form-check-input">
+                                Details
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="row flex-sm-row">
+
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnDatewise" data-type="date">Date wise Report</a>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btnToday" data-type="day">Today</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnSeven" data-type="week">7 Days</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btnOneMonth" data-type="month">1 Month</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btnYear" data-type="year">1 Year</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+                var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+                $(document).ready(function () {
+
+
+                    var date = new Date();
+                    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+                    //        new Date(date.getFullYear(), date.getMonth(), date.getd());
+
+                    //$("#txtDate2").datepicker('setDate', 'now');
+                    //alert('OK');
+                      LoadDefaultData();
+
+                    $("#txtDate2").datepicker({
+                        autoclose: true,
+                    }).on('changeDate', function (e) {
+                        ChangeDt("#txtDate2");
+                    });
+
+                    $("#txtDate").datepicker({
+                        autoclose: true,
+                    }).on('changeDate', function (e) {
+                        ChangeDt("#txtDate");
+                    });
+
+                    $("#txtDate").datepicker({
+                        autoclose: true,
+                    });
+
+                    $("#txtDate2").val(today);
+                    $("#txtDate").val(today);
+
+
+
+                    function ChangeDt(caller) {
+
+                        console.log(caller);
+                        let _thisVal2 = $(caller).val();
+
+                        if (_thisVal2.indexOf('-') > 0) {
+
+                            let _existValue = _thisVal2.split('-');
+                            $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+                        }
+
+
+
+                    };
+
+
+
+
+
+                    function LoadDefaultData() {
+                        //ClearControl();
+                        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                        $.ajax({
+                            type: "POST",
+                            url: WEB_URL + "Expenses/ExpensesEntryViewModelReports",
+
+                            // data: JSON.stringify(receiveMain),
+                            dataType: "JSON",
+                            contentType: "application/json;charset=utf-8",
+                            success: function (data) {
+                                // HideGateOverlay();
+                                $("#spInfo").html('');
+                                console.log(data);
+
+                                BindExHeads(data.expensesHeads)
+                                // BinSubCategoryTable(data.customerSubCategorys);
+
+
+                            },
+                            error: function (a, b, c) {
+                                //  HideGateOverlay();
+                                alert(a, c);
+                            }
+                        });
+                    }
+
+
+
+
+
+                    function BindExHeads(_custList) {
+                        $("#selCust option").remove();
+
+                        $.each(_custList, function (i, prodData) {
+
+                            $("#selCust").append(' <option data-id="' + prodData.expensesHeadID + '" data-custID="' + prodData.expensesHeadID + '" value="' + prodData.expensesHeadID + '" > ' + prodData.name+'</option>');
+
+
+                        });
+
+                    }
+
+
+
+
+
+                    $("#chkCashSales").change(function () {
+                        if ($(this).is(':checked')) {
+                            $("#selCust").attr('disabled', 'disabled');
+                            $("#selCust").val('');
+                        }
+
+                        else {
+                            $("#selCust").removeAttr('disabled','disabled');
+
+                        }
+                    });
+
+
+
+
+                    $("a.reports").on('click', function () {
+                        $("#spInfo").html('');
+                        var recvPayType = '';
+
+                        var _fromDate = $("#txtDate").val();
+                        var _toDate = $("#txtDate2").val();
+                        var _custIDs = $("#selCust").val();
+                        if (_custIDs == '') {
+                            _custIDs = "0";
+                        }
+
+
+                        if ($("chkCashSales").is(':checked')) {
+
+                            _custIDs = "0";
+                        }
+                        if (_custIDs == null || _custIDs==undefined) {
+
+                            _custIDs = "0";
+                        }
+                        var IsDetails = "0";
+
+                        if ($('#chkDetails').is(':checked')) {
+                            IsDetails = "1";
+                        }
+
+                        var type = $(this).attr('data-type');
+
+
+
+                        $(this).attr('href', WEB_URL + 'Expenses/ExpensesReport?fromDate=' + _fromDate + "&&toDate=" + _toDate + "&&customerIDs=" + _custIDs + "&&IsDetails=" + IsDetails + "&&type=" + type + "&&recvPayType" + recvPayType);
+
+                    });
+
+
+
+             
+                
+                });
+
+         
+</script>

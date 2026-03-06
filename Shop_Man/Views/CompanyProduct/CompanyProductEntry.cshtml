@@ -1,0 +1,2039 @@
+﻿
+@{
+    ViewData["Title"] = "CompanyProductEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: কোম্পানি প্রোডাক্ট এন্ট্রি ::.
+
+
+    </div>
+
+}
+<style>
+    input[type=text]:focus {
+        background-color: #282727;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #282727;
+        color: white;
+    }
+</style>
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <input type="button" value="পণ্যের নাম" class="btn btn-block btn-dark" id="btnProName" data-toggle="modal" data-target="#modalProName" />
+    </div>
+
+    <div class="col-md-2">
+        <input type="button" value="আর্টিকেল" class="btn btn-block btn-danger" id="btnArticle" data-toggle="modal" data-target="#modalArticle" />
+    </div>
+    <div class="col-md-2">
+        <input type="button" value="সাইজ" class="btn btn-block btn-dark" id="btnSize" data-toggle="modal" data-target="#modalSize" />
+    </div>
+    <div class="col-md-2">
+        <input type="button" value="কো: ক্যাটা:" class="btn btn-block btn-info" id="btnCoCat" data-toggle="modal" data-target="#modalCoCat" />
+    </div>
+    <div class="col-md-2">
+        <input type="button" value="পণ্যের ধরন" class="btn btn-block btn-success" id="btnProdDoron" data-toggle="modal" data-target="#modalProdDoron" />
+    </div>
+
+</div>
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0.5em; padding-bottom:0.25em;">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body p-0">
+
+
+                <form>
+                    <div class="form-group-sm row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> কোম্পানির নাম:</label>
+                        <div class="col-sm-3">
+                            <input data-tab="1" type="text" autocomplete="off" class="form-control-sm form-control" id="txtComName" list="dltxtComName" />
+                            <datalist id="dltxtComName"></datalist>
+                        </div>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">কোড:</label>
+                        <div class="col-sm-2">
+                            <input type="text" disabled class="form-control-sm form-control" id="txtCode">
+                        </div>
+                        <div class="col-sm-1">
+                            <button class="mb-2 mr-2 btn-icon btn-shadow  btn btn-outline-dark" id="btnSearchCode">
+                                <i class="pe-7s-search btn-icon-wrapper"> </i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">পণ্যের নাম</label>
+                            <input data-tab="2" autocomplete="off" name="city" id="txtProName" type="text" class="form-control-sm form-control" list="dltxtProName" />
+                            <datalist id="dltxtProName"></datalist>
+
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">পণ্যের ধরন</label>
+                            <input data-tab="3" autocomplete="off" name="city" id="txtProdType" type="text" class="form-control-sm form-control" list="dltxtProdType" />
+                            <datalist id="dltxtProdType"></datalist>
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">আর্টিকেল</label>
+                            <input data-tab="4" autocomplete="off" name="city" id="txtArcticle" type="text" class="form-control-sm form-control" list="dltxtArcticle" />
+                            <datalist id="dltxtArcticle"></datalist>
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">কো: ক্যাটাগরি</label>
+                            <input data-tab="5" autocomplete="off" name="city" id="txtCoCategory" type="text" class="form-control-sm form-control" list="dltxtCoCategory" />
+                            <datalist id="dltxtCoCategory"></datalist>
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">সাইজ</label>
+                            <input data-tab="6" autocomplete="off" name="city" id="txtSize" type="text" class="form-control-sm form-control" list="dltxtSize" />
+                            <datalist id="dltxtSize"></datalist>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">জোড়া/ডজন</label>
+                            <input data-tab="7" autocomplete="off" name="city" id="txtUOM" type="text" class="form-control-sm form-control" list="dltxtUOM" />
+                            <datalist id="dltxtUOM"></datalist>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+                        @*<div class="col-md-2">
+
+                            <label for="exampleCity">ক্রয় মূল্য</label>
+                            <input data-tab="8" name="city" id="txtBuyPrice" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">কোঃ কমিঃ</label>
+                            <input data-tab="9" name="city" id="txtCoComm" type="text" class="form-control-sm form-control" />
+                        </div>*@
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">বিক্রয় মূল্য</label>
+                            <input data-tab="8" name="city" id="txtSellPrice" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">কাস্টঃ কমিঃ</label>
+                            <input data-tab="9" name="city" id="txtCustComm" type="text" class="form-control-sm form-control" />
+                        </div>
+                        @*<div class="col-md-1">
+                                <label for="exampleCity">কমিঃ</label> <br />
+                                <div class="position-relative form-check form-check-inline">
+                                    <input id="rdComm" type="checkbox" class="form-check-input" />
+                                </div>
+
+                            </div>*@
+                        <div class="col-md-1">
+
+                            <label for="exampleCity"></label>
+                            <br />
+                            <input data-tab="10" type="button" data-companyProductID="0" value="Add" class="btn btn-success" id="btnAdd" />
+                            @*<button class="mb-2 mr-2 btn-icon   btn btn-outline-dark">
+                                    <i class="pe-7s-plus btn-icon-wrapper"> </i>
+                                </button>*@
+                        </div>
+                        <div class="col-sm-1">
+                            <label for="exampleCity"></label>
+                            <br />
+                            <input disabled type="button" data-custid="0" value="Save" class="btn  btn-info" id="btnSaveCust" />
+
+
+                        </div>
+                        <div class="col-sm-2">
+                            <label for="exampleCity"></label>
+                            <br />
+                            <input type="button" value="Add New" class="btn btn-danger" id="btnAddNewCust" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0.25em;">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body p-0">
+
+
+                <table id="tblProdItem" class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>কোড</th>
+                            <th>পণ্যের নাম</th>
+                            <th>আর্টিকেল</th>
+                            <th>কো: ক্যাটা:</th>
+                            <th>সাইজ</th>
+                            <th>পণ্যের ধরন</th>
+                            <th>জোড়া/ডজন</th>
+                            <th>ক্রয় মূল্য</th>
+                            <th>কোঃ কমিঃ</th>
+                            <th>বিক্রয় মূল্য</th>
+                            <th>
+                                কাস্টঃ কমিঃ
+                            </th>
+                            <th>
+
+                            </th>
+                            <th>
+                                @*<button data-for="edit" class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"> Edit</button>*@
+
+
+                                @*<button data-for="edit" class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger"> Edit</button>*@
+
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div id="modalProdDoron" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    পণ্যের ধরন
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">নাম :</label>
+                                <input autocomplete="off" name="CategoryName" id="txtProdDoronEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo1">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-prodDoronId="0" type="button" id="btnSaveProdDoron" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblProdType" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>আইডি</th>
+                                        <th>নাম</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseProdDoron" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalArticle" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+
+                    আর্টিকেল
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">নাম :</label>
+                                <input autocomplete="off" name="CategoryName" id="txtArticleEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-articleId="0" type="button" id="btnSaveArticle" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblArticle" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>আইডি</th>
+                                        <th>নাম</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseArticle" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalSize" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    সাইজ
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">নাম :</label>
+                                <input autocomplete="off" name="CategoryName" id="txtSizeEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo3">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-sizeId="0" type="button" id="btnSaveSize" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblSize" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>আইডি</th>
+                                        <th>নাম</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseSize" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalCoCat" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+
+                    কো: ক্যাটাগরি
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">নাম :</label>
+                                <input autocomplete="off" name="CategoryName" id="txtCoCatEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo4">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-coCatId="0" type="button" id="btnSaveCoCat" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblCoCat" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>আইডি</th>
+                                        <th>নাম</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCoCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalProName" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    পণ্যের নাম
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">নাম :</label>
+                                <input autocomplete="off" name="CategoryName" id="txtProNameEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo5">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-proNameId="0" type="button" id="btnSaveProName" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblProName" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>আইডি</th>
+                                        <th>নাম</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseProName" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var CUST_LIST = [];
+    var CUST_CAT = [];
+    var SUB_CUST_CAT = [];
+    var tableCust;
+
+    var specialChars = [
+        '০',
+        '১',
+        '২',
+        '৩',
+        '৪',
+        '৫',
+        '৬',
+        '৭',
+        '৮',
+        '৯',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '.',
+        '.',
+        '-',
+        '-'
+    ];
+    var BeagaliToEnglish = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '.': '.',
+        '.': '.',
+
+        '-': '-',
+        '-': '-'
+
+    }
+
+    var EnglisgToBengali = {
+        '০': '০',
+        '১': '১',
+        '২': '২',
+        '৩': '৩',
+        '৪': '৪',
+        '৫': '৫',
+        '৬': '৬',
+        '৭': '৭',
+        '৮': '৮',
+        '৯': '9',
+        '0': '০',
+        '1': '১',
+        '2': '২',
+        '3': '৩',
+        '4': '৪',
+        '5': '৫',
+        '6': '৬',
+        '7': '৭',
+        '8': '৮',
+        '9': '৯',
+        '.': '.',
+        '.': '.',
+        '-': '-',
+        '-': '-'
+
+    }
+
+
+    function ConvertBanglaToEnglish(_str) {
+        var res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            res += BeagaliToEnglish[_arr[i]];
+        }
+        return res;
+    }
+
+    function ConvertEnglishToBengali(_str) {
+        var _res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            _res += EnglisgToBengali[_arr[i]];
+        }
+        return _res;
+    }
+
+
+
+    $(document).ready(function () {
+
+        // alert('ghgh');
+
+        ClearControl();
+        LoadDefaultData();
+
+                $("input").on('keypress', function (event) {
+                   
+            // alert('ok');
+            var _currentTab = $(this).attr("data-tab");
+            var _id = $(this).attr("id");
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if (keycode == '13') {
+                        if (_id !== 'btnAdd') {
+                            event.preventDefault();
+                        }
+                if (_currentTab != undefined) {
+                    if (_id !== 'btnAdd') {
+                        var _nextTab = parseInt(_currentTab) + 1;
+                        $('input[data-tab="' + _nextTab + '"]').focus();
+                    }
+                }
+            }
+
+
+        });
+        $("#txtComName").bind('input', function () {
+            //var dataSequence = $(this).attr("data-sequence");
+            $("#tblProdItem tr:gt(0)").remove();
+            var _suppID = GetDataID($(this).val(), "#dltxtComName");
+            if (_suppID != undefined) {
+
+
+                var _obj =
+                    { "SupplierId": _suppID }
+
+                GetCompanyProductInCompany(_obj);
+
+            }
+        });
+
+
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/GetCompanyProductEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+                    BindProName(data.prodNames);
+                    BindArcticle(data.articles);
+                    BindCoCategory(data.prodCoCategorys);
+                    BindSize(data.sizes);
+                    BindProdType(data.prodTypes);
+                    BindUOM(data.uoMs);
+                    BindSupplier(data.suppliers);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function BindProName(_catList) {
+            $("#dltxtProName option").remove();
+            $("#tblProName tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                $("#dltxtProName").append(' <option data-id="' + prodData.prodNameID + '" value="' + prodData.name + '" />');
+                $("#tblProName").append('<tr> <td>' + prodData.prodNameID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-prodNameID=' + prodData.prodNameID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-prodNameID=' + prodData.prodNameID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+            });
+        }
+
+        function BindArcticle(_catList) {
+            $("#dltxtArcticle option").remove();
+            $("#tblArticle tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+
+              
+                $("#dltxtArcticle").append(' <option data-id="' + prodData.articleID + '" value="' + prodData.name + '"/>');
+                $("#tblArticle").append('<tr> <td>' + prodData.articleID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-articleID=' + prodData.articleID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-articleID=' + prodData.articleID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+        }
+
+        function BindCoCategory(_catList) {
+            $("#dltxtCoCategory option").remove();
+            $("#tblCoCat tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                $("#dltxtCoCategory").append(' <option data-id="' + prodData.prodCoCategoryID + '" value="' + prodData.name + '" />');
+                $("#tblCoCat").append('<tr> <td>' + prodData.prodCoCategoryID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-prodCoCategoryID=' + prodData.prodCoCategoryID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-prodCoCategoryID=' + prodData.prodCoCategoryID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+        }
+
+        function BindSize(_catList) {
+            $("#dltxtSize option").remove();
+            $("#tblSize tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                //let _convertedNames = prodData.name.replaceAll('১', '1').replaceAll('২', '2').replaceAll('৩', '3').replaceAll('৪', '4').replaceAll('৫', '5').replaceAll('৬', '6').replaceAll('৭', '7').replaceAll('৮', '8').replaceAll('৯', '9').replaceAll('০', '0');
+                $("#dltxtSize").append(' <option data-id="' + prodData.sizeID + '" value="' + prodData.name + '" />');
+                $("#tblSize").append('<tr> <td>' + prodData.sizeID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-sizeID=' + prodData.sizeID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-sizeID=' + prodData.sizeID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+        }
+        function BindProdType(_catList) {
+            $("#dltxtProdType option").remove();
+            $("#tblProdType tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                $("#dltxtProdType").append(' <option data-id="' + prodData.prodTypeID + '" value="' + prodData.name + '" />');
+                $("#tblProdType").append('<tr> <td>' + prodData.prodTypeID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-prodTypeID=' + prodData.prodTypeID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-prodTypeID=' + prodData.prodTypeID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+        }
+
+        function BindUOM(_catList) {
+            $("#dltxtUOM option").remove();
+            $("#tblUOM tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                $("#dltxtUOM").append(' <option data-id="' + prodData.uomid + '" value="' + prodData.name + '" />');
+                $("#tblUOM").append('<tr> <td>' + prodData.uomid + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-uomid=' + prodData.uomid + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-uomid=' + prodData.uomid + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+        }
+
+
+        function BindSupplier(_catList) {
+
+            $("#tblUOM tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+                $("#dltxtComName").append(' <option data-id="' + prodData.supplierId + '" value="' + prodData.name + '" />');
+
+            });
+        }
+        //
+
+
+        ////-----
+        $("#btnAdd").click(function () {
+
+            //alert('kkk');
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var companyproductid = $(this).attr("data-companyproductid");
+
+            var _sppName = $("#txtComName").val();
+            var _suppID = GetDataID(_sppName, "#dltxtComName");
+
+            var _prodDoronName = $("#txtProdType").val();
+            var _prodDoronID = GetDataID(_prodDoronName, "#dltxtProdType");
+
+
+            var _prodName = $("#txtProName").val();
+            var _prodNameID = GetDataID(_prodName, "#dltxtProName");
+
+
+            var _articleName = $("#txtArcticle").val();
+            var _articleID = GetDataID(_articleName, "#dltxtArcticle");
+
+            var _prodCoCatName = $("#txtCoCategory").val();
+            var _prodCoCatNameID = GetDataID(_prodCoCatName, "#dltxtCoCategory");
+
+            var _sizeName = $("#txtSize").val();
+            var _sizeNameID = GetDataID(_sizeName, "#dltxtSize");
+
+
+            var _uomName = $("#txtUOM").val();
+            var _uomNameID = GetDataID(_uomName, "#dltxtUOM");
+
+            var _buyPrice = 0;
+                //ConvertBanglaToEnglish($("#txtBuyPrice").val());
+            var _buyComm = 0;
+                //ConvertBanglaToEnglish($("#txtCoComm").val());
+            var _sellPrice = ConvertBanglaToEnglish( $("#txtSellPrice").val());
+            var _sellComm = ConvertBanglaToEnglish( $("#txtCustComm").val());
+
+
+
+            if (_sppName == '') {
+                $("#txtComName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Company Name !</strong>');
+                return;
+            }
+
+            if (_suppID == null || _suppID == undefined || _suppID == 0) {
+                $("#txtComName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Company Name !</strong>');
+                return;
+            }
+
+
+
+            if (_prodDoronName == '') {
+                $("#txtProdType").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Type !</strong>');
+                return;
+            }
+
+            if (_prodDoronID == null || _prodDoronID == undefined || _prodDoronID == 0) {
+                $("#txtProdType").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Type Name !</strong>');
+                return;
+            }
+
+
+
+            if (_prodName == '') {
+                $("#txtProName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Product Name !</strong>');
+                return;
+            }
+
+            if (_prodNameID == null || _prodNameID == undefined || _prodNameID == 0) {
+                $("#txtProName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Product Name !</strong>');
+                return;
+            }
+
+
+
+
+            if (_articleName == '') {
+                $("#txtArcticle").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Article Name !</strong>');
+                return;
+            }
+
+            if (_articleID == null || _articleID == undefined || _articleID == 0) {
+                $("#txtArcticle").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Article Name !</strong>');
+                return;
+            }
+
+
+
+
+
+
+            if (_sizeName == '') {
+                $("#txtSize").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid  Size !</strong>');
+                return;
+            }
+
+            if (_sizeNameID == null || _sizeNameID == undefined || _sizeNameID == 0) {
+                $("#txtSize").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Size !</strong>');
+                return;
+            }
+
+
+
+            /////---------
+
+
+
+            if (_uomName == '') {
+                $("#txtUOM").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid  Unit !</strong>');
+                return;
+            }
+
+            if (_uomNameID == null || _uomNameID == undefined || _uomNameID == 0) {
+                $("#txtUOM").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Unit !</strong>');
+                return;
+            }
+
+
+            if (_buyPrice == '') { _buyPrice = 0 }
+            if (_buyComm == '') { _buyComm = 0 }
+            if (_sellPrice == '') { _sellPrice = 0 }
+            if (_sellComm == '') { _sellComm = 0 }
+
+
+
+            var companyProduct = {
+                "CompanyProductID": companyproductid,
+                "Supplier": { "SupplierId": _suppID },
+                "ProdName": { "ProdNameID": _prodNameID },
+                "Article": { "ArticleID": _articleID },
+                "ProdCoCategory": { "ProdCoCategoryID": _prodCoCatNameID },
+                "Size": { "SizeID": _sizeNameID },
+                "ProdType": { "ProdTypeID": _prodDoronID },
+                "UOM": { "UOMID": _uomNameID },
+                "BuyPrice": _buyPrice,
+                "BuyComm": _buyComm,
+                "SellPrice": _sellPrice,
+                "SellComm": _sellComm,
+
+                "OpeningStock": 0,
+                "CurrentStock": 0
+            }
+
+
+            console.log(companyProduct);
+
+            $("#spInfo").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveCompanyProduct",
+
+                data: JSON.stringify(companyProduct),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        var _obj =
+                            { "SupplierId": _suppID }
+
+                        GetCompanyProductInCompany(_obj);
+                        $("#txtProdType").focus();
+                        $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        //BindProdType(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        });
+
+        //----
+
+
+        //------------------
+
+        function GetCompanyProductInCompany(_obj) {
+
+
+            $("#spInfo").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/GetCompanyProductInCompany",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+
+                    BindProductInCompany(data);
+
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+        function BindProductInCompany(_obj) {
+            $("#tblProdItem tr:gt(0)").remove();
+            $.each(_obj, function (i, _data) {
+
+
+
+                $("#tblProdItem").append(
+                    '<tr><td>' + _data.companyProductID + '</td><td>' + _data.prodName?.name + '</td><td>' + _data.article?.name + '</td><td>' + _data.prodCoCategory?.name + '</td><td>' + _data.size?.name + '</td><td>' + _data.prodType?.name + '</td><td>' + _data.uom?.name + '</td><td>' + _data.buyPrice + '</td><td>' + _data.buyComm + '</td><td>' + _data.sellPrice + '</td><td>' + _data.sellComm + '</td><td> <button data-for="edit"  data-companyProductID="' + _data.companyProductID + '" class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"> Edit</button></td> <td><button data-for="delete"  data-companyProductID="' + _data.companyProductID + '" class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger"> Delete</button></td></tr>'
+                );
+
+
+            });
+        }
+        ////-----
+
+        $("#tblProdItem").on('click', 'tr td button', function (e) {
+
+
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+
+
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-companyProductID");
+            console.log(_id);
+            var companyProduct = {
+                "companyProductID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadProductForEdit(companyProduct);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+                    DeleteProduct(companyProduct)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+        });
+
+        function LoadProductForEdit(companyProduct) {
+
+
+            $("#spInfo").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/GetCompanyProduct",
+
+                data: JSON.stringify(companyProduct),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+
+                    // BindProductInCompany(data);
+
+                    $("#btnAdd").val('Update');
+                    $("#btnAdd").attr('data-companyProductID', data.companyProductID);
+
+
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+
+                    $("#txtComName").val(data.supplier.name);
+
+
+
+
+                    $("#txtProdType").val(data.prodType.name);
+
+
+
+                    $("#txtProName").val(data.prodName.name);
+
+
+
+                    $("#txtArcticle").val(data.article.name);
+
+
+                    $("#txtCoCategory").val(data.prodCoCategory.name);
+
+
+                    $("#txtSize").val(data.size.name);
+
+
+
+                    $("#txtUOM").val(data.uom.name);
+
+
+                   // $("#txtBuyPrice").val(data.buyPrice);
+                   // $("#txtCoComm").val(data.buyComm);
+                    $("#txtSellPrice").val(data.sellPrice);
+                    $("#txtCustComm").val(data.sellComm);
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function DeleteProduct(companyProduct) {
+
+            $("#spInfo").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/DeleteCompanyProduct",
+
+                data: JSON.stringify(companyProduct),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+
+
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                    var _sppName = $("#txtComName").val();
+                    var _suppID = GetDataID(_sppName, "#dltxtComName");
+                    var _obj =
+                        { "SupplierId": _suppID }
+
+                    GetCompanyProductInCompany(_obj);
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+        ////----------------------
+
+        $("#tblProName").on('click', 'tr td button', function (e) {
+
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-prodnameid");
+            var prodName = {
+                "prodNameID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                $("#spInfo5").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetProName",
+
+                    data: JSON.stringify(prodName),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSaveProName").val('Update');
+                        $("#btnSaveProName").attr('data-pronameid', data.prodNameID);
+
+
+
+                        $("#txtProNameEdit").val(data.name);
+
+                        $("#spInfo5").html('');
+
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+
+
+                    $("#spInfo5").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "CompanyProduct/DeleteProName",
+
+                        data: JSON.stringify(prodName),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            ClearControl();
+                            BindProName(data.obj)
+                            $("#spInfo5").html('');
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+        });
+
+        ///-------------------
+
+        $("#tblArticle").on('click', 'tr td button', function (e) {
+            $("#spInfo2").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-articleid");
+            var article = {
+                "articleID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetArcticle",
+
+                    data: JSON.stringify(article),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSaveArticle").val('Update');
+                        $("#btnSaveArticle").attr('data-articleid', data.articleID);
+
+
+
+                        $("#txtArticleEdit").val(data.name);
+
+                        $("#spInfo2").html('');
+
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+
+
+                    $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "CompanyProduct/DeleteArticle",
+
+                        data: JSON.stringify(article),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            ClearControl();
+                            BindArcticle(data.obj)
+                            $("#spInfo2").html('');
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+        });
+
+        ////---------------
+
+
+        $("#btnSaveProName").click(function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr("data-pronameid");
+            var _name = $("#txtProNameEdit").val();
+
+            if (_name == '') {
+                $("#txtProNameEdit").addClass("input-validation-error");
+                $("#spInfo5").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+
+
+            var prodName = {
+                "prodNameID": _id,
+                "name": _name
+            }
+            console.log(prodName);
+
+            $("#spInfo5").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveProName",
+
+                data: JSON.stringify(prodName),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo5").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        $("#spInfo5").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindProName(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+
+        ///////--------------------------
+
+        $("#btnSaveArticle").click(function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr("data-articleid");
+            var _name = $("#txtArticleEdit").val();
+
+            if (_name == '') {
+                $("#txtArticleEdit").addClass("input-validation-error");
+                $("#spInfo2").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+
+
+            var article = {
+                "articleID": _id,
+                "name": _name
+            }
+
+
+            $("#spInfo2").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveArticle",
+
+                data: JSON.stringify(article),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindArcticle(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+        ///---------------------
+
+
+        $("#btnSaveSize").click(function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr("data-sizeid");
+            var _name = $("#txtSizeEdit").val();
+
+            if (_name == '') {
+                $("#txtSizeEdit").addClass("input-validation-error");
+                $("#spInfo3").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+
+
+            var size = {
+                "sizeID": _id,
+                "name": _name
+            }
+
+
+            $("#spInfo3").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveSize",
+
+                data: JSON.stringify(size),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo3").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        $("#spInfo3").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindSize(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+
+        /////--------------------
+        $("#btnSaveCoCat").click(function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr("data-cocatid");
+            var _name = $("#txtCoCatEdit").val();
+
+            if (_name == '') {
+                $("#txtCoCatEdit").addClass("input-validation-error");
+                $("#spInfo4").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+
+
+            var prodCoCategory = {
+                "prodCoCategoryID": _id,
+                "name": _name
+            }
+
+
+            $("#spInfo4").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveCoCategory",
+
+                data: JSON.stringify(prodCoCategory),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo4").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        $("#spInfo4").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindCoCategory(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+
+        ////-----------------------
+
+        $("#btnSaveProdDoron").click(function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr("data-proddoronid");
+            var _name = $("#txtProdDoronEdit").val();
+
+            if (_name == '') {
+                $("#txtProdDoronEdit").addClass("input-validation-error");
+                $("#spInfo1").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+
+
+            var prodType = {
+                "prodTypeID": _id,
+                "name": _name
+            }
+
+
+            $("#spInfo1").html('<strong style="color:blue">Saving  Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/SaveProdType",
+
+                data: JSON.stringify(prodType),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo1").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+
+                        $("#spInfo1").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindProdType(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+
+
+        ////----------------------------
+
+
+
+        //////------------------
+        $("#tblSize").on('click', 'tr td button', function (e) {
+
+            $("#spInfo3").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-sizeid");
+            var size = {
+                "sizeID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                $("#spInfo3").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetSize",
+
+                    data: JSON.stringify(size),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSaveSize").val('Update');
+                        $("#btnSaveSize").attr('data-sizeid', data.sizeID);
+
+
+
+                        $("#txtSizeEdit").val(data.name);
+
+                        $("#spInfo3").html('');
+
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+
+
+                    $("#spInfo3").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "CompanyProduct/DeleteSize",
+
+                        data: JSON.stringify(size),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            ClearControl();
+                            BindSize(data.obj)
+                            $("#spInfo3").html('');
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+
+        });
+
+
+        //////------------------
+        $("#tblCoCat").on('click', 'tr td button', function (e) {
+
+            $("#spInfo4").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-prodcocategoryid");
+            var prodCoCategory = {
+                "prodCoCategoryID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                $("#spInfo4").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetCoCategory",
+
+                    data: JSON.stringify(prodCoCategory),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSaveCoCat").val('Update');
+                        $("#btnSaveCoCat").attr('data-cocatid', data.prodCoCategoryID);
+
+
+
+                        $("#txtCoCatEdit").val(data.name);
+
+                        $("#spInfo4").html('');
+
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+
+
+                    $("#spInfo4").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "CompanyProduct/DeleteCoCategory",
+
+                        data: JSON.stringify(prodCoCategory),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            ClearControl();
+                            BindCoCategory(data.obj)
+                            $("#spInfo4").html('');
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+
+        });
+
+
+
+        $("#tblProdType").on('click', 'tr td button', function (e) {
+
+            $("#spInfo1").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-prodtypeid");
+            var prodType = {
+                "prodTypeID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                $("#spInfo1").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetProdType",
+
+                    data: JSON.stringify(prodType),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSaveProdDoron").val('Update');
+                        $("#btnSaveProdDoron").attr('data-proddoronid', data.prodTypeID);
+
+
+
+                        $("#txtProdDoronEdit").val(data.name);
+
+                        $("#spInfo1").html('');
+
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+
+
+                    $("#spInfo1").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "CompanyProduct/DeleteProdType",
+
+                        data: JSON.stringify(prodType),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            ClearControl();
+                            BindProdType(data.obj)
+                            $("#spInfo1").html('');
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+
+
+
+
+
+        });
+
+
+
+        //--------------------///-------------------------------------------------------------------
+        function GetDataValue(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[data-id="' + value + '"]');
+            var endval = val.attr('value');
+            return endval;
+        }
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+
+        function ClearControl() {
+            $("#txtProName").val('');
+            $("#txtProNameEdit").val('');
+            $("#btnSaveProName").attr('data-pronameid', '0');
+            $("#btnSaveProName").val('Save');
+
+
+            $("#txtArcticle").val('');
+            $("#txtArticleEdit").val('');
+            $("#btnSaveArticle").attr('data-articleid', '0');
+            $("#btnSaveArticle").val('Save');
+
+
+
+            $("#txtCoCategory").val('');
+            $("#txtCoCatEdit").val('');
+            $("#btnSaveCoCat").attr('data-cocatid', '0');
+            $("#btnSaveCoCat").val('Save');
+
+
+            $("#txtSize").val('');
+            $("#txtSizeEdit").val('');
+            $("#btnSaveSize").attr('data-sizeid', '0');
+            $("#btnSaveSize").val('Save');
+
+
+            $("#txtProdType").val('');
+            $("#txtProdDoronEdit").val('');
+            $("#btnSaveProdDoron").attr('data-proddoronid', '0');
+            $("#btnSaveProdDoron").val('Save');
+
+
+          //  $("#txtBuyPrice").val('0');
+           // $("#txtCoComm").val('0');
+            $("#txtSellPrice").val('0');
+
+            $("#txtCustComm").val('0');
+
+
+
+            $("#btnAdd").attr('data-companyProductID', '0');
+            $("#btnAdd").val('Save');
+
+        }
+
+    });
+
+</script>

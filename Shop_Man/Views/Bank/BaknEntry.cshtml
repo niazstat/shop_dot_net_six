@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewData["Title"] = "BaknEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        ..::   ব্যাংক এন্ট্রি    ::..
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<div class="row flex-sm-row">
+    <div class="col-md-1">
+        <label for="inputEmail3" class="col-form-label">নাম :</label>
+
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" class="form-control-sm form-control" id="txtName">
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+
+<div class="col-md-2">
+    <div class="main-card mb-3 card">
+        <div class="card-body">
+
+            <input type="button" data-cashPaymentID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+            <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>আইডি</th>
+
+                            <th>নাম</th>
+                       
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

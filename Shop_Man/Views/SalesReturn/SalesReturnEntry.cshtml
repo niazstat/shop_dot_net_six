@@ -1,0 +1,449 @@
+﻿
+@{
+    ViewData["Title"] = "SalesReturnEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<script src="~/js/views/salesreturn/salesreturnentry.js"></script>
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 2mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: বিক্রয় রিটার্ন এন্ট্রি ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বিক্রয় বিল :</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="mb-2 form-control-sm form-control" id="txtBIllNo">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="Load/New" class="btn btn-success btn-block" id="btnLoad" />
+                        </div>
+                        <div class="col-sm-1"><input type="button" value="Clear" class="btn btn-danger btn-block" id="btnAddNewCust" /></div>
+
+
+                        <div class="col-sm-1">পার্টি বিল</div>
+                        <div class="col-sm-1"><input type="text" disabled class="mb-2 form-control-sm form-control" id="txtBIllNoParty"></div>
+
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">রিটার্ন বিল :</label>
+                        <div class="col-sm-1">
+                            <input type="text" class="mb-2 form-control-sm form-control" id="txtBIllNoRet">
+                        </div>
+
+
+
+                        <div class="col-sm-1">
+                            <input type="button" value="View" class="btn btn-dark btn-block" id="btnView" />
+                            <button type="button" class="btn  btn-primary" style="display:none;"
+                                    data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+                                Modal View
+                            </button>
+
+                        </div>
+
+                        <div class="col-sm-1">
+                            <input type="button" value="Edit" class="btn btn-danger btn-block" id="btnEdit" />
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বিক্রয় তারিখ:</label>
+                        <div class="col-sm-2">
+                            <input type="text" disabled data-tab="1" autocomplete="off" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2" />
+
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-1 col-form-label"> কাস্টমার নাম:</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtCustName" />
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label"> শপ নাম:</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtShopName" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">আর্টিকেল X সাইজ:</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtArticleSize" list="dlArticleSize" />
+                            <datalist id="dlArticleSize">
+                            </datalist>
+                        </div>
+
+
+                       
+                    </div>
+
+                    <div class="form-row">
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট রিটার্ন :</label>
+
+                        <div class="col-sm-2">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtTotalRetQty" />
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">  রিটার্ন তারিখ:</label>
+
+                        <div class="col-sm-2">
+                            <input type="text"  autocomplete="off" data-tab="4" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtReturnDate" />
+
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button"  data-salesreturndetailsid="0"  data-salesdetailsid" ="0" data-salesheadid="0"  value="Save" class="btn btn-gradient-info btn-block" id="btnSaveReturn" />
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="row flex-sm-row">
+                        <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+                            <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+                                <div class="card-body">
+
+
+                                    <table id="tblProdItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                                        <thead>
+                                            <tr>
+
+
+                                                <th>পণ্যের নাম</th>
+                                                <th>আর্টিকেল</th>
+
+                                                <th>সাইজ</th>
+
+
+                                                <th>জোড়া</th>
+                                                <th> কমিঃ</th>
+                                                <th>রিটার্ন  মূল্য</th>
+                                                <th>মোট রিটার্ন মূল্য</th>
+                                                <th>মোট রিটার্ন  কমিঃ</th>
+
+                                                <th>
+                                                    রিটার্ন জোড়া
+                                                </th>
+                                                <th>
+
+
+                                                </th>
+                                                <th>
+
+
+                                                </th>
+                                            </tr>
+
+
+
+
+                                        </thead>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row flex-sm-row">
+                        <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+                            <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+                                <div class="card-body">
+
+
+                                    <table id="tblReturnItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                                        <thead>
+                                            <tr>
+
+                                                <th style="display:none">পণ্যের নাম</th>
+                                                <th>পণ্যের নাম</th>
+                                                <th>আর্টিকেল</th>
+
+                                                <th>সাইজ</th>
+
+
+                                                <th> রিটার্ন জোড়া </th>
+
+                                                <th>রিটার্ন  মূল্য</th>
+                                                <th>মোট রিটার্ন মূল্য</th>
+                                                <th> রিটার্ন কমিঃ মূল্য</th>
+                                                <th>মোট রিটার্ন কমিঃ</th>
+                                                <th>নীট রিটার্ন মূল্য</th>
+                                                <th>
+
+                                                </th>
+                                                <th>
+
+
+                                                </th>
+                                            </tr>
+
+
+
+
+                                        </thead>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div id="modalInvoice" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="button" class="btn btn-outline-primary" value="Create PDF"
+                       id="btPrint" onclick="createPDF()" />
+            </div>
+            <div class="modal-body" id="tab">
+                <style>
+
+
+                    .tblClass {
+                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                        width: 100%;
+                        font-size: 0.8em;
+                        font-weight: normal;
+                    }
+
+                    .headerAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-top: 1px solid black;
+                        font-size: 0.8em;
+                        text-align: center;
+                    }
+
+                    .TDRightLeftBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .headerRightBorder {
+                        border-right: 1px solid black;
+                        border-top: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDRightBorder {
+                        border-right: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+                </style>
+
+                <table class="tblClass" id="tblOrderBill">
+                    <thead>
+                        <tr>
+                            <td colspan="8" class="headerAllBorder" style="        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+        box-sizing: border-box;
+        margin: 10px;">
+                                <span style="        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;
+        margin: 10px;">রিটার্ন বিল</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 26px;
+        font-weight: bolder;">
+                                <span id="spHeaderBill"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center; "> <span style="font-size: 12px; font-weight: bolder" id="spShortDes"></span></td></tr>
+
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 16px;
+        font-weight: bolder;">
+                                <span id="spPropritor" style="        background-color: black;
+        color: white;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center;  font-size:12px;"><span id="spAddressBill"></span></td></tr>
+
+                        <tr>
+
+                            <td colspan="2" style="text-align:left;   border-left: 1px solid black; font-weight:bold; padding:3px;">রিটার্ন বিল নং  :</td>
+                            <td style="        text-align: left;
+        font-weight: bold; ">
+                                <span id="spOrderNoBill"></span>
+                            </td>
+
+
+                            <td colspan="3" style="text-align:center;  font-size:10px;"><strong><span id="spAddressMobile"></span></strong></td>
+
+                            <td style="text-align:right;  font-weight:bold; padding:3px;">রিটার্ন তারিখ  :</td>
+                            <td style="        text-align: right;
+        border-right: 1px solid black;
+        font-weight: bold;">
+                                <span id="spDateBill"></span>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align:left;    border-left: 1px solid black;font-weight:bold; padding:3px;">কাস্টমার নাম :</td>
+                            <td colspan="3" style="        text-align: left;
+        font-weight: bold;">
+                                <span id="spPartyBill"></span>
+                            </td>
+                            <td colspan="2" style="text-align:right; font-weight:bold; padding:3px;">বিক্রয় বিল নং :</td>
+                            <td style="text-align: right;
+        font-weight: bold;border-right: 1px solid black;">
+                                <span id="spcustwiseSalesNo"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left;    border-left: 1px solid black;font-weight:bold; padding:3px;">প্রতিষ্ঠান নাম :</td>
+                            <td colspan="6" style="        text-align: left;
+        border-right: 1px solid black;
+        font-weight: bold;">
+                                <span id="spPartyshopNameBill"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="        text-align: left;
+
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;font-weight:bold;
+        padding: 3px;">
+                                প্রতিষ্ঠান ঠিকানা :
+                            </td>
+                            <td colspan="6" style=" text-align: left;
+        font-weight: bold;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;">
+                                <span id="spPartyshopAddressBill"></span>
+                            </td>
+
+                        </tr>
+
+                    </thead>
+                    <tr>
+                        <td class="TDAllBorder" style="width:5%">
+                            সি নং
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">পণ্যের নাম</td>
+                        <td class="TDRightBorder" style="width:10%">
+                            আর্টিকেল
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">সাইজ</td>
+
+                        <td class="TDRightBorder" style="        width: 6%;
+        text-align: right">
+                            জোড়া
+                        </td>
+                        <td class="TDRightBorder" style="        width: 10%;
+        text-align: right">
+                            বিক্রয় মূল্য
+                        </td>
+                        <td class="TDRightBorder" style=" width: 7%; text-align: right">কমিঃ</td>
+
+                        <td class="TDRightBorder" style="width:15%; text-align:right">	নীট মোট রিটার্ন মূল্য</td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+

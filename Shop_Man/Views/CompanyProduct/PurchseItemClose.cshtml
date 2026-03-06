@@ -1,0 +1,265 @@
+﻿
+@{
+    ViewData["Title"] = "PurchseItemClose";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script src="~/js/views/companyproduct/purchseitemclose.js"></script>
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::ক্রয় প্রোডাক্ট ক্লোস্ এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label"> পূর্বের  ক্লোজ তারিখ :</label>
+
+    </div>
+    <div class="col-md-2">
+        <select class="form-control-sm form-control" id="selLastYearList">
+            <option value="">-</option>
+        </select>
+
+
+
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearchdate"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="col-md-2">
+        <input type="button" data-editstatus="0" value="View Current" class="btn btn-block btn-success" id="btnViewCurrect" />
+    </div>
+    @*<div class="col-md-2">
+            <input class="btn btn-gradient-success" type="button" value="Edit or New Entry" id="btnEditorNewEntry" />
+        </div>*@
+
+    @*<div class="col-md-2">
+            <input class="btn btn-danger" type="button" value="View Last Entry" id="btnLastEntry" />
+        </div>*@
+
+    <div class="col-sm-2">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+        Modal View
+    </button>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoiceSales" id="btnViewModel2">
+        Modal View
+    </button>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">নিউ ক্লোজ তাঃ</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="mb-1 form-control-sm form-control" id="txtDateEntry" />
+                        </div>
+
+
+
+                        <div class="col-md-3">
+                            <input type="button" data-editstatus="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+                        </div>
+
+
+
+        
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                
+
+
+
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <span id="spInfo">
+
+                                </span>
+                            </div>
+                        </div>
+
+
+
+
+ <div class="row" id="tab" style="background-color:white !important;">
+
+                            <style>
+                                .CSSTableGenerator {
+                                    margin: 0px;
+                                    padding: 0px;
+                                    width: 100%;
+                                    border: thin solid #000000;
+                                }
+
+                                    .CSSTableGenerator table {
+                                        border-collapse: collapse;
+                                        border-spacing: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        margin: 0px;
+                                        padding: 0px;
+                                    }
+
+
+                                    .CSSTableGenerator tr:nth-child(odd) {
+                                    }
+
+                                    .CSSTableGenerator tr:nth-child(even) {
+                                    }
+
+                                    .CSSTableGenerator td {
+                                        vertical-align: middle;
+                                        border: thin solid #000000;
+                                        border-width: 0px thin thin 0px;
+                                        text-align: left;
+                                        padding: 2px;
+                                        font-size: .8em;
+                                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                                        font-weight: normal;
+                                    }
+
+                                    .CSSTableGenerator tr:last-child td {
+                                        border-width: 0px thin 0px 0px;
+                                    }
+
+                                    .CSSTableGenerator tr td:last-child {
+                                        border-width: 0px 0px thin 0px;
+                                    }
+
+                                    .CSSTableGenerator tr:last-child td:last-child {
+                                        border-width: 0px 0px 0px 0px;
+                                    }
+
+                                    .CSSTableGenerator tr:first-child td {
+                                        border: 0px solid #000000;
+                                        text-align: center;
+                                        border-width: 0px 0px thin thin;
+                                        font-size: 0.8em;
+                                        font-family: Arial;
+                                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                                        color: black;
+                                    }
+
+                                        .CSSTableGenerator tr:first-child td:first-child {
+                                            border-width: 0px 0px thin 0px;
+                                        }
+
+                                        .CSSTableGenerator tr:first-child td:last-child {
+                                            border-width: 0px 0px thin thin;
+                                        }
+
+                                .CSSTableGenerator2 {
+                                    margin: 0px;
+                                    padding: 0px;
+                                    width: 100%;
+                                }
+
+                                    .CSSTableGenerator2 tr:nth-child(odd) {
+                                        text-align: center;
+                                    }
+
+                                    .CSSTableGenerator2 tr:nth-child(even) {
+                                        text-align: center;
+                                    }
+
+
+                                .tdClass {
+                                    color: #666;
+                                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                                    font-weight: bold;
+                                    text-align: left;
+                                }
+                            </style>
+          
+
+
+                        <div class="col-md-12">
+
+                            <table id="tblOrder" class="table table-hover table-striped table-bordered CSSTableGenerator" style="margin:auto 5px auto 5px;">
+
+
+                                <thead>
+                                    <tr>
+                                        <th>Sl</th>
+                                        <th>Article</th>
+                                        <th>Size</th>
+                                        <th>FromDate</th>
+                                        <th>ToDate</th>
+                                        <th>PurQty</th>
+                                        <th>PurAmount </th>
+                                        <th>Commission</th>
+                                        <th>NetPurAmount</th>
+
+                                        <th>AvgAmount </th>
+
+
+
+                                    </tr>
+                                </thead>
+
+
+
+                            </table>
+                        </div>
+
+                            </div>
+
+
+
+
+
+                  
+
+                            

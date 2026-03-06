@@ -1,0 +1,326 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerClosingInAYear";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: List of Party Closing in A Year::.
+    </div>
+
+}
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-12">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+
+<div class="row" id="tab" style="background-color:white !important;">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+            </p>
+
+            <p style="text-align:center;">
+
+                <span style="font-weight:900"> @TempData["Title"].ToString()</span>
+
+
+            </p>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+                      
+                            <th>Name</th>
+                            <th>Shop</th>
+                            <th>Year</th>
+                            <th>Year Clos Date</th>
+                          
+                            <th>Address</th>
+                            <th></th>
+                        
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var tableCust;
+    $(document).ready(function () {
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+
+
+            return vars;
+        }
+
+        var queryStrings = getUrlVars();
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            //"processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [1, "asc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+               
+
+                { "data": "name" },
+                {
+                    "data": "shopName"
+                },
+                {
+                    "data": "yearName"
+                },
+                {
+                    "data": "yearCloseDateFormated"
+                },
+
+             
+                { "data": "address" },
+
+            
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<a class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-success" href="#" target="_blank" data-yearname="' + data.yearName + '" data-custid="' + data.customerID + '">Details</a>';
+                    }
+                }
+            ]
+        });
+
+
+
+
+        LoadDefaultData();
+
+        function LoadDefaultData() {
+
+            var model = {
+               
+                "YearName": queryStrings["yearName"]
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/GetExistingCustomerYearCloseListInAYear",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data.obj);
+                    //RECEIVE = data;
+                    //BindProduct(data);
+                    //$("#spInfo").html('');
+
+                    tableCust.rows.add(data.obj).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+    });
+
+
+    $("#dataTable").on('click', 'tr td a', function () {
+
+
+        let _custid = $(this).attr("data-custid");
+        let _yearname = $(this).attr("data-yearname");
+        $(this).attr('href', WEB_URL + 'Customer/CustomerClosingDetails?customerID=' + _custid + '&&yearName=' + _yearname);
+
+    });
+</script>
+ 
+
+      

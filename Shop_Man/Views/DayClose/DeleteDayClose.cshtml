@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewData["Title"] = "DeleteDayClose";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::ডিলিট ডে ক্লোজ এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label">  ডে ক্লোজ তারিখ :</label>
+
+    </div>
+    <div class="col-md-2">
+        <input type="text" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDateEntry">
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-danger" id="btnDeletedate"><i class="fa fa-trash"></i>&nbsp; &nbsp; Delete</button>
+    </div>
+
+
+
+    <div class="col-md-4">
+     <span id="spInfo"></span>
+    </div>
+
+  
+
+
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+
+                <table  style="width: 100%;" id="tblOrderBill" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>সি নং :</th>
+                            <th> ডে ক্লোজ তারিখ </th>
+                            <th>ডিলিট  টাইম </th>
+                            </thead>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var ReportDate = "";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+    $(document).ready(function () {
+
+
+        $("#txtDateEntry").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateEntry");
+        });
+
+        $("#txtDateEntry").val(today);
+
+
+        function ChangeDt(caller) {
+           
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+        LoadDefaultData();
+
+
+        function LoadDefaultData() {
+            $("#spInfo").html('');
+        
+            var model = {
+                'dDate': $("#txtDateEntry").val()
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "DayClose/GetDelatedDayClose",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    var _obj = data.obj;
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    
+                  BindData(_obj);
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function BindData(_list) {
+            $("#tblOrderBill tr:gt(0)").remove();
+            if (_list != null) {
+
+                $(_list).each(function (i, _singleObj) {
+
+                    $("#tblOrderBill").append('<tr>  <td class="TDAllBorder" controlname="SlNo">' + (i + 1) + '</td> <td  class="TDRightBorder"  >' + _singleObj.dataCloseDateFormated + '</td> <td class="TDRightBorder"  >' + _singleObj.entryDateFormated + '</td> </tr>');
+
+                });
+
+            }
+
+        }
+
+        $("#btnDeletedate").click(function (e) {
+            e.preventDefault();
+
+
+
+            $("#spInfo").html('');
+
+            var model = {
+                'dDate': $("#txtDateEntry").val()
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Deleteing Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "DayClose/MakeDeleteDayClose",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    var _obj = data.obj;
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                    BindData(_obj);
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+    });
+
+
+    </script>

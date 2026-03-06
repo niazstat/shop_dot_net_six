@@ -1,0 +1,864 @@
+﻿
+@{
+    ViewData["Title"] = "Cash Receive Entry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row flex-sm-row">
+    <div class="col-md-1">
+        <label for="inputEmail3" class="col-form-label">তারিখ :</label>
+
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDateEntrySearch">
+    </div>
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label">প্রদানকারী :</label>
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtCategorySearch" list="dltxtCategory" />
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtSubCategorySearch" list="dltxtSubCategory" />
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control"  id="txtCustomerSearch" list="dltxtCustName" />
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearch"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">ইনভয়েস নং  :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtInvoiceNo">
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input type="text" disabled class="form-control" id="txtInvoiceNoSL">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">তারিখ :</label>
+                        <div class="col-sm-3">
+                            <input type="text" autocomplete="off" data-date-format="dd-mm-yyyy" class="form-control" id="txtDate" placeholder="">
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" autocomplete="off" id="txtDateTime" placeholder="">
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">ক্যাটাগরি :</label>
+                        <div class="col-sm-4">
+                            <input type="text" autocomplete="off" class="form-control" id="txtCategory" placeholder="" list="dltxtCategory" />
+                            <datalist id="dltxtCategory">
+                            </datalist>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">শপ নাম :</label>
+                        <div class="col-sm-10">
+                            <input type="text" autocomplete="off" class="form-control" id="txtCustomer" list="dltxtCustName" />
+                            <datalist id="dltxtCustName"></datalist>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">প্রদানকারী নাম :</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-sm form-control" disabled id="txtCustNameAddress" />
+
+                        </div>
+                    </div>
+
+                 
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">পূর্বের বাকী :</label>
+                        <div class="col-sm-4">
+                            <input type="number" disabled class="form-control" id="txtPrevDue">
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মাধ্যম :</label>
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="txtMedium" />
+                            <datalist id="dltxtMedium"></datalist>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">টাকা :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtAmount">
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">নোট :</label>
+                        <div class="col-sm-10">
+                            <input type="text" autocomplete="off" class="form-control" id="txtNote">
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-cashReceiveID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>সি নং</th>
+
+                            <th>ইনভয়েস নং</th>
+                            <th>তারিখ</th>
+                            <th>প্রদানকারী</th>
+                            <th>মাধ্যম</th>
+                            <th>টাকা</th>
+                            <th>নোট</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section HeadingText {
+    <div class="page-title-heading">
+        ..::   ক্যাশ রিসিভ   ::..
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+<script type="text/javascript">
+    var days = ['Saturday','Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday' ];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var specialChars = [
+        '০',
+        '১',
+        '২',
+        '৩',
+        '৪',
+        '৫',
+        '৬',
+        '৭',
+        '৮',
+        '৯',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '.',
+        '.',
+        '-',
+        '-'
+    ];
+    var BeagaliToEnglish = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '.': '.',
+        '.': '.',
+
+        '-': '-',
+        '-': '-'
+
+    }
+
+    var EnglisgToBengali = {
+        '০': '০',
+        '১': '১',
+        '২': '২',
+        '৩': '৩',
+        '৪': '৪',
+        '৫': '৫',
+        '৬': '৬',
+        '৭': '৭',
+        '৮': '৮',
+        '৯': '9',
+        '0': '০',
+        '1': '১',
+        '2': '২',
+        '3': '৩',
+        '4': '৪',
+        '5': '৫',
+        '6': '৬',
+        '7': '৭',
+        '8': '৮',
+        '9': '৯',
+        '.': '.',
+        '.': '.',
+        '-': '-',
+        '-': '-'
+
+    }
+
+
+    function ConvertBanglaToEnglish(_str) {
+        var res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            res += BeagaliToEnglish[_arr[i]];
+        }
+        return res;
+    }
+
+    function ConvertEnglishToBengali(_str) {
+        var _res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            _res += EnglisgToBengali[_arr[i]];
+        }
+        return _res;
+    }
+    var CUST_LIST = [];
+    var CUST_CAT = [];
+    var SUB_CUST_CAT = [];
+    var PROD_NAMES = [];
+    var COMP_PRODUCTS = [];
+    var tableCust;
+    $(document).ready(function () {
+
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+   
+        function currentTime() {
+            let date = new Date();
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
+
+            if (hh === 0) {
+                hh = 12;
+            }
+            if (hh > 12) {
+                hh = hh - 12;
+                session = "PM";
+            }
+
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;
+            ss = (ss < 10) ? "0" + ss : ss;
+
+            let time = hh + ":" + mm + ":" + ss + " " + session;
+
+            //document.getElementById("clock").innerText = time;
+
+            $("#txtDateTime").val(time)
+            let t = setTimeout(function () { currentTime() }, 1000);
+        }
+
+        currentTime();
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "invoicNoSL" },
+
+                { "data": "generatedInvoicNo" },
+                { "data": "receiveDateFormated" },
+                { "data": "customer.shopName" },
+                { "data": "paymentMedium.name" },
+                { "data": "amount" },
+
+                { "data": "note" },
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.cashReceiveID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.cashReceiveID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+
+
+
+        $("#txtDateEntrySearch").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateEntrySearch");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        });
+        $("#txtDateEntrySearch").val(today);
+        $("#txtDate").val(today);
+        LoadDefaultData();
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CashReceive/GetCashReceiveViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                 
+                    CUST_CAT = data.customerCategorys;
+                    CUST_LIST = data.customers;
+                    SUB_CUST_CAT = data.customerSubCategorys;
+                   
+                    BindCustCategoryName(data.customerCategorys);
+                    BindPaymentMedium(data.paymentMedium);
+                
+                    tableCust.rows.add(data.cashReceives).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+
+        $("#txtCategory").bind('input', function () {
+            // ClearAfterBuyerChange();
+            $("#dltxtSubCategory option").remove();
+            $("#txtSubCategory").val('');
+            // var _thisVal=
+            var _val = $(this).val();
+
+            var _catID = GetDataID(_val, "#dltxtCategory");
+            //var _subCatList = [];
+            //if (_catID != undefined) {
+            //    _subCatList = SUB_CUST_CAT.filter(function (_obj) {
+            //        return _obj.customerCategoryID == _catID;
+            //    });
+
+            //    BindSubCustName(_subCatList);
+
+            //}
+            var _CustList = [];
+            if (_catID != undefined) {
+                _CustList = CUST_LIST.filter(function (_obj) {
+                    return _obj.customerSubCategory.customerCategoryID == _catID;
+                });
+
+                BindCustName(_CustList);
+            }
+
+        });
+
+
+
+        function BindSubCustName(_subcatList) {
+            console.log(_subcatList);
+            $("#dltxtSubCategory option").remove();
+
+            $.each(_subcatList, function (i, prodData) {
+
+                $("#dltxtSubCategory").append(' <option data-id="' + prodData.customerSubCategoryID + '" data-custID="' + prodData.customerSubCategoryID + '" value="' + prodData.customerSubCategoryName + '" />');
+
+
+            });
+
+        }
+
+        function BindCustCategoryName(_catList) {
+            $("#dltxtCategory option").remove();
+            $.each(_catList, function (i, prodData) {
+
+                $("#dltxtCategory").append(' <option data-id="' + prodData.customerCategoryID + '" data-custID="' + prodData.customerCategoryID + '" value="' + prodData.customerCategoryName + '" />');
+
+
+            });
+
+        }
+
+
+        function BindCustName(_custList) {
+            $("#dltxtCustName option").remove();
+
+            $.each(_custList, function (i, prodData) {
+
+                $("#dltxtCustName").append(' <option data-id="' + prodData.customerID + '" data-custID="' + prodData.customerID + '" value="' + prodData.shopName + '-' + prodData.customerID+ '"  custname="' + prodData.name + ', ' + prodData.address1 + '"/>');
+
+
+
+            });
+
+        }
+
+        function BindPaymentMedium(_obj) {
+            console.log(_obj);
+            $("#txtMedium").val(_obj.name);
+            $("#dltxtMedium").append(' <option data-id="' + _obj.paymentMediumID + '" data-custID="' + _obj.paymentMediumID + '" value="' + _obj.name + '" />');
+
+        }
+
+        $("#btnSaveCust").click(function () {
+            $("#spInfo").html('');
+         
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+            let _cashReceiveID = $(this).attr('data-cashReceiveID');
+            let _receivedate = $("#txtDate").val();
+            let _payName2 = $("#txtMedium").val();
+            let _paymentID = GetDataID(_payName2, "#dltxtMedium");
+
+            let _custName2 = $("#txtCustomer").val();
+            let _custNameID2 = GetDataID(_custName2, "#dltxtCustName");
+          
+            let _amount = ConvertBanglaToEnglish( $("#txtAmount").val());
+            let _note1 = $("#txtNote").val();
+         
+
+            if (_paymentID == undefined || _paymentID == null || _paymentID == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Payment Medium!</strong>');
+
+                $("#txtPaymentMedium").focus();
+                $btn.prop('disabled', false);
+                return;
+            }
+
+            if (_custName2 == '' || _custNameID2 == undefined || _custNameID2 == null || _custNameID2 == '') {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Customer!</strong>');
+
+                $("#txtCustName").focus();
+                $btn.prop('disabled', false);
+                return;
+            }
+
+     
+
+     
+            var cashReceive = {
+                "CashReceiveID": _cashReceiveID,
+                "ReceiveDate": _receivedate,
+                "Customer": { "CustomerID": _custNameID2 },
+                "PaymentMedium": { "PaymentMediumID": _paymentID },
+             
+                "Note": _note1,
+                "Amount": parseFloat(_amount)
+            }
+
+            console.log(cashReceive);
+
+
+        
+
+            $("#spInfo").html('<strong style="color:blue">Savng Data Please wait.. !</strong>');
+
+         
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CashReceive/SaveCashReceive",
+
+                data: JSON.stringify(cashReceive),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtInvoiceNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        $btn.prop('disabled', false);
+                       ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+                       
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                        $btn.prop('disabled', false);
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                    $btn.prop('disabled', false);
+                }
+            });
+
+
+
+
+        });
+
+        $("#txtCustomer").bind('input', function () {
+            $("#txtPrevDue").val('');
+            let _custName2 = $("#txtCustomer").val();
+            let _custNameID2 = GetDataID(_custName2, "#dltxtCustName");
+            let _custNameAndAddress = GetShopName(_custName2, "#dltxtCustName");
+
+            if (!(_custNameID2 == undefined || _custNameID2 == null || _custNameID2 == '')) {
+                $("#txtCustNameAddress").val(_custNameAndAddress);
+                var model = { "CustomerID": _custNameID2 };
+
+
+                LoadCustomerBalance(model);
+            }
+        });
+
+        function LoadCustomerBalance(_obj) {
+            //txtPrevDue
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Supplier Balance....</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/GetCustomerCurrentBalalce",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    $("#txtPrevDue").val(data.currentBalance);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        }
+
+        function ClearControlAfterSave() {
+
+            $("#txtCustomer").val('');
+            $("#txtPrevDue").val('0');
+            $("#txtAmount").val('0');
+            $("#txtNote").val('');
+            $("#txtCustNameAddress").val('');
+            $("#btnSaveCust").removeAttr('disabled');
+            $("#btnSaveCust").val('Save');
+            $("#btnSaveCust").attr('data-cashreceiveid','0');
+
+        }
+
+
+
+        function GetDataValue(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[data-id="' + value + '"]');
+            var endval = val.attr('value');
+            return endval;
+        }
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+        function GetShopName(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('custname');
+            return endval;
+        }
+    });
+
+
+
+
+    function editCustomer(id) {
+        $('#txtPrevDue').val('');
+       // ClearControl();
+        var cashReceive = {
+            "cashReceiveID": id
+        }
+
+       // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "CashReceive/GetCashReceive",
+
+            data: JSON.stringify(cashReceive),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $("#btnSaveCust").val('Update');
+                $("#btnSaveCust").attr('data-cashReceiveID', data.obj.cashReceiveID);
+
+                $("#txtDate").val(data.obj.receiveDateFormated);
+                $("#txtCustomer").val(data.obj.customer.shopName + '-' + data.obj.customer.customerNo);
+                $("#dltxtCustName").append(' <option data-id="' + data.obj.customer.customerID + '" data-custID="' + data.obj.customer.customerID + '"  value="' + data.obj.customer.shopName + '-' + data.obj.customer.customerNo + '"  custname="' + data.obj.customer.name + ', ' + data.obj.customer.address1 + '"/>');
+
+                $("#txtCustNameAddress").val(data.obj.customer.name + ', ' + data.obj.customer.address1);
+               $("#txtAmount").val(data.obj.amount);
+               $("#txtNote").val(data.obj.note);
+
+                $("#spInfo").html(data.resultMessage);
+
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+
+
+    }
+
+
+   
+
+
+
+
+    function deleteCustomer(id) {
+
+       // ClearControl();
+
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+
+
+
+        var cashReceive = {
+            "cashReceiveID": id
+        }
+
+        //alert(id);
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "CashReceive/DeleteCashReceive",
+
+            data: JSON.stringify(cashReceive),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    //ClearControl();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                  
+
+                    //ClearControlAfterSave();
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+
+                }
+
+
+
+
+
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+    </script>

@@ -1,0 +1,327 @@
+﻿
+@{
+    ViewData["Title"] = "StockAdjustReportView";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Stock Adjust Report ::.
+    </div>
+
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+
+    <div class="col-sm-3">
+        <input type="button" class="btn btn-outline-info" value="Excel"
+               id="btPrint" onclick="exportReport('tab')" />
+
+    </div>
+
+</div>
+
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+
+<div class="row" id="tab">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid black;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid black;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid black;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+                <span id="spFilter"></span>
+            </p>
+
+        </div>
+    </div>
+
+
+    <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+    </table>
+
+
+</div>
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    $(document).ready(function () {
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+
+            if (vars["customerIDs"] != '0') {
+
+                $("#spFilter").text('FIlter by Customer ');
+            }
+            return vars;
+        }
+
+        var queryStrings = getUrlVars();
+
+        LoadData();
+
+        function LoadData() {
+            $("#spInfo").html('');
+
+            var model = {
+                "FromDate": queryStrings["fromDate"],
+                "ToDate": queryStrings["toDate"],
+                "CustomerIds": queryStrings["customerIDs"],
+                "ArticleNames": queryStrings["fromDate"],
+                "IsDetails": queryStrings["IsDetails"],
+                "Type": queryStrings["type"],
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "StockAdjust/GetStockAdjustReport",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data.obj);
+                    $("#spInfo").html('');
+                    $("#spTitle").text(data.resultNo);
+
+                    BindData(data.obj);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+
+        function BindData(_obj) {
+
+
+            $("#tblOrder").append(`<thead> <tr><td>SL</td><td>Date</td><td>Inv No</td> <td>Prod Name</td><td>Article</td><td>Size</td><td>Qty</td> <td>Rate</td>  <td> Amount</td></tr ></thead >`);
+
+
+            var _totQty = 0;
+
+            $.each(_obj, function (i, prodData) {
+
+
+
+
+                $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>' + prodData.adjustDateFormated + '</td><td>' + prodData.generatedStockAdjustNo + '</td ><td  colspan="6" style="text-align:right;">' + prodData.note1 + '</td></tr > ');
+
+                $.each(prodData.stockAdjustDetailsList, function (j, itemData) {
+                    _totQty += itemData.adjustQtyInPair;
+                    $("#tblOrder").append('<tr><td></td><td></td><td></td><td style="text-align:right;">' + itemData.productName + '</td> <td style="text-align:right;">' + itemData.articleName + '</td><td style="text-align:right;">' + itemData.sizeName + '</td><td style="text-align:right;">' + itemData.adjustQtyInPair + '</td><td style="text-align:right;">' + itemData.adjustRate + '</td><td style="text-align:right;">' + (parseFloat(itemData.adjustRate) * parseFloat(itemData.adjustQtyInPair)) + '</td></tr > ');
+
+
+
+
+
+                });
+
+
+
+
+            });
+
+
+            $("#tblOrder").append('<tr><td colspan="6">Total : </td><td style="text-align:right;">' + _totQty + '</td><td style="text-align:right;"></td><td style="text-align:right;"></td></tr> ');
+
+        }
+
+
+    });
+
+
+
+    function exportReport(tableName) {
+
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById('tab');
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+
+        var ReportDate = 'Stock_Adjust_Report';
+        // Specify file name
+        var filename = ReportDate + '.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+
+        }
+
+    }
+
+
+
+
+
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Stock_Adjust_Report</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>
+

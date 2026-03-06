@@ -1,0 +1,973 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerYearClosing";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::কাস্টমার বছর/ইয়ার ক্লোজ এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+
+    <label for="inputEmail3" class="col-sm-2 col-form-label">বছর ক্লোজ তাঃ</label>
+    <div class="col-sm-2">
+        <input type="text" class="mb-1 form-control-sm form-control" id="txtDateEntry" />
+    </div>
+
+
+
+
+    <div class="col-md-1">
+        <button class="btn btn-danger" id="btnSearchdate"><i class="fa fa-search"></i></button>
+
+    </div>
+
+    <div class="col-md-1">
+        Year Name
+    </div>
+    <div class="col-md-1">
+        <input class="mb-1 form-control-sm form-control" disabled type="number" id="txtYear" />
+
+    </div>
+    <div class="col-md-2">
+        <input class="btn btn-gradient-success" type="button" value="Edit or New Entry" id="btnEditorNewEntry" />
+    </div>
+
+    <div class="col-md-1">
+        <input class="btn btn-danger" type="button" value="Last Entry" id="btnLastEntry" />
+    </div>
+
+    <div class="col-sm-1">
+        <input type="button" value="< Prev" class="btn btn-secondary " id="btnPrev" />
+    </div>
+    <div class="col-sm-1">
+        <input type="button" value="Next >" class="btn btn-secondary" id="btnNext" />
+    </div>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+        Modal View
+    </button>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoiceSales" id="btnViewModel2">
+        Modal View
+    </button>
+</div>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="exampleCity">কাস্টমার নাম:</label>
+                        <input type="text" disabled class="form-control" id="txtCustomerName">
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <label for="exampleCity">শপ নাম:</label>
+                        <input type="text" disabled class="form-control" id="txtShopName">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">ওপেনিং এমাউন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtOpeningAmount">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="exampleCity"> বছর/ইয়ার:</label>
+                        <input type="text" disabled class="form-control" id="txtYear2">
+
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <label for="exampleCity">সেলস এমাউন্ট :</label>
+                        <input type="text" disabled class="form-control" id="txtSalesAmount">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">বস্তা করচ:</label>
+                        <input type="text" disabled class="form-control" id="txtSackFee">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">যাতায়ত খরচ :</label>
+                        <input type="text" disabled class="form-control" id="txtTransportCost">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity"> টাকা কম / বেশি:</label>
+                        <input type="text" disabled class="form-control" id="txtAddLessAmount">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">সেলস রিসিভ:</label>
+                        <input type="text" disabled class="form-control" id="txtReceiveAmount">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">ক্যাশ রিসিভ:</label>
+                        <input type="text" disabled class="form-control" id="txtCashReceiveAmount">
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <label for="exampleCity">চেক রিসিভ :</label>
+                        <input type="text" disabled class="form-control" id="txtCheckRecev">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">চেক পেমেন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtCheckPayment">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">ক্যাশ পেমেন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtCashPayment">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity"> এডজাস্ট এমাউন্ট :</label>
+                        <input type="text" disabled class="form-control" id="txtAdjustAmount">
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity"> রিটার্ন এমাউন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtReturnAmount">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <label for="exampleCity">ক্লোসিং শর্ট এমাউন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtClosingShortAmount">
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <label for="exampleCity">রিজেক্ট গুডস এমাউন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtRejectGoodsAmount">
+
+                    </div>
+                    <div class="col-md-2">
+                        <label for="exampleCity">
+                            সেলস এডজাস্ট:
+                        </label>
+                        <input type="text" disabled class="form-control" id="txtSalesAdjustAmount">
+
+                    </div>
+
+
+
+                    <div class="col-md-2">
+
+                        <label for="exampleCity"> ক্লোসিং এমাউন্ট:</label>
+                        <input type="text" disabled class="form-control" id="txtClosingAmount">
+
+                    </div>
+
+
+
+                    <div class="col-md-6">
+
+                        <span id="spInfo">
+
+                        </span>
+
+                    </div>
+
+
+
+
+                </div>
+             
+            </div>
+</div>
+            </div>
+            <div class="col-md-2">
+                <div class="main-card mb-3 card">
+                    <div class="card-body">
+
+                        <input type="button" data-editstatus="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                        <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+                    
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnReport" data-type="date">Current Balance</a>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row" id="showDiv">
+            <div class="col-md-12">
+                <div class="main-card mb-3 card">
+                    <div class="card-body">
+                        <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                            <thead>
+                                <tr>
+
+
+
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Shop</th>
+                                    <th>Last Clos Date</th>
+                                    <th>Mobile No</th>
+                                    <th>Address</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var CUSTOMER_ID = 0;
+            var YEAR_NAME = 0;
+            var tableCust;
+            var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+            var datePicker;
+            $(document).ready(function () {
+
+                
+                var date = new Date();
+                var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+                 datePicker = flatpickr("#txtDateEntry", { dateFormat: "d-M-Y" });
+                datePicker.setDate(date);
+                //datePicker
+               // $("#txtDateEntry").flatpickr({ enableTime: true, dateFormat: "d-M-Y" });
+                //$("#txtDateEntry").datepicker({
+                //    autoclose: true,
+                //}).on('changeDate', function (e) {
+                //    ChangeDt("#txtDateEntry");
+                //});
+
+                //$("#txtDateEntry").datepicker({
+                //    autoclose: true,
+                //});
+                //$("#txtDateEntry").val(today);
+
+                //function ChangeDt(caller) {
+
+                //    console.log(caller);
+                //    let _thisVal2 = $(caller).val();
+
+                //    if (_thisVal2.indexOf('-') > 0) {
+
+                //        let _existValue = _thisVal2.split('-');
+                //        $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+                //        $("#txtYear").val(_existValue[2]);
+
+                //    }
+
+
+
+                //};
+
+
+
+                LoadDefaultData();
+
+
+                tableCust = $('#dataTable').DataTable({
+                    data: [],
+                    "columnDefs": [
+
+                        {
+                            "searchable": true,
+                            "orderable": false,
+                            "targets": 0
+                        }
+                    ],
+                    "language":
+                    {
+                        "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                            '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                            '<div class="loader">' +
+                            '<div class="line-scale-pulse-out-rapid">' +
+                            '<div></div>' +
+                            '<div></div>' +
+                            '<div></div>' +
+                            '<div></div>' +
+                            '<div></div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<p>Loading</p></div>'
+                    },
+                    //"responsive": true,
+                    //"processing": true,
+                    //"serverSide": true,
+                    "lengthMenu": [
+                        [10, 15, 25, 50, 100, -1],
+                        [10, 15, 25, 50, 100, "All"]
+                    ],
+
+                    "order": [1, "asc"],
+                    "start": 0,
+                    "length": 10,
+                    "bFilter": true,
+
+                    "columns": [
+                        {
+                            "data": "customerID"
+                        },
+
+                        { "data": "name" },
+                        {
+                            "data": "shopName"
+                        },
+                        {
+                            "data": "yearCloseDateFormated"
+                        },
+
+                        { "data": "mobileNo" },
+                        { "data": "address1" },
+
+                        {
+                            "data": null,
+                            "mRender": function (data, type, full) {
+                                return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="getLastClosingYear(\'' + data.customerID + '\',\'' + data.lastClosingYearName + '\')">Select</button>';
+                            }
+                        }
+                        ,
+
+                        {
+                            "data": null,
+                            "mRender": function (data, type, full) {
+                                return '<a class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-success" href="#" target="_blank" data-custid="' + data.customerID + '">Details</a>';
+                            }
+                        }
+                    ]
+                });
+
+                function LoadDefaultData() {
+                     ClearControl();
+                    $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "Customer/CustomersWithLastClosingYearList",
+
+                        // data: JSON.stringify(receiveMain),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            // HideGateOverlay();
+                            $("#spInfo").html('');
+                            console.log(data);
+                            //RECEIVE = data;
+                            //BindProduct(data);
+                            //$("#spInfo").html('');
+
+                            tableCust.rows.add(data).draw();
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+                }
+
+                $("#btnLastEntry").click(function () {
+
+                    getLastClosingYear(CUSTOMER_ID, YEAR_NAME);
+
+                });
+
+
+                $("#btnSaveCust").click(function () {
+
+                    let _year = $("#txtYear").val();
+                    let _dateName = $("#txtDateEntry").val();
+
+                    if (_dateName == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Closing Date !</strong>');
+
+                        $("#txtDateEntry").focus();
+                        return;
+                    }
+
+
+                    //if (isNaN(_year)) {
+                    //    $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                    //    $("#txtYear").focus();
+                    //    return;
+                    //}
+                    if (CUSTOMER_ID == 0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+
+                        return;
+                    }
+
+                    var model = {
+                        "YearCloseCustomerSummID": 0,
+                        "CustomerID": CUSTOMER_ID,
+                        "YearName":0,
+                            //parseInt(_year),
+                        "YearCloseDate":_dateName
+                    }
+
+                    $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "Customer/SaveCustomerYearClose",
+
+                        data: JSON.stringify(model),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+
+
+                            if (parseInt(data.resultID) > 0) {
+                                ClearControl();
+
+                                CUSTOMER_ID = 0;
+                                YEAR_NAME = 0;
+
+                                $("#btnSaveCust").attr('data-editstatus', '0')
+                                console.log(data);
+                                tableCust.clear().draw();
+                                tableCust.rows.add(data.obj2).draw();
+
+                                $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                            }
+                            else {
+                                $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                            }
+
+
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+
+
+                });
+
+
+
+                $("#btnReport").click(function (event) {
+
+                    let _year = $("#txtYear").val();
+                    let _dateName = $("#txtDateEntry").val();
+
+                    if (_dateName == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Closing Date !</strong>');
+
+                        $("#txtDateEntry").focus();
+                        $(this).attr('href', '#');
+                        event.preventDefault();
+                        return;
+                    }
+
+
+                    //if (isNaN(_year)) {
+                    //    $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                    //    $("#txtYear").focus();
+                    //    return;
+                    //}
+                    if (CUSTOMER_ID == 0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+                        $(this).attr('href','#');
+                        event.preventDefault();
+                        return;
+                    }
+                    else {
+
+                        $(this).attr('href', WEB_URL + 'Customer/CustomerClosingViewCurrentDate?customerID=' + CUSTOMER_ID + '&&yearName=' + _year + '&&_type=VIEW&&dDate=' + _dateName);
+
+                    }
+
+
+
+
+                });
+
+
+
+                $("#btnEditorNewEntry").click(function () {
+
+                    let _year = $("#txtYear").val();
+                    let _closeDate = $("#txtDateEntry").val();
+                    if (_closeDate == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year/Date !</strong>');
+
+                        $("#txtDateEntry").focus();
+                        return;
+                    }
+
+
+                    //if ( isNaN( _year)) {
+                    //    $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                    //    $("#txtYear").focus();
+                    //    return;
+                    //}
+                    if (CUSTOMER_ID ==0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+
+                        return;
+                    }
+
+
+                   // $("#txtDateEntry").attr('disabled','disabled');
+                    var model = {
+                        "YearCloseCustomerSummID": 0,
+                        "CustomerID": CUSTOMER_ID,
+                        "YearName": parseInt(_year),
+                        "YearCloseDate": _closeDate
+                    }
+
+                    $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "Customer/GetCustomerYearCloseNew",
+
+                        data: JSON.stringify(model),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            if (data.obj != null) {
+                                let _obj = data.obj;
+
+                                $("#txtYear").val(_obj.yearName);
+                               // $("#txtDateEntry").val(_obj.yearCloseDateFormated);
+                                let dateToSet = new Date(_obj.yearCloseDateFormated);
+                                datePicker.setDate(dateToSet);
+                                $("#txtCustomerName").val(_obj.name);
+                                $("#txtShopName").val(_obj.shopName);
+                                $("#txtOpeningAmount").val(_obj.openingBalance);
+                                $("#txtYear2").val(_obj.yearName);
+                                $("#txtSalesAmount").val(_obj.salesAmount);
+                                $("#txtSackFee").val(_obj.totalSackNoFee);
+                                $("#txtTransportCost").val(_obj.transportCost);
+                                $("#txtAddLessAmount").val(_obj.addLessAmount);
+                                $("#txtReceiveAmount").val(_obj.receiveAmount);
+                                $("#txtCashReceiveAmount").val(_obj.cashReceiveAmount);
+                                $("#txtCheckRecev").val(_obj.checkRecev);
+                                $("#txtCheckPayment").val(_obj.checkPayment);
+                                $("#txtCashPayment").val(_obj.cashPayment);
+                                $("#txtAdjustAmount").val(_obj.adjustAmount);
+                                $("#txtReturnAmount").val(_obj.returnAmount);
+                                $("#txtClosingShortAmount").val(_obj.closingShortAmount);
+                                $("#txtRejectGoodsAmount").val(_obj.rejectGoodsAmount);
+                                $("#txtSalesAdjustAmount").val(_obj.salesAdjustAmount);
+                                $("#txtClosingAmount").val(_obj.closingAmount);
+
+                                $("#spInfo").html('');
+                            }
+                            else {
+                                $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                            }
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+
+                });
+
+
+
+
+                $("#btnSearchdate").click(function () {
+
+                    let _year = $("#txtYear").val();
+
+                    if (_year == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+
+
+                    if (isNaN(_year)) {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+                    if (CUSTOMER_ID == 0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+
+                        return;
+                    }
+
+                
+                    LoadExistingData(_year);
+
+                });
+
+                $("#btnNext").click(function () {
+
+                    let _year = $("#txtYear").val();
+
+                    if (_year == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+
+
+                    if (isNaN(_year)) {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+                    if (CUSTOMER_ID == 0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+
+                        return;
+                    }
+
+                    _year = parseInt(_year)+ 1;
+                    $("#txtYear").val(_year);
+
+                    let _val2 = $("#txtDateEntry").val()
+
+                    if (_val2.indexOf('-') > 0) {
+
+                        let _existValue = _val2.split('-');
+                       // $("#txtDateEntry").val(_existValue[0] + '-' +_existValue[1] + '-' + _year);
+
+
+                        let dateToSet = new Date(_existValue[0] + '-' + _existValue[1] + '-' + _year);
+                        datePicker.setDate(dateToSet);
+
+
+                    }
+
+
+
+                    LoadExistingData(_year);
+
+
+                });
+
+
+                $("#btnPrev").click(function () {
+
+                    let _year = $("#txtYear").val();
+
+                    if (_year == '') {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+
+
+                    if (isNaN(_year)) {
+                        $("#spInfo").html('<strong style="color:red">Invalid Year !</strong>');
+
+                        $("#txtYear").focus();
+                        return;
+                    }
+                    if (CUSTOMER_ID == 0) {
+                        $("#spInfo").html('<strong style="color:red">Please Select a Valid Customer!</strong>');
+
+                        return;
+                    }
+
+
+
+                    _year = parseInt(_year) - 1;
+                    $("#txtYear").val(_year);
+                    let _val2 = $("#txtDateEntry").val();
+
+                    if (_val2.indexOf('-') > 0) {
+
+                        let _existValue = _val2.split('-');
+                        console.log(_existValue);
+                        let newYr = parseInt(_existValue[2]) + 1;
+
+                        let dateToSet = new Date(_existValue[0] + '-' + _existValue[1] + '-' + _year);
+                        datePicker.setDate(dateToSet);
+                   
+
+                    }
+
+
+
+            
+
+                    LoadExistingData(_year);
+
+
+                });
+
+                function LoadExistingData(_year) {
+                    var model = {
+                        "YearCloseCustomerSummID": 0,
+                        "CustomerID": CUSTOMER_ID,
+                        "YearName": parseInt(_year)
+                    }
+                    ClearControl();
+                    $("#txtDateEntry").removeAttr('disabled');
+                    $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "Customer/GetExistingCustomerYearClose",
+
+                        data: JSON.stringify(model),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            console.log(data);
+                            if (data.obj != null) {
+                                let _obj = data.obj;
+
+                                $("#txtYear").val(_obj.yearName);
+
+                                let dateToSet = new Date(_obj.yearCloseDateFormated);
+                                datePicker.setDate(dateToSet);
+
+
+                                //$("#txtDateEntry").val(_obj.yearCloseDateFormated);
+                                $("#txtCustomerName").val(_obj.name);
+                                $("#txtShopName").val(_obj.shopName);
+                                $("#txtOpeningAmount").val(_obj.openingBalance);
+                                $("#txtYear2").val(_obj.yearName);
+                                $("#txtSalesAmount").val(_obj.salesAmount);
+                                $("#txtSackFee").val(_obj.totalSackNoFee);
+                                $("#txtTransportCost").val(_obj.transportCost);
+                                $("#txtAddLessAmount").val(_obj.addLessAmount);
+                                $("#txtReceiveAmount").val(_obj.receiveAmount);
+                                $("#txtCashReceiveAmount").val(_obj.cashReceiveAmount);
+                                $("#txtCheckRecev").val(_obj.checkRecev);
+                                $("#txtCheckPayment").val(_obj.checkPayment);
+                                $("#txtCashPayment").val(_obj.cashPayment);
+                                $("#txtAdjustAmount").val(_obj.adjustAmount);
+                                $("#txtReturnAmount").val(_obj.returnAmount);
+                                $("#txtClosingShortAmount").val(_obj.closingShortAmount);
+                                $("#txtRejectGoodsAmount").val(_obj.rejectGoodsAmount);
+                                $("#txtSalesAdjustAmount").val(_obj.salesAdjustAmount);
+                                $("#txtClosingAmount").val(_obj.closingAmount);
+
+                                $("#spInfo").html('');
+                            }
+                            else {
+                                $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                            }
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+                }
+            });
+
+
+
+
+            function ClearControl() {
+                 //CUSTOMER_ID = 0;
+                //YEAR_NAME = 0;
+
+                $("#txtCustomerName").val('');
+                $("#txtShopName").val('');
+                $("#txtOpeningAmount").val('0');
+                $("#txtYear2").val('-');
+                $("#txtSalesAmount").val('0');
+                $("#txtSackFee").val('0');
+                $("#txtTransportCost").val('0');
+                $("#txtAddLessAmount").val('0');
+                $("#txtReceiveAmount").val('0');
+                $("#txtCashReceiveAmount").val('0');
+                $("#txtCheckRecev").val('0');
+                $("#txtCheckPayment").val('0');
+                $("#txtCashPayment").val('0');
+                $("#txtAdjustAmount").val('0');
+                $("#txtReturnAmount").val('0');
+                $("#txtClosingShortAmount").val('0');
+                $("#txtRejectGoodsAmount").val('0');
+                $("#txtSalesAdjustAmount").val('0');
+                $("#txtClosingAmount").val('0');
+            }
+
+
+            function getLastClosingYear(id, yearname) {
+
+                ClearControl();
+                CUSTOMER_ID = parseInt(id);
+                YEAR_NAME = parseInt(yearname);
+                $("#spInfo").html('');
+
+                if (CUSTOMER_ID == 0) {
+
+                    $("#spInfo").html('<strong style="color:red">Invalid Customer ID !</strong>');
+                    return;
+                }
+                if (YEAR_NAME == 0) {
+
+                    $("#spInfo").html('<strong style="color:red">Invalid Year Name!</strong>');
+                    return;
+                }
+                var model = {
+                    "YearCloseCustomerSummID":0,
+                    "CustomerID": CUSTOMER_ID
+                }
+
+
+                console.log(model);
+
+                $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "Customer/GetLastCustomerYearClose",
+
+                    data: JSON.stringify(model),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.obj != null) {
+                            let _obj = data.obj;
+
+                            $("#txtYear").val(_obj.yearName);
+
+
+                            let dateToSet = new Date(_obj.yearCloseDateFormated);
+                            datePicker.setDate(dateToSet);
+                            //$("#txtDateEntry").val(_obj.yearCloseDateFormated);
+                            $("#txtCustomerName").val(_obj.name);
+                            $("#txtShopName").val(_obj.shopName);
+                            $("#txtOpeningAmount").val(_obj.openingBalance);
+                            $("#txtYear2").val(_obj.yearName);
+                            $("#txtSalesAmount").val(_obj.salesAmount);
+                            $("#txtSackFee").val(_obj.totalSackNoFee);
+                            $("#txtTransportCost").val(_obj.transportCost);
+                            $("#txtAddLessAmount").val(_obj.addLessAmount);
+                            $("#txtReceiveAmount").val(_obj.receiveAmount);
+                            $("#txtCashReceiveAmount").val(_obj.cashReceiveAmount);
+                            $("#txtCheckRecev").val(_obj.checkRecev);
+                            $("#txtCheckPayment").val(_obj.checkPayment);
+                            $("#txtCashPayment").val(_obj.cashPayment);
+                            $("#txtAdjustAmount").val(_obj.adjustAmount);
+                            $("#txtReturnAmount").val(_obj.returnAmount);
+                            $("#txtClosingShortAmount").val(_obj.closingShortAmount);
+                            $("#txtRejectGoodsAmount").val(_obj.rejectGoodsAmount);
+                            $("#txtSalesAdjustAmount").val(_obj.salesAdjustAmount);
+
+                            $("#txtClosingAmount").val(_obj.closingAmount);
+
+                            $("#spInfo").html('');
+                        }
+                        else {
+                            $("#spInfo").html('<strong style="color:red">' + data.resultMessage+'</strong>');
+                        }
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+
+            }
+
+
+            $("#dataTable").on('click', 'tr td a', function () {
+
+
+                let _id = $(this).attr("data-custid");
+
+                $(this).attr('href', WEB_URL + 'Customer/CustomerClosingList?customerID=' + _id);
+
+            });
+        </script>

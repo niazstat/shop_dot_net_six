@@ -1,0 +1,452 @@
+﻿
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .::  এডজাস্ট  রিপোর্ট ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input name="type" id="chkCust" type="radio" class="form-check-input">
+
+                                শুধু কাস্টমার
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input name="type" id="chkSupp" type="radio" class="form-check-input">
+                                শুধু সাপ্লাইয়ার
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input name="type" id="chkAll" type="radio" class="form-check-input">
+                                কাস্টমার  ও সাপ্লাইয়ার
+                            </label>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">
+
+                        Customers
+
+                    </label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selCust"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkAllCust" class="form-check-input">
+                                <span id="spAllCust">
+                                        All Customers
+                                </span>
+
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">
+
+                        Suppliers
+
+                    </label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selSupp"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkAllSupp" class="form-check-input">
+                                <span id="spAllSupp">
+                                    All Suppliers
+                                </span>
+
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+    <div class="card-body">
+
+        <div class="form-group row">
+
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnDatewise" data-type="date">Date wise Report</a>
+            </div>
+
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btnToday" data-type="day">Today</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnSeven" data-type="week">7 Days</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btnOneMonth" data-type="month">1 Month</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btnYear" data-type="year">1 Year</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    $(document).ready(function () {
+
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+        $("#txtDate2").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate2");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        });
+
+        $("#txtDate2").val(today);
+        $("#txtDate").val(today);
+
+
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+
+        };
+
+        LoadData('Supplier');
+        LoadData('Customer');
+
+
+
+        $("#selCust").attr('disabled', 'disabled');
+        $("#selSupp").attr('disabled', 'disabled');
+
+
+
+
+        $("input[type=radio][name=type]").change(function () {
+            if ($("#chkCust").is(':checked')) {
+
+                $("#chkAllCust").removeAttr('disabled');
+                $("#chkAllSupp").attr('disabled', 'disabled');
+                $("#selSupp").attr('disabled', 'disabled');
+                $("#selCust").removeAttr('disabled');
+            }
+            if ($("#chkSupp").is(':checked')) {
+
+                $("#chkAllSupp").removeAttr('disabled');
+                $("#chkAllCust").attr('disabled', 'disabled');
+
+                $("#selCust").attr('disabled', 'disabled');
+                $("#selSupp").removeAttr('disabled');
+
+            }
+
+            if ($("#chkAll").is(':checked')) {
+
+                $("#chkAllSupp").attr('disabled', 'disabled');
+                $("#chkAllCust").attr('disabled', 'disabled');
+
+                $("#selSupp").attr('disabled', 'disabled');
+                $("#selCust").attr('disabled', 'disabled');
+
+            }
+
+            //alert($(this).attr('id'));
+        });
+    
+
+
+
+
+       // Select Supplier / Customer:
+
+        $("#chkAllCust").change(function () {
+            if ($(this).is(':checked')) {
+                $("#selCust").attr('disabled', 'disabled');
+                $("#selCust").val('');
+            }
+
+            else {
+                $("#selCust").removeAttr('disabled', 'disabled');
+
+            }
+        });
+
+
+        $("#chkAllSupp").change(function () {
+            if ($(this).is(':checked')) {
+                $("#selSupp").attr('disabled', 'disabled');
+                $("#selSupp").val('');
+            }
+
+            else {
+                $("#selSupp").removeAttr('disabled', 'disabled');
+
+            }
+        });
+
+
+        function LoadData(_param) {
+            var _url = "";
+
+            if (_param === 'Customer') {
+
+                _url = WEB_URL + "Customer/GetCustomers";
+            }
+            if (_param === 'Supplier') {
+
+                _url = WEB_URL + "Supplier/GetSuppliers";
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: _url,
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+
+
+
+                    if (_param === 'Customer') {
+
+                        BindCustName(data)
+                    }
+                    if (_param === 'Supplier') {
+
+                        BindSuppName(data)
+                    }
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+        function BindSuppName(_custList) {
+            $("#selSupp option").remove();
+
+            $.each(_custList, function (i, prodData) {
+
+                $("#selSupp").append(' <option data-id="' + prodData.supplierId + '" data-custID="' + prodData.supplierId + '" value="' + prodData.supplierId + '" > ' + prodData.name + '</option>');
+
+
+            });
+
+        }
+
+        function BindCustName(_custList) {
+            $("#selCust option").remove();
+
+            $.each(_custList, function (i, prodData) {
+
+                $("#selCust").append(' <option data-id="' + prodData.customerID + '" data-custID="' + prodData.customerID + '" value="' + prodData.customerID + '" > ' + prodData.shopName + '</option>');
+
+
+            });
+
+        }
+
+
+        $("a.reports").on('click', function () {
+            $("#spInfo").html('');
+
+
+            var _fromDate = $("#txtDate").val();
+            var _toDate = $("#txtDate2").val();
+            var _custIDs = '0';
+
+                
+
+            var custType = "All";
+
+            if ($("#chkCust").is(':checked')) {
+
+                custType = "CUST";
+                _custIDs=$("#selCust").val();
+
+            }
+            if ($("#chkSupp").is(':checked')) {
+
+                custType = "SUPP";
+                _custIDs = $("#selSupp").val();
+
+            }
+
+
+
+            if (_custIDs == '') {
+                _custIDs = "0";
+            }
+
+
+      
+
+            if ($("chkAllCust").is(':checked')) {
+
+                _custIDs = "0";
+            }
+            if ($("spAllSupp").is(':checked')) {
+
+                _custIDs = "0";
+            }
+
+            var IsDetails = "0";
+
+
+
+
+
+            var type = $(this).attr('data-type');
+
+
+
+            $(this).attr('href', WEB_URL + 'Adjustment/AdjustReport?fromDate=' + _fromDate + "&&toDate=" + _toDate + "&&customerIDs=" + _custIDs + "&&IsDetails=" + IsDetails + "&&type=" + type + "&&_custType=" + custType);
+        });
+
+
+    });
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Bill</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>
+

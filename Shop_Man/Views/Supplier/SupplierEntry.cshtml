@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewData["Title"] = "SupplierEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        ..::Supplier Information Entry ::..
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<script src="~/js/views/supplier/supplierentry.js"></script>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Supplier Code :</label>
+                        <div class="col-sm-6">
+                            <input type="text" disabled class="form-control" id="txtCustCode1">
+                        </div>
+
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="txtCustCode2">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">ক্যাটাগরি :</label>
+                        <div class="col-sm-3">
+                            <input  data-tab="1" type="text" autocomplete="off" class="form-control" id="txtCategory" placeholder="" list="dltxtCategory">
+                            <datalist id="dltxtCategory">
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <button type="button" class="btn  btn-primary"
+                                    data-toggle="modal" data-target="#modalCategory" id="btnEditCat">
+                                Edit
+                            </button>
+
+                        </div>
+
+
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Sub Category</label>
+                        <div class="col-sm-3">
+                            <input  data-tab="2" type="text" class="form-control" autocomplete="off" id="txtSubCategory" placeholder="" list="dltxtSubCategory">
+                            <datalist id="dltxtSubCategory">
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn  btn-primary"
+                                    data-toggle="modal" data-target="#modalSubCategory" id="btnEditSubCat">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Supplier Name</label>
+                        <div class="col-sm-10">
+                            <input  data-tab="3" type="text" autocomplete="off" class="form-control" id="txtCustName" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Contact Person :</label>
+                        <div class="col-sm-10">
+                            <input  data-tab="4" type="text" autocomplete="off" class="form-control" id="txtContactPerson">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            <input  data-tab="5" type="text" class="form-control" id="txtAddress">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Mobile 1</label>
+                        <div class="col-sm-4">
+                            <input  data-tab="6" type="text" class="form-control" id="txtMobile1">
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Mobile 2</label>
+                        <div class="col-sm-4">
+                            <input  data-tab="7" type="text" class="form-control" id="txtMobile2">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Op Balance </label>
+                        <div class="col-sm-4">
+                            <input  data-tab="8" type="number" class="form-control" id="txtOpBalance" placeholder=" Op Balance">
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button"  data-tab="9" data-suppid="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+
+
+
+                            <th>ID</th>
+
+                            <th>Sub Cat</th>
+                            <th>Name</th>
+                            <th>Contact Per</th>
+                            <th>Address1</th>
+                            <th>Op Balance</th>
+
+
+                            <th>MobileNo</th>
+
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="app-drawer-overlay d-none animated fadeIn"></div>
+
+
+
+<div id="modalCategory" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Category</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Category Name</label>
+                                <input name="CategoryName" id="txtCatNameEdit" placeholder="Category Name" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-catId="0" type="button" id="btnSaveCat" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblCat" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="modalSubCategory" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Sub Category</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Category Name</label>
+                                <input name="CategoryName" id="txtCatNameEditSub" autocomplete="off" type="text" class="form-control" list="dltxtCategory">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Sub Category Name</label>
+                                <input name="CategoryName" id="txtSubCatNameEditSub" autocomplete="off" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <span id="spInfo3">
+
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+
+                            <input data-subcatId="0" type="button" id="btnSaveSubCat" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblSubCat" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseSubCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

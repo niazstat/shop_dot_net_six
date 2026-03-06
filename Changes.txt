@@ -1,0 +1,705 @@
+
+Create Function [dbo].[TotalCashPaymentCustYear](@yearName int)
+returns money as
+Begin
+    Declare  @CashPayment Decimal(18,2)
+ 
+    set @CashPayment=0;
+    ------------------------
+
+
+
+SELECT       @CashPayment=ISNULL(SUM( A.Amount),0)  
+FROM            dbo.CashPayments AS A 
+
+INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID
+
+ where  
+						    Datepart( YEAR, A.PaymentDate )=@yearName
+
+
+
+
+    ------------------
+   
+     return @CashPayment;
+
+end;
+-==================================
+create Function [dbo].[TotalCheqPaymentCustYear](@yearName int)
+returns money as
+Begin
+    Declare  @CheqPayment Decimal(18,2)
+ 
+    set @CheqPayment=0;
+    ------------------------
+
+SELECT       @CheqPayment=ISNULL(SUM( A.Amount),0)
+FROM            dbo.ChequeTransactions AS A  
+INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID
+
+
+where   A.IsChequePassed=1 and A.Type='Payment'
+						 and      Datepart( YEAR, A.ChequePassDate )=@yearName
+    ------------------
+   
+     return @CheqPayment;
+
+end;
+----------=====================
+CREATE Function [dbo].[TotalAllCustomerPrevBalanceYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+
+
+
+Select @TotalSalesAmount =ISNULL( SUM(amnt),0)  from (
+
+  -- Select ISNULL(OpeningBalance,0) amnt from  dbo.Customer where CustomerID=@custID
+ 
+SELECT      ISNULL(  SUM( A.SalesQtyInPair*( A.SalesRate- A.CommissionRate)),0) as amnt
+FROM            dbo.SalesDetailss AS A INNER JOIN
+                         dbo.SalesHeads AS B ON A.SalesHeadID = B.SalesHeadID INNER JOIN
+                         dbo.Customer AS C ON B.CustomerID = C.CustomerID  where   datepart(year,B.SalesDate )< @yearName
+						  
+						  union all
+
+SELECT  ISNULL( SUM( B.TotalSackNoFee+B.TransportCost+B.PackingCost  +B.AddLessAmount-   B.ReceiveAmount),0)  as amnt
+FROM             
+                         dbo.SalesHeads  B INNER JOIN
+                         dbo.Customer AS C ON B.CustomerID = C.CustomerID  where     datepart(year,B.SalesDate )< @yearName
+union all 
+
+SELECT       - ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.CashReceive AS A INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID  where     datepart(year,A.ReceiveDate )< @yearName
+
+
+union all
+
+SELECT     - ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.ChequeTransactions AS A INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID  where   A.IsChequePassed=1 and A.Type='Receive'
+						 and   datepart(year,A.ChequePassDate )< @yearName
+
+union all
+
+SELECT       ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.ChequeTransactions AS A INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID  where   A.IsChequePassed=1 and A.Type='Payment'
+						 and     datepart(year,A.ChequePassDate )< @yearName
+
+
+union all
+
+SELECT       ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.CashPayments AS A INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID  where    datepart(year,A.PaymentDate )< @yearName
+
+
+union all
+--new
+SELECT       ISNULL(SUM( -A.Amount-A.ClosingShortAmount-A.RejectGoodsAmount),0) as amnt
+FROM            dbo.Adjustments AS A INNER JOIN
+                         dbo.Customer AS B ON A.CustomerID = B.CustomerID  where   datepart(year,A.PaymentDate )< @yearName    
+
+
+union all
+SELECT     - ISNULL(SUM( B.ReyurnQtyInPair*(B.RetRate-B.ReturnCommissionRate)),0) as amnt
+FROM            dbo.SalesReturns AS A INNER JOIN
+                         dbo.SalesReturnDetails AS B ON A.SalesReturnID = B.SalesReturnID  where   datepart(year,A.ReturnDate )< @yearName    
+
+
+
+union all 
+
+
+Select -SUM( ISNULL(  B.SalesAdjustInPair*B.SalesAdjustRate,0))  as amnt From SalesAdjusts A inner join 
+SalesAdjustDetails B on A.SalesAdjustID=B.SalesAdjustID  inner join 
+Customer C on A.CustomerID=C.CustomerID   where     datepart(year,A.SalesAdjustDate )< @yearName    
+) A
+
+
+
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+
+------------===================
+
+
+
+		    ISNULL( dbo.TotalSalesQtyYear(@yearName),0.0) as  SalesQty ,
+			    ISNULL( dbo.TotalSalesReturnQtyDay(@yearName),0.0) as  ReturnQty ,
+				    ISNULL( dbo.TotalPurchaseQtyYear(@yearName),0.0) as  PurchaseQty 
+ISNULL( dbo.TotalAllSupplierPrevBalanceYear(@yearName),0.0) as  TotalAllSupplierPrevBalanceYear 
+
+
+---------==========================
+Create Function [dbo].[TotalAllSupplierPrevBalanceYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+
+ 
+Select @TotalSalesAmount= ISNULL( SUM(amnt),0)  from (
+
+   Select ISNULL(OpeningBalance,0) amnt from  dbo.Suppliers 
+
+   union all 
+SELECT      ISNULL(  SUM( B.PurchaseQtyInPair*( B.PurchaseRate- B.CommissionRate)),0) as amnt
+FROM            dbo.PurchaseHeads AS A INNER JOIN
+                         dbo.PurchaseDetails AS B ON A.PurchaseHeadID = B.PurchaseHeadID INNER JOIN
+                         dbo.Suppliers AS C ON A.SupplierId = C.SupplierId     where  Datepart(YEAR ,A.PurchaseDate)< @yearName
+						
+union all 
+
+SELECT        -ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.CashPayments AS A INNER JOIN
+                         dbo.Suppliers AS B ON A.SupplierId = B.SupplierId    where  Datepart(YEAR ,A.PaymentDate)< @yearName
+
+
+union all
+
+SELECT      ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.ChequeTransactions AS A INNER JOIN
+                         dbo.Suppliers AS B ON A.SupplierId = B.SupplierId  where   A.IsChequePassed=1 and A.Type='Receive'
+						 and     Datepart(YEAR ,A.TranDate)< @yearName
+
+union all
+
+SELECT      -ISNULL(SUM( A.Amount),0) as amnt
+FROM            dbo.ChequeTransactions AS A INNER JOIN
+                         dbo.Suppliers AS B ON A.SupplierId = B.SupplierId  where   A.IsChequePassed=1 and A.Type='Payment'
+						 and       Datepart(YEAR ,A.TranDate)< @yearName
+
+union all
+
+SELECT      -ISNULL(SUM( A.Amount+ A.ClosingShortAmount+ A.RejectGoodsAmount),0) as amnt
+FROM            dbo.Adjustments AS A INNER JOIN
+                         dbo.Suppliers AS B ON A.SupplierId = B.SupplierId  where      Datepart(YEAR ,A.PaymentDate)< @yearName
+) 
+
+A 
+
+
+
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+
+------------======================
+
+
+Declare @yearName int ;
+
+set @yearName = 2024
+Declare @lastdayYear datetime ;
+Declare @maxDateItemClose datetime ;
+
+Declare @totalcostAmountOfsoldItems money ;
+Declare @totalcostAmountOfReturnedItems money ;
+
+Select @lastdayYear=CAST( Convert(varchar, '31-dec-'+ CONVERT(varchar, @yearName))  as date);
+
+
+Select @maxDateItemClose=ISNULL( MAX(ToDate),'01-Jan-1900') from  PurchaseItemCloses  where ToDate<=@lastdayYear ;
+
+
+
+
+
+WITH CTE_Name_Items AS (
+
+Select A.CompanyProductID , ISNULL( B.AvgAmount,0) AvgAmount ,  0 as TotalPurQty,0 TotalPurAmount,0 TotalPurNetPurAmount
+
+from CompanyProducts  A left outer join PurchaseItemCloses B  on A.CompanyProductID=B.CompanyProductID  and B.ToDate=@maxDateItemClose
+
+
+)
+,
+
+ CTE_Sales AS (
+
+
+SELECT    A.CompanyProductID,
+ISNULL(  SUM( A.SalesQtyInPair*( A.SalesRate- A.CommissionRate)),0) as SalesAmount,ISNULL(SUM( A.SalesQtyInPair),0) SalesQtyInPair
+
+
+
+FROM            dbo.SalesDetailss AS A INNER JOIN
+                         dbo.SalesHeads AS B ON A.SalesHeadID = B.SalesHeadID 
+                          where datepart(year, SalesDate )=@yearName
+group by  A.CompanyProductID
+
+
+)
+
+
+,
+
+ CTE_Returns AS (
+
+
+
+   Select B.CompanyProductID, SUM(B.ReyurnQtyInPair*(B.RetRate-B.ReturnCommissionRate)) ReturnAmount,SUM(B.ReyurnQtyInPair) ReyurnQtyInPair
+
+FROM            dbo.SalesReturns AS A INNER JOIN
+                         dbo.SalesReturnDetails AS B ON A.SalesReturnID = B.SalesReturnID    where   
+
+
+       datepart(year, ReturnDate )=@yearName
+
+
+group by  B.CompanyProductID
+
+
+) 
+
+
+
+
+    SELECT 
+        A.CompanyProductID,A.SalesAmount / A.SalesQtyInPair  salesrate,
+      case when X.AvgPurAmnt =0 then A.SalesAmount / NULLIF(A.SalesQtyInPair, 0)  else  X.AvgPurAmnt end AS AvgPurAmnt
+		
+		
+		, A.SalesQtyInPair -- Avoid division by zero
+    FROM CTE_Sales A
+    LEFT JOIN (
+        SELECT 
+            A.CompanyProductID, 
+            ISNULL(B.AvgPurAmnt, A.AvgAmount) AS AvgPurAmnt
+        FROM CTE_Name_Items A
+        LEFT JOIN (
+            SELECT 
+                B.CompanyProductID,
+                SUM((B.PurchaseRate - B.CommissionRate) * B.PurchaseQtyInPair) / 
+                SUM(B.PurchaseQtyInPair) AS AvgPurAmnt
+            FROM  [PurchaseHeads] A
+            INNER JOIN PurchaseDetails B 
+                ON A.PurchaseHeadID = B.PurchaseHeadID
+            WHERE CAST(A.PurchaseDate AS DATE) > @maxDateItemClose
+              AND CAST(A.PurchaseDate AS DATE) <= @lastdayYear
+            GROUP BY B.CompanyProductID
+        ) B ON A.CompanyProductID = B.CompanyProductID
+    ) X ON A.CompanyProductID = X.CompanyProductID
+
+;
+
+
+==============================================
+create Function [dbo].[TotalSalesAmountWithDiscYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( A.SalesQtyInPair*(A.SalesRate)),0)
+FROM            dbo.SalesDetailss AS A INNER JOIN
+                         dbo.SalesHeads AS B ON A.SalesHeadID = B.SalesHeadID INNER JOIN
+                         dbo.PaymentMediums AS C ON B.PaymentMediumID = C.PaymentMediumID  where  
+						 
+					
+	    Datepart( YEAR,B.SalesDate )=@yearName
+
+
+
+    ------------------
+    
+    
+     return @TotalSalesAmount;
+
+end;
+
+======================
+
+
+create Function [dbo].[TotalSalesDiscountYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( A.SalesQtyInPair*(A.CommissionRate)),0)
+FROM            dbo.SalesDetailss AS A INNER JOIN
+                         dbo.SalesHeads AS B ON A.SalesHeadID = B.SalesHeadID INNER JOIN
+                         dbo.PaymentMediums AS C ON B.PaymentMediumID = C.PaymentMediumID  where  
+						 
+					
+	    Datepart( YEAR,B.SalesDate )=@yearName
+
+
+
+    ------------------
+    
+    
+     return @TotalSalesAmount;
+
+end;
+
+-----------=====================
+
+spProfit
+spReturnItemCost
+spItemCost
+
+
+
+YearItemStockCloses  ,SP_Current_Stock
+=======================
+    public class SP_Yearly_Profit_Loss
+    {
+
+        public int YearName { get; set; }
+
+        public decimal SalesAmount { get; set; }
+        public decimal AddLessAmount { get; set; }
+        public decimal ReturnAmount { get; set; }
+        public decimal SalesAdjustAmount { get; set; }
+        public decimal SalesCommision { get; set; }
+        public decimal TotalSackNoFee { get; set; }
+        public decimal TransportCost { get; set; }
+
+        public decimal TotalAllRecvSales  { get; set; }
+
+
+        public decimal PurchaseAmount { get; set; }
+        public decimal RetPurchaseAmount { get; set; }
+
+        public decimal PurchaseCommission { get; set; }
+
+
+        public decimal CheckPayment { get; set; }
+        public decimal CashPayment { get; set; }
+
+
+
+
+        public decimal StockAdjustAmount { get; set; }
+
+
+
+
+
+
+     //   public decimal ReceiveAmount { get; set; }  totlallrecevamountsales
+        public decimal CashReceiveAmount { get; set; }
+        public decimal CheckRecev { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+        public decimal SalaryAmount { get; set; }
+        public decimal ExpensesAmount { get; set; }
+
+        public decimal TotalAdjustAmountSupplier { get; set; }
+        public decimal TotalClosingShortAmountSupplier { get; set; }
+        public decimal TotalRejectGoodsAmountSupplier { get; set; }
+        public decimal TotalAdjustAmountCustomer { get; set; }
+        public decimal TotalClosingShortAmountCustomer { get; set; }
+        public decimal TotalRejectGoodsAmountCustomer { get; set; }
+
+
+        //[NotMapped]
+      //  public decimal NetProfit { get { return SalesAmount - (PurchaseAmount - RetPurchaseAmount) - ReturnAmount + AddLessAmount - AdjustAmount - ClosingShortAmount - RejectGoodsAmount - SalesAdjustAmount - StockAdjustAmount; } }
+
+    }
+================================
+Create Function [dbo].[TotalSalaryYear](@yearName int)
+returns money as
+Begin
+    Declare  @amount Decimal(18,2)
+ 
+    set @amount=0;
+    ------------------------
+
+
+SELECT      @amount= ISNULL(SUM( A.AddAmount),0) 
+FROM            [SalarySheets] AS A where   Datepart( PayDate)=@yearName
+
+------------------
+return @amount;
+
+end;
+
+--------==============================
+
+Create Function [dbo].[TotalExpensesYear](@yearName int)
+returns money as
+Begin
+    Declare  @amount Decimal(18,2)
+ 
+set @amount=0;
+    ------------------------
+SELECT      @amount= ISNULL(SUM( A.Amount),0) 
+FROM            [Expenses] AS A where   Datepart( YEAR,TranDate )=@yearName
+
+------------------
+return @amount;
+
+end;
+
+
+============================
+
+create Function [dbo].[TotalStockAdjustAmountYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( A.AdjustQtyInPair*(A.AdjustRate)),0)
+FROM            dbo.StockAdjustDetails AS A INNER JOIN
+                         dbo.StockAdjustHead AS B ON A.StockAdjustHeadID = B.StockAdjustHeadID 
+					
+	  where   Datepart( YEAR,B.AdjustDate )=@yearName
+
+
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+
+===========================
+
+create Function [dbo].[TotalAdjustAmountSupplierYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( Amount),0)
+FROM            dbo.Adjustments AS A  
+
+  inner join Suppliers B on A.SupplierId = B.SupplierId
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+						  	 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+
+================================
+
+create Function [dbo].[TotalClosingShortAmountSupplierYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( ClosingShortAmount
+FROM            dbo.Adjustments AS A  inner join Suppliers B on A.SupplierId = B.SupplierId
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+ 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+=============================
+create Function [dbo].[TotalRejectGoodsAmountSupplierYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( RejectGoodsAmount),0)
+FROM            dbo.Adjustments AS A  inner join Suppliers B on A.SupplierId = B.SupplierId
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+ 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+=========================
+
+create Function [dbo].[TotalAdjustAmountCustomerYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( Amount),0)
+FROM            dbo.Adjustments AS A  
+
+  inner join Customer B on A.CustomerID = B.CustomerID
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+						  	 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+
+
+==================
+create Function [dbo].[TotalClosingShortAmountCustomerYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( ClosingShortAmount),0)
+FROM            dbo.Adjustments AS A 
+
+  inner join Customer B on A.CustomerID = B.CustomerID
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+ 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+===================
+create Function [dbo].[TotalRejectGoodsAmountCustomerYear](@yearName int)
+returns money as
+Begin
+    Declare  @TotalSalesAmount Decimal(18,2)
+ 
+    set @TotalSalesAmount=0;
+    ------------------------
+ 
+ SELECT     @TotalSalesAmount=ISNULL(  SUM( RejectGoodsAmount),0)
+FROM            dbo.Adjustments AS A 
+
+  inner join Customer B on A.CustomerID = B.CustomerID
+					
+	  where   Datepart( YEAR,A.PaymentDate )=@yearName
+
+ 
+    ------------------
+     return @TotalSalesAmount;
+
+end;
+===================
+
+USE [OrderManagementDB]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_Yearly_Profit_Loss]    Script Date: 12/26/2024 11:13:19 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER  PROCEDURE [dbo].[SP_Yearly_Profit_Loss] (@yearName int)
+AS
+BEGIN
+
+
+
+  Select @yearName as YearName ,
+
+     ISNULL( dbo.TotalSalesAmountYear(@yearName),0.0)  as  SalesAmount ,
+	 ISNULL( dbo.TotalAllRecvSalesYear(@yearName),0.0)   as TotalAllRecvSales,
+
+       ISNULL( dbo.TotalAddLessSalesYear(@yearName),0.0) as  AddLessAmount ,
+	    ISNULL( dbo.TotalSackNoFeeYear(@yearName),0.0) as TotalSackNoFee ,
+
+
+       ISNULL( dbo.TotalSalesReturnAmountYear(@yearName),0.0) as  ReturnAmount ,
+
+     ISNULL( dbo.TotalSalesAdjustAmountYear(@yearName),0.0) as  SalesAdjustAmount ,
+
+
+     0.0  as SalesCommision ,
+       
+      0.0  as TransportCost ,
+
+
+
+
+       ISNULL( dbo.TotalPurchaseAmountYear(@yearName),0.0) as PurchaseAmount ,
+	     ISNULL( dbo.TotalPurchaseCommissionAmountYear(@yearName),0.0) as PurchaseCommission ,
+0.0  as RetPurchaseAmount ,
+
+     
+
+           ISNULL( dbo.TotalCheqPaymentYear(@yearName),0.0) as CheckPayment ,
+           ISNULL( dbo.TotalCashPaymentYear(@yearName),0.0) as CashPayment,
+
+        ISNULL( dbo.TotalStockAdjustAmountYear(@yearName),0.0) as StockAdjustAmount ,
+
+
+
+
+        -- ISNULL( dbo.TotalSalesAmountYear(@yearName),0) as ReceiveAmount ,
+
+
+            ISNULL( dbo.TotalCasheReceiveYear(@yearName),0.0) as CashReceiveAmount ,
+           ISNULL( dbo.TotalChecqReceiveYear(@yearName),0.0) as CheckRecev ,
+
+
+
+
+
+
+
+
+
+
+
+          ISNULL( dbo.TotalSalaryYear(@yearName),0.0) as SalaryAmount ,
+            ISNULL( dbo.TotalExpensesYear(@yearName),0.0) as ExpensesAmount ,
+
+        ISNULL( dbo.TotalAdjustAmountSupplierYear(@yearName),0.0) as  TotalAdjustAmountSupplier ,
+
+
+       ISNULL( dbo.TotalClosingShortAmountSupplierYear(@yearName),0.0) as  TotalClosingShortAmountSupplier ,
+
+         ISNULL( dbo.TotalRejectGoodsAmountSupplierYear(@yearName),0.0) as TotalRejectGoodsAmountSupplier ,
+
+          ISNULL( dbo.TotalAdjustAmountCustomerYear(@yearName),0.0) as TotalAdjustAmountCustomer ,
+
+          ISNULL( dbo.TotalClosingShortAmountCustomerYear(@yearName),0.0) as TotalClosingShortAmountCustomer ,
+
+        ISNULL( dbo.TotalRejectGoodsAmountCustomerYear(@yearName),0.0) as  TotalRejectGoodsAmountCustomer 
+
+
+
+END
+
+
+============================

@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerLock";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+          Customer Lock/Unlock
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+                            <th>ID</th>
+                            <th>Cust No</th>
+                          
+                            <th>Name</th>
+                            <th>Shop</th>
+                            <th>Op Balance</th>
+                         
+
+                            <th>MobileNo</th>
+                        
+
+                            <th>Locked/ <br />Not Locked</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var CUST_LIST = [];
+    var CUST_CAT = [];
+    var SUB_CUST_CAT = [];
+    var tableCust;
+    $(document).ready(function () {
+
+        // alert('ghgh');
+
+        LoadDefaultData();
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            //"processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [1, "asc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "customerID" },
+                { "data": "customerNo" },
+           
+                { "data": "name" },
+                { "data": "shopName" },
+                { "data": "openingBalance" },
+              
+                { "data": "mobileNo" },
+              
+                { "data": "isLockedText" },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn ' + (data.isLocked == true ? 'btn-outline-danger' : 'btn-outline-info') +'  " onclick="editCustomer(\'' + data.customerID + '\')">' + (data.isLocked==true?'Un Lock':'Lock')+'</button>';
+                    }
+                }
+                
+            ]
+        });
+
+
+
+        function LoadDefaultData() {
+           // ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/GetCustomers",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+    })
+
+    function editCustomer(id) {
+
+      
+
+        if (confirm('Are you sure to Update Customer?')) {
+            // Save it!
+            
+        }
+        else {
+            return;
+        }
+
+
+
+
+        var customer = {
+            "CustomerID": id
+        }
+
+
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Customer/LockUnlockCustomer",
+
+            data: JSON.stringify(customer),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    //ClearControl();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+               
+                    // tableCust.fnClearTable();
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+
+                }
+
+
+
+
+
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+</script>

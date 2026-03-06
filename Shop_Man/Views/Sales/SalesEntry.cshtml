@@ -1,0 +1,847 @@
+﻿
+@{
+    ViewData["Title"] = "SalesEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<link href="~/css/paper.css" rel="stylesheet" />
+<script src="~/js/views/sales/salesentry.js"></script>
+<style type="text/css" media="print">
+    @@page {
+
+        /* this affects the margin in the printer settings */
+
+        size: A5;
+        margin: 0;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+
+    @@media print {
+    @@page {
+        size: A5;
+        margin: 0;
+    }
+}
+</style>
+
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: বিক্রয় এন্ট্রি ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">বিল নম্বর:</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="mb-2 form-control-sm form-control" id="txtBIllNo">
+                        </div>
+                        <div class="col-sm-1">পার্টি বিল</div>
+                        <div class="col-sm-1"><input type="text" disabled class="mb-2 form-control-sm form-control" id="txtBIllNoParty"></div>
+                        <div class="col-sm-1">
+                            <input type="button" value="Edit" class="btn btn-danger btn-block" id="btnEdit" />
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="View" class="btn btn-dark btn-block" id="btnView" />
+                            <button type="button" class="btn  btn-primary" style="display:none;"
+                                    data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+                                Modal View
+                            </button>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+
+                                    <input type="checkbox" id="chkBalance" class="form-check-input">
+                                    ব্যালান্স বাদ
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="A5" class="btn btn-info " id="btnViewA5" />
+                            <button type="button" class="btn  btn-primary" style="display:none;"
+                                    data-toggle="modal" data-target="#modalInvoiceA5" id="btnViewModelA5">
+                                Modal View
+                            </button>
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="< Prev" class="btn btn-secondary " id="btnPrev" />
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="Next >" class="btn btn-secondary" id="btnNext" />
+                        </div>
+                        <div class="col-sm-1"><input type="button" value="Add New" class="btn btn-danger btn-block" id="btnAddNewCust" /></div>
+
+
+
+
+                        @*<label for="inputPassword3" class="col-sm-1 col-form-label">Sub Cate</label>
+        <div class="col-sm-2">
+            <input type="text" data-tab="2" class="form-control-sm form-control" id="txtSubCategory" placeholder="" list="dltxtSubCategory">
+            <datalist id="dltxtSubCategory">
+            </datalist>
+        </div>*@
+
+
+
+
+                    </div>
+
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-1 col-form-label">তারিখ:</label>
+                        <div class="col-sm-2">
+                            <input type="text" data-tab="1" autocomplete="off" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2" />
+                            @*<input type="text" disabled class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">*@
+                        </div>
+                        <div class="col-sm-2">
+
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+
+                                    <input data-tab="2" type="checkbox" id="chkCashSales" class="form-check-input">
+                                    ক্যাশ্ সেলস
+                                </label>
+                            </div>
+
+                        </div>
+                        <label for="inputPassword3" class="col-sm-1 col-form-label">ক্যাটাগরি</label>
+                        <div class="col-sm-2">
+                            <input type="text" data-tab="3" class="form-control-sm form-control" id="txtCategory" placeholder="" list="dltxtCategory">
+                            <datalist id="dltxtCategory">
+                            </datalist>
+                        </div>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label"> শপ নাম:</label>
+                        <div class="col-sm-3">
+                            <input type="text" autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtCustName" list="dltxtCustName" />
+                            <datalist id="dltxtCustName"></datalist>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">পণ্যের নাম</label>
+                            <input autocomplete="off" data-tab="5"  id="txtProName" type="text" class="form-control-sm form-control" list="dltxtProName" />
+                            <datalist id="dltxtProName"></datalist>
+
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">আর্টিকেল</label>
+                            <input data-tab="6" autocomplete="off"  id="txtArcticle" type="text" class="form-control-sm form-control" list="dltxtArcticle" />
+                            <datalist id="dltxtArcticle"></datalist>
+                        </div>
+                        @*<div class="col-md-2">
+
+                            <label for="exampleCity">Extra আর্টিকেল</label>
+                            <input autocomplete="off" data-tab="7" id="txtExtraArticle" type="text" class="form-control-sm form-control" list="dlExtraArticle" />
+                            <datalist id="dlExtraArticle"></datalist>
+                        </div>*@
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">সাইজ</label>
+                            <input autocomplete="off"  id="txtSize" disabled type="text" class="form-control-sm form-control" list="dltxtSize" />
+                            <datalist id="dltxtSize"></datalist>
+                        </div>
+
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">জোড়া/ডজন</label>
+                            <input autocomplete="off"  id="txtUOM" type="text" class="form-control-sm form-control" list="dltxtUOM" />
+                            <datalist id="dltxtUOM"></datalist>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="exampleCity">Currrent Tock</label>
+                            <input disabled autocomplete="off" id="txtCurrentStock" type="text" class="form-control-sm form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-1">
+
+                            <label for="exampleCity">জোড়া</label>
+                            <input min="0" data-tab="8" autocomplete="off"  id="txtPair" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-1">
+
+                            <label for="exampleCity">ডজন</label>
+                            <input min="0" autocomplete="off"   disabled id="txtDozen" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-1">
+
+                            <label for="exampleCity">কমিঃ</label>
+                            <input min="0" data-tab="9" autocomplete="off"   id="txtComm" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-1">
+
+                            <label for="exampleCity">বিক্রয় মূল্য</label>
+                            <input min="0" data-tab="10" autocomplete="off"  id="txtSellPrice" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">মোট বিঃ মূল্য</label>
+                            <input min="0" autocomplete="off" disabled id="txtTotalSellPrice" type="text" class="form-control-sm form-control" />
+                        </div>
+                        <div class="col-md-2">
+
+                            <label for="exampleCity">মোট কমিঃ</label>
+                            <input min="0" autocomplete="off"  disabled id="txtTotalComm" type="text" class="form-control-sm form-control" />
+                        </div>
+
+                        <div class="col-md-1">
+
+                            <label for="exampleCity"></label>
+                            <br />
+                            <input data-tab="11" type="button" data-salesHeadID="0" data-salesDetailsID="0" data-companyProductID="0" data-slno="0" value="Add" class="btn btn-success" id="btnAdd" />
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="exampleCity"></label>
+                            <input type="text" class="form-control-sm form-control" disabled id="txtCustNameAddress" />
+
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+
+                <table id="tblProdItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                    <thead>
+                        <tr>
+                            <th style="display:none">CommProductID</th>
+                            <th>সি নং</th>
+                            <th>পণ্যের নাম</th>
+                            <th>আর্টিকেল</th>
+                            <th>Extra আর্টিকেল</th>
+                            <th>সাইজ</th>
+                            <th>Stock</th>
+                            <th>জোড়া/ডজন</th>
+                            <th>ডজন</th>
+                            <th>জোড়া</th>
+                            <th> কমিঃ</th>
+                            <th>বিক্রয় মূল্য</th>
+                            <th>মোট বিক্রয় মূল্য</th>
+                            <th>কোঃ কমিঃ</th>
+
+                            <th>
+
+                            </th>
+                            <th>
+
+
+                            </th>
+                        </tr>
+
+
+
+
+                    </thead>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0.25em;">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body ">
+
+
+                <table style="padding:0; background-color:darkseagreen; width:100%;">
+
+                    <tr>
+                        <td></td>
+                        <td> Medium</td>
+
+                        <td>Current Joma</td>
+                        <td>Acc No</td>
+                        <td>Check.TT No</td>
+                        <td>Check Pass Date</td>
+                        <td style="width:30%">Note</td>
+
+
+                    </tr>
+
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="text" data-tab="14" autocomplete="off" class="form-control-sm form-control" id="txtPaymentMedium" list="dlPaymentMedium" />
+                            <datalist id="dlPaymentMedium"> </datalist>
+
+                        </td>
+                        <td> <input type="text" autocomplete="off" class="form-control-sm form-control" id="txtCurrentJoma" /></td>
+                        <td> <input type="text" data-tab="15" autocomplete="off" class="form-control-sm form-control" id="txtAccNo" /></td>
+
+                        <td> <input type="text" data-tab="16" autocomplete="off" class="form-control-sm form-control" id="txtCheckTTNo" /></td>
+                        <td> <input type="text" data-tab="17" autocomplete="off" class="form-control-sm form-control" id="txtCheckPasDate" data-date-format="dd-mm-yyyy" /></td>
+                        <td> <input type="text" data-tab="18" autocomplete="off" class="form-control-sm form-control" id="txtNote1" /></td>
+
+
+                    </tr>
+                </table>
+                <table style="padding:0; background-color:lightgray; width:100%;">
+
+                    <tr>
+
+                        <td>Total Dozen </td>
+                        <td style="text-align:right;"> নীট টাকা </td>
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" disabled autocomplete="off" id="txtNeatAmount" /></td>
+                        <td></td>
+                    
+                        <td style="text-align:right;"> আজকের মোট টাকা</td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" disabled autocomplete="off" id="txtTotalAmount" /></td>
+                        <td></td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>  <input type="text" disabled autocomplete="off" id="txtTotalDozen" /> </td>
+                        <td style="text-align:right;">  আজকে জমা :</td>
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" data-tab="23" autocomplete="off" id="txtTodayJoma" /></td>
+                        <td></td>
+                      
+                        <td style="text-align:right;"> মোট কমিশন</td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" disabled autocomplete="off" id="txtTotalComm2" /></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>Total Pair:</td>
+
+                        <td style="text-align:right;"> আজকের বাকি :</td>
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" disabled autocomplete="off" id="txtTodayDue" /></td>
+
+                        <td style="text-align:right;">মোট বস্তা :<input   type="text" data-tab="19" style="width:40%;text-align:right;" autocomplete="off" id="txtBostaQty" /> </td>
+                        <td style="text-align:right;"> মোট বস্তা খরচ </td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" data-tab="20" type="text" autocomplete="off" id="txtBostaAmount" /> </td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>  <input type="number" disabled autocomplete="off" id="txtTotalpair" /></td>
+
+
+                        <td style="text-align:right;">পূর্বের বাকি :</td>
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" disabled autocomplete="off" id="txtPrevDue" /></td>
+
+                        <td></td>
+
+                        <td style="text-align:right;"> মোট বস্তা/ যাতায়ত খরচ :</td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" type="text" data-tab="21" autocomplete="off" id="txtPackCost" /></td>
+
+                        <td style="text-align:center;">         <input data-tab="24" type="button" data-salesHeadID="0" data-salesDetailsID="0" value="Save" class="btn  btn-info btn-block" id="btnSaveCust" /></td>
+                    </tr>
+
+
+                    <tr>
+
+                        <td></td>
+                        <td style="text-align:right;">  মোট বাকি :</td>
+                        <td style="text-align:right;"> <input style="text-align:right;" disabled type="text" autocomplete="off" id="txtTotalDue" /></td>
+                        <td></td>
+
+                        <td style="text-align:right;"> টাকা কম / বেশি :</td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" data-tab="22" type="text" autocomplete="off" id="txtAddLess" /></td>
+                        <td> </td>
+
+                    </tr>
+                    <tr>
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td style="text-align:right;">মোট টাকা : </td>
+
+                        <td style="text-align:right;"> <input style="text-align:right;" disabled type="text" autocomplete="off" id="txtGrandTotal" /></td>
+                        <td> </td>
+
+                    </tr>
+                </table>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div id="modalInvoice" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="button" class="btn btn-outline-primary" value="Create PDF"
+                       id="btPrint" onclick="createPDF()" />
+            </div>
+            <div class="modal-body" id="tab">
+                <style>
+
+
+                    .tblClass {
+                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                        width: 100%;
+                        font-size: 0.8em;
+                        font-weight: normal;
+                    }
+
+                    .headerAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-top: 1px solid black;
+                        font-size: 0.8em;
+                        text-align: center;
+                    }
+
+                    .TDRightLeftBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .headerRightBorder {
+                        border-right: 1px solid black;
+                        border-top: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDRightBorder {
+                        border-right: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+                </style>
+
+                <table class="tblClass" id="tblOrderBill">
+                    <thead>
+                        <tr>
+                            <td colspan="8" class="headerAllBorder" style="        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+        box-sizing: border-box;
+        margin: 10px;">
+                                <span style="        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;
+        margin: 10px;"> বিল /ক্যাশ ম্যামো</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 26px;
+        font-weight: bolder;">
+                                <span id="spHeaderBill"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center; "> <span style="font-size: 12px; font-weight: bolder" id="spShortDes"></span></td></tr>
+
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 16px;
+        font-weight: bolder;">
+                                <span id="spPropritor" style="        background-color: black;
+        color: white;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center;  font-size:12px;"><span id="spAddressBill"></span></td></tr>
+
+                        <tr>
+
+                            <td colspan="2" style="text-align:left;   border-left: 1px solid black; font-weight:bold; padding:3px;">বিল নং  :</td>
+                            <td style="        text-align: left;
+        font-weight: bold; ">
+                                <span id="spOrderNoBill"></span>
+                            </td>
+
+
+                            <td colspan="3" style="text-align:center;  font-size:10px;"><strong><span id="spAddressMobile"></span></strong></td>
+
+                            <td style="text-align:right;  font-weight:bold; padding:3px;">তারিখ  :</td>
+                            <td style="        text-align: right;
+        border-right: 1px solid black;
+        font-weight: bold;">
+                                <span id="spDateBill"></span>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align:left;    border-left: 1px solid black;font-weight:bold; padding:3px;">কাস্টমার নাম :</td>
+                            <td colspan="3" style="        text-align: left;
+        font-weight: bold;">
+                                <span id="spPartyBill"></span>
+                            </td>
+                            <td colspan="2" style="text-align:right; font-weight:bold; padding:3px;">কাস্টমার বিল নং :</td>
+                            <td style="text-align: right;
+        font-weight: bold;border-right: 1px solid black;">
+                                <span id="spcustwiseSalesNo"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align:left;    border-left: 1px solid black;font-weight:bold; padding:3px;">প্রতিষ্ঠান নাম :</td>
+                            <td colspan="6" style="        text-align: left;
+        border-right: 1px solid black;
+        font-weight: bold;">
+                                <span id="spPartyshopNameBill"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="        text-align: left;
+
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;font-weight:bold;
+        padding: 3px;">
+                                প্রতিষ্ঠান ঠিকানা :
+                            </td>
+                            <td colspan="6" style=" text-align: left;
+        font-weight: bold;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;">
+                                <span id="spPartyshopAddressBill"></span>
+                            </td>
+
+                        </tr>
+
+                    </thead>
+                    <tr>
+                        <td class="TDAllBorder" style="width:5%">
+                            সি নং
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">পণ্যের নাম</td>
+                        <td class="TDRightBorder" style="width:10%">
+                            আর্টিকেল
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">সাইজ</td>
+
+                        <td class="TDRightBorder" style="        width: 6%;
+        text-align: right">
+                            জোড়া
+                        </td>
+                        <td class="TDRightBorder" style="        width: 10%;
+        text-align: right">
+                            বিক্রয় মূল্য
+                        </td>
+                        <td class="TDRightBorder" style=" width: 7%; text-align: right">কমিঃ</td>
+
+                        <td class="TDRightBorder" style="width:15%; text-align:right">	নীট মোট বিক্রয় মূল্য</td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="modalInvoiceA5" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input type="button" class="btn btn-outline-primary" value="Create PDF"
+                       id="btPrint" onclick="createPDFA5()" />
+            </div>
+            <style>@@page { size: A5 }</style>
+            <div class="modal-body A5" id="tabA5">
+                <style>
+
+
+
+                    .tblClass {
+                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                        width: 100%;
+                        font-size: 0.8em;
+                        font-weight: normal;
+                    }
+
+                    .headerAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-top: 1px solid black;
+                        font-size: 0.8em;
+                        text-align: center;
+                    }
+
+                    .TDRightLeftBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDAllBorder {
+                        border-right: 1px solid black;
+                        border-left: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .headerRightBorder {
+                        border-right: 1px solid black;
+                        border-top: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+
+                    .TDRightBorder {
+                        border-right: 1px solid black;
+                        border-bottom: 1px solid black;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+                </style>
+
+                <table class="tblClass" id="tblOrderBillA5">
+                    <thead>
+                        <tr>
+                            <td colspan="8" class="headerAllBorder" style="        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+        box-sizing: border-box;
+        margin: 10px;">
+                                <span style="        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;
+        margin: 10px;"> বিল /ক্যাশ ম্যামো</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 26px;
+        font-weight: bolder;">
+                                <span id="spHeaderBillA5"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center; "> <span style="font-size: 12px; font-weight: bolder" id="spShortDesA5"></span></td></tr>
+
+                        <tr>
+                            <td colspan="8" class="TDRightLeftBorder" style="  text-align: center;
+        font-size: 16px;
+        font-weight: bolder;">
+                                <span id="spPropritorA5" style="        background-color: black;
+        color: white;
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 3px;
+        box-sizing: border-box;"></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" class="TDRightLeftBorder" style="text-align:center;  font-size:12px;"><span id="spAddressBillA5"></span></td></tr>
+
+                        <tr>
+
+                            <td colspan="2" style="        text-align: left;
+        border-left: 1px solid black;
+        font-size: 0.9em;
+        padding: 3px;">
+                                বিল নং :
+                            </td>
+                            <td style="        text-align: left;
+        font-size: 0.9em;">
+                                <span id="spOrderNoBillA5"></span>
+                            </td>
+
+
+                            <td colspan="3" style="text-align:center;  font-size:10px;"><strong><span id="spAddressMobileA5"></span></strong></td>
+
+                            <td style="        text-align: right;
+        padding: 3px;
+        font-size: 0.9em;">
+                                তারিখ :
+                            </td>
+                            <td style="        text-align: right;
+        border-right: 1px solid black;
+        font-size: 0.9em;">
+                                <span id="spDateBillA5"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="        text-align: left;
+        border-left: 1px solid black;
+        padding: 3px;
+        font-size: 0.9em;">
+                                প্রতিষ্ঠান নাম:
+                            </td>
+                            <td colspan="3" style="        text-align: left;
+        font-size: 0.9em;">
+                                <span id="spPartyshopNameBillA5"></span>
+                            </td>
+
+                            <td colspan="2" style="        text-align: right;
+        padding: 3px;
+        font-size: 0.9em;">
+                                কাস্টমার বিল নং:
+                            </td>
+                            <td style="        text-align: right;
+        border-right: 1px solid black;
+        font-size: 0.9em;">
+                                <span id="spcustwiseSalesNoA5"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="        text-align: left;
+        font-size: 0.9em;   border-left: 1px solid black;
+        padding: 3px;">
+                                কাস্টমার নাম:
+                            </td>
+                            <td colspan="6" style="        text-align: left;
+        border-right: 1px solid black;
+        font-size: 0.9em;">
+                                <span id="spPartyBillA5"></span>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="        text-align: left;
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+        padding: 3px;
+        font-size: 0.9em;">
+                                প্রতিষ্ঠান ঠিকানা:
+                            </td>
+                            <td colspan="6" style="        text-align: left;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+        font-size: 0.9em;">
+                                <span id="spPartyshopAddressBillA5"></span>
+                            </td>
+
+                        </tr>
+
+                    </thead>
+                    <tr>
+                        <td class="TDAllBorder" style="width:5%">
+                            সি নং
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">পণ্যের নাম</td>
+                        <td class="TDRightBorder" style="width:10%">
+                            আর্টিকেল
+                        </td>
+                        <td class="TDRightBorder" style="width:10%">সাইজ</td>
+
+                        <td class="TDRightBorder" style="        width: 6%;
+        text-align: right">
+                            জোড়া
+                        </td>
+                        <td class="TDRightBorder" style="        width: 10%;
+        text-align: right">
+                            বিক্রয় মূল্য
+                        </td>
+                        <td class="TDRightBorder" style=" width: 7%; text-align: right">কমিঃ</td>
+
+                        <td class="TDRightBorder" style="width:15%; text-align:right">	নীট মোট বিক্রয় মূল্য</td>
+                    </tr>
+
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

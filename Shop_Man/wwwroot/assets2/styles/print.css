@@ -1,0 +1,276 @@
+body{
+    background: #fff !important;
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px
+}
+
+.col-lg-12 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px
+}
+
+@media (min-width:992px) {
+    .col-lg-12 {
+        flex: 0 0 100%;
+        max-width: 100%
+    }
+}
+
+
+.table .thead-dark th {
+    color: #fff !important;
+    background-color: #343a40 !important;
+    border-color: #454d55;
+    -webkit-print-color-adjust: exact; 
+}
+@media screen {
+    .no_screen {
+        display: none;
+    }
+
+    .no_print {
+        display: block;
+    }
+
+    .amount_due {
+        font-size: 20px;
+        font-family: inherit;
+        font-weight: 400;
+    }
+    .td-7{
+        width: 7% !important;
+    }
+    .td-63{
+        width: 63% !important;
+    }
+
+
+}
+body { -webkit-print-color-adjust: exact !important;}
+.font-weight-bold{
+    font-weight: bold;
+}
+
+
+
+@media print {
+    .td-10{
+        width: 10% !important;
+    }
+    .td-60{
+        width: 60% !important;
+    }
+    body { -webkit-print-color-adjust: exact !important;background: #fff !important;}
+    a{
+        text-decoration: none !important;
+        color: black !important;
+    }
+    .no_screen {
+        display: block !important;
+    }
+
+    .no_print {
+        display: none;
+    }
+
+    .p-xl {
+        padding: 0;
+    }
+
+    .print-invoice {
+        margin-top: -35px;
+    }
+
+    .amount_due {
+        font-size: 20px;
+        font-family: inherit;
+        font-weight: 400;
+        color: red;
+        display: none;
+    }
+
+    .invoice_footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .document-section {
+        display: none;
+    }
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px
+    }
+    
+    .col-lg-12 {
+        position: relative;
+        width: 100%;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px
+    }
+    /*to avoid printing blank page*/
+    html,
+    body {
+        border: 1px solid white;
+        height: 99%;
+        page-break-after: avoid;
+        page-break-before: avoid;
+    }
+
+    a[href]:after {
+        content: none !important;
+    }
+    .table .thead-dark th {
+        color: #fff;
+        background-color: #343a40 !important;
+        border-color: #454d55;
+        -webkit-print-color-adjust: exact !important; 
+    }
+    .border-left-dark{
+        border-left: 5px solid #343a40;
+        -webkit-print-color-adjust: exact; 
+    }
+    .bg-dark-low-opacity{
+        background: rgba(0,0,0,0.09) !important;
+        -webkit-print-color-adjust: exact !important; 
+    }
+
+
+    .font-weight-bold{
+        font-weight: bold;
+    }
+    /************/
+    #profile table,
+    #profile thead,
+    #profile tbody,
+    #profile th,
+    #profile tr,
+    #profile td{
+        display: block;
+    }
+    #profile thead tr{
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    #profile tr{
+        margin: 0 0 1rem 0;
+        padding: 0;
+    }
+    #profile td{
+        border: none;
+        position: relative;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-weight: normal;
+        font-size: 12px;
+        color: #333 !important;
+    }
+    #profile #basic_info td{
+        padding-left: 35%;
+    }
+    #profile #supp_info td{
+        padding-left: 38%;
+    }
+    #profile #off_info td{
+        padding-left: 40%;
+    }
+    #profile #qua_info td{
+        padding-left: 25%;
+    }
+    #profile td:before{
+        position: absolute;
+        top: 0;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+    #basic-info-one td:nth-of-type(1):before{ content: "Unit Name";font-weight: bold !important;}
+    #basic-info-two td:nth-of-type(1):before{ content: "Dept. Name";font-weight: bold !important;}
+    #basic-info-one td:nth-of-type(2):before{ content: "EMP Name";font-weight: bold !important;}
+    #basic-info-two td:nth-of-type(2):before{ content: "EMP ID";font-weight: bold !important;}
+    #basic-info-one td:nth-of-type(3):before{ content: "Device ID";font-weight: bold !important;}
+    #basic-info-two td:nth-of-type(3):before{ content: "Mill Division";font-weight: bold !important;}
+    #basic-info-one td:nth-of-type(4):before{ content: "Father'\s Name";font-weight: bold !important;}
+    #basic-info-two td:nth-of-type(4):before{ content: "Mother'\s Name";font-weight: bold !important;}
+    #basic-info-one td:nth-of-type(5):before{ content: "Present Add";font-weight: bold !important;}
+    #basic-info-two td:nth-of-type(5):before{ content: "Permanent Add";font-weight: bold !important;}
+
+    #basic_info_section{
+        width: 100%;
+    }
+    #basic_info_section .one,
+    #basic_info_section .two{
+        width:42.5%;
+        float: left;
+    }
+    #basic_info_section .three{
+        width:15%;
+        float: left;
+    }
+
+    #supp_info_section{
+        width: 100%;
+    }
+    #supp_info_section .one,
+    #supp_info_section .two{
+        width:33%;
+        float: left;
+    }
+    #supp_info_section .three{
+        width:34%;
+        float: left;
+    }
+    #off_info_section{
+        width: 100%;
+    }
+    #off_info_section .one,
+    #off_info_section .two{
+        width:33%;
+        float: left;
+    }
+    #off_info_section .three{
+        width:34%;
+        float: left;
+    }
+    #qua_info_section{
+        width: 100%;
+    }
+
+}
+
+@page {
+    size: auto;
+    margin: 0mm;
+}
+.font-size-5{font-size:5px;}
+.font-size-6{font-size:6px;}
+.font-size-7{font-size:7px;}
+.font-size-8{font-size:8px;}
+.font-size-9{font-size:9px;}
+.font-size-10{font-size:10px;}
+.font-size-11{font-size:11px;}
+.font-size-12{font-size:12px;}
+.font-size-13{font-size:13px;}
+.font-size-14{font-size:14px;}
+.font-size-15{font-size:15px;}
+.font-size-16{font-size:16px;}
+.font-size-17{font-size:17px;}
+.font-size-18{font-size:18px;}
+.font-size-19{font-size:19px;}
+.font-size-20{font-size:20px;}
+/*to hide page url, page number and datetime*/
+
+

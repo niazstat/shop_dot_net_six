@@ -1,0 +1,1596 @@
+﻿.
+@{
+    ViewData["Title"] = "CustomerEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        New Customer Entry
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+<style>
+    input[type=text]:focus {
+        background-color: #282727;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #282727;
+        color: white;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <h5 class="card-title text-center">..::Customer Information Entry ::..</h5>
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Customer Code :</label>
+                        <div class="col-sm-6">
+                            <input type="text" disabled class="form-control" id="txtCustCode1">
+                        </div>
+
+                        <div class="col-sm-4">
+                            <input type="text" disabled class="form-control" id="txtCustCode2">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Category</label>
+                        <div class="col-sm-3">
+                            <input data-tab="1" type="text" class="form-control" id="txtCategory" placeholder="" list="dltxtCategory">
+                            <datalist id="dltxtCategory">
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <button type="button" class="btn  btn-primary"
+                                    data-toggle="modal" data-target="#modalCategory" id="btnEditCat">
+                                Edit
+                            </button>
+
+                        </div>
+
+
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Sub Category</label>
+                        <div class="col-sm-3">
+                            <input data-tab="2" type="text" class="form-control" id="txtSubCategory" placeholder="" list="dltxtSubCategory">
+                            <datalist id="dltxtSubCategory">
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn  btn-primary"
+                                    data-toggle="modal" data-target="#modalSubCategory" id="btnEditSubCat">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Shop Name</label>
+                        <div class="col-sm-10">
+                            <input data-tab="3" type="text" class="form-control" id="txtShopName" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Customer Name</label>
+                        <div class="col-sm-10">
+                            <input data-tab="4" type="text" class="form-control" id="txtCustName" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">District</label>
+                        <div class="col-sm-4">
+                            <input data-tab="5" type="text" class="form-control" id="txtDistrict" list="dltxtDistrict" />
+
+
+                            <datalist id="dltxtDistrict">
+                            </datalist>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <button type="button" class="btn  btn-info"
+                                    data-toggle="modal" data-target="#modalDistrict" id="btnEditDistrict">
+                                Edit
+                            </button>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            <input data-tab="6" type="text" class="form-control" id="txtAddress">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Mobile 1</label>
+                        <div class="col-sm-4">
+                            <input data-tab="7" type="text" class="form-control" id="txtMobile1">
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Mobile 2</label>
+                        <div class="col-sm-4">
+                            <input data-tab="8" type="text" class="form-control" id="txtMobile2">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-4 col-form-label">Op Balance ( Balance | Commission | PCs)</label>
+                        <div class="col-sm-3">
+                            <input data-tab="9" type="number" disabled class="form-control" id="txtOpBalance" placeholder=" Op Balance">
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input data-tab="10" type="number" disabled class="form-control" id="txtOpComm" placeholder=" Op Comm">
+                        </div>
+                        <div class="col-sm-2">
+                            <input data-tab="11" type="number" disabled class="form-control" id="txtOpPcs" placeholder=" Op Qty">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Starting Year</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="selStartingYear">
+                            </select>
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="selActiveStatus">
+                                <option value="0">Active</option>
+                                <option value="1">DeActive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-tab="12" data-custid="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+                            <th>ID</th>
+                            <th>Cust No</th>
+                            <th>Sub Cat</th>
+                            <th>Name</th>
+                            <th>Shop</th>
+                            <th>Op Balance</th>
+                            <th>District</th>
+
+                            <th>MobileNo</th>
+                            <th>Address1</th>
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="app-drawer-overlay d-none animated fadeIn"></div>
+
+
+
+<div id="modalCategory" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Category</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Category Name</label>
+                                <input name="CategoryName" id="txtCatNameEdit" placeholder="Category Name" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-catId="0" type="button" id="btnSaveCat" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblCat" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modalDistrict" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add District</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">District Name</label>
+                                <input name="Dsitrict Name" id="txtDistrictNameEdit" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo4">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input type="button" data-districtid="0" id="btnSaveDistrict" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblDistrict" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modalSubCategory" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Sub Category</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Category Name</label>
+                                <input name="CategoryName" id="txtCatNameEditSub" placeholder="Category Name" type="text" class="form-control" list="dltxtCategory">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Sub Category Name</label>
+                                <input name="CategoryName" id="txtSubCatNameEditSub" placeholder="Sub Category Name" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <span id="spInfo3">
+
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+
+                            <input data-subcatId="0" type="button" id="btnSaveSubCat" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblSubCat" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseSubCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    var CUST_LIST = [];
+    var CUST_CAT = [];
+    var SUB_CUST_CAT = [];
+    var tableCust;
+    $(document).ready(function () {
+
+        // alert('ghgh');
+
+        LoadDefaultData();
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            //"processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [1, "asc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "customerID" },
+                { "data": "customerNo" },
+                { "data": "customerSubCategory.customerSubCategoryName" },
+                { "data": "name" },
+                { "data": "shopName" },
+                { "data": "openingBalance" },
+                { "data": "district.name" },
+                { "data": "mobileNo" },
+                { "data": "address1" },
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.customerID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.customerID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+        bindStartingYear();
+        function bindStartingYear() {
+
+            var date = new Date();
+            var _currentYear =  date.getFullYear();
+
+            $("#selStartingYear").append("<option value='" + _currentYear + "'>" + _currentYear+"</option>")
+            $("#selStartingYear").append("<option value='" + (_currentYear - 1) + "'>" + (_currentYear - 1) + "</option>")
+            $("#selStartingYear").append("<option value='" + (_currentYear - 2) + "'>" + (_currentYear - 2) + "</option>")
+
+        }
+
+
+
+
+        $("input").on('keypress', function (event) {
+
+            // alert('ok');
+            var _currentTab = $(this).attr("data-tab");
+            var _id = $(this).attr("id");
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                if (_currentTab != undefined) {
+                    if (_id !== 'btnSaveCust') {
+                        var _nextTab = parseInt(_currentTab) + 1;
+                        $('input[data-tab="' + _nextTab + '"]').focus();
+                    }
+                }
+            }
+
+
+        });
+
+
+
+
+        function LoadDefaultData() {
+            ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/CustomerEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    //RECEIVE = data;
+                    //BindProduct(data);
+                    //$("#spInfo").html('');
+                    CUST_CAT = data.customerCategorys;
+                    CUST_LIST = data.customers;
+                    SUB_CUST_CAT = data.customerSubCategorys;
+                    LoadCustCategoryName(data.customerCategorys);
+                    BinCategoryTable(data.customerCategorys);
+                    BindDistrictName(data.districtS);
+                    BinSubCategoryTable(data.customerSubCategorys);
+                    tableCust.rows.add(data.customers).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+        $("#btnEditCat").click(function () {
+            $("#spInfo2").html('');
+            ClearControl();
+        });
+        $("#txtCategory").bind('input', function () {
+            // ClearAfterBuyerChange();
+            $("#dltxtSubCategory option").remove();
+            $("#txtSubCategory").val('');
+            // var _thisVal=
+            var _val = $(this).val();
+
+            var _catID = GetDataID(_val, "#dltxtCategory");
+
+            if (_catID != undefined) {
+                var _SubCatList = SUB_CUST_CAT.filter(function (_obj) {
+                    return _obj.customerCategoryID == _catID;
+                });
+
+                LoadSubCustName(_SubCatList);
+            }
+
+        });
+
+
+        $("#btnSaveCust").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+            $("#spInfo").html('');
+
+
+            var _custId = $("#btnSaveCust").attr('data-custid');
+
+
+            var _catName = $("#txtCategory").val();
+
+            var _subcatName = $("#txtSubCategory").val();
+
+            var _shopName = $("#txtShopName").val();
+
+            var _custName = $("#txtCustName").val();
+
+            var _distName = $("#txtDistrict").val();
+
+            var _address = $("#txtAddress").val();
+
+            var _mobile1 = $("#txtMobile1").val();
+
+            var _mobile2 = $("#txtMobile2").val();
+
+            var _OpBal = $("#txtOpBalance").val();
+
+            var _opComm = $("#txtOpComm").val();
+            var _opPcs = $("#txtOpPcs").val();
+
+            let _startingYear = $("#selStartingYear").val();
+
+            let _status = $("#selActiveStatus").val();
+
+
+            var _catID = GetDataID(_catName, "#dltxtCategory");
+
+            var _subCatID = GetDataID(_subcatName, "#dltxtSubCategory");
+
+            var _distID = GetDataID(_distName, "#dltxtDistrict");
+
+
+            if (_distName == '') {
+                $("#txtDistrict").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid District !</strong>');
+                return;
+            }
+            if (_distID == '' || _distID == null || _distID == undefined) {
+                $("#txtDistrict").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid District !</strong>');
+                return;
+            }
+
+
+
+            if (_catName == '') {
+                $("#txtCategory").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Category !</strong>');
+                return;
+            }
+            if (_catID == '' || _catID == null || _catID == undefined) {
+                $("#txtCategory").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Category !</strong>');
+                return;
+            }
+            if (_subcatName == '') {
+                $("#txtSubCategory").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Sub Category !</strong>');
+                return;
+            }
+
+
+            if (_subCatID == '' || _subCatID == null || _subCatID == undefined) {
+                $("#txtSubCategory").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Sub Category !</strong>');
+                return;
+            }
+
+            if (_shopName == '') {
+                $("#txtShopName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Shop Name !</strong>');
+                return;
+            }
+
+            if (_custName == '') {
+                $("#txtCustName").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Customer Name !</strong>');
+                return;
+            }
+            if (_address == '') {
+                $("#txtAddress").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Address !</strong>');
+                return;
+            }
+
+            if (_mobile1 == '') {
+                $("#txtMobile1").addClass("input-validation-error");
+                $("#spInfo").html('<strong style="color:red">Invalid Mobilr !</strong>');
+                return;
+            }
+
+
+            if (_OpBal == '') {
+                _OpBal = '0';
+            }
+            if (_opComm == '') {
+                _opComm = '0';
+            }
+            if (_opPcs == '') {
+                _opPcs = '0';
+            }
+
+
+            $("#spInfo").html('<strong>Please wait ....</strong>');
+            var customer = {
+                "CustomerID": _custId,
+                "CustomerNo": 0,
+                "DistrictID": _distID,
+                "Name": _custName,
+                "ShopName": _shopName,
+                "MobileNo": _mobile1,
+                "MobileNo2": _mobile2,
+                "Address1": _address,
+                "Address2": _address,
+
+
+                "OpeningBalance": _OpBal,
+                "OpeningCommission": _opComm,
+                "OpeningQty": _opPcs,
+                "CurrentBalance": _OpBal,
+
+                "CustomerSubCategoryID": _subCatID,
+                "StartingYear": _startingYear == null || undefined ? 0 : _startingYear,
+                "IsBlocked": _status
+
+            }
+
+            console.log(customer);
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/AddCustomer",
+
+                data: JSON.stringify(customer),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                    }
+                    else {
+                        ClearControl();
+                        $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        CUST_LIST = data.obj;
+                        // tableCust.fnClearTable();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+
+                    }
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        });
+
+
+
+        $("#btnSaveCat").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $("#btnSaveCat").attr('data-catId');
+
+            $("#spInfo2").html('');
+
+            var _catName = $("#txtCatNameEdit").val();
+
+            if (_catName == '') {
+                $("#txtCatNameEdit").addClass("input-validation-error");
+                $("#spInfo2").html('<strong style="color:red">Invalid Product !</strong>');
+                return;
+            }
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+            var customerCategory = {
+                "CustomerCategoryID": _id,
+                "CustomerCategoryName": _catName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/InsertNewCustomerCategory",
+
+                data: JSON.stringify(customerCategory),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        ClearControl();
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        CUST_CAT = data.obj;
+                        LoadCustCategoryName(data.obj)
+                        BinCategoryTable(data.obj);
+                    }
+
+
+
+                    //CUST_CAT = data.customerCategorys;
+                    //CUST_LIST = data.customers;
+                    //SUB_CUST_CAT = data.customerSubCategorys;
+                    //LoadCustName(data.customerCategorys);
+                    //BinCategoryTable(data.customerCategorys);
+                    //BinSubCategoryTable(data.customerSubCategorys)
+                    //tableCust.rows.add(data.customers).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+        $("#btnAddNewCust").on('click', function () {
+            ClearControl();
+        });
+
+        $("#btnSaveSubCat").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+            $("#spInfo3").html('');
+
+            var _catName = $("#txtCatNameEditSub").val();
+
+            var _subCatName = $("#txtSubCatNameEditSub").val();
+
+            var _id = $(this).attr("data-subcatId");
+
+            if (_catName == '') {
+                $("#txtCatNameEditSub").addClass("input-validation-error");
+                $("#spInfo3").html('<strong style="color:red">Invalid Category !</strong>');
+                return;
+            }
+
+
+            if (_subCatName == '') {
+                $("#txtSubCatNameEditSub").addClass("input-validation-error");
+                $("#spInfo3").html('<strong style="color:red">Invalid Sub Category !</strong>');
+                return;
+            }
+
+
+            var _catID = GetDataID(_catName, "#dltxtCategory");
+
+            if (_catID == '' || _catID == null || _catID == undefined) {
+                $("#txtCatNameEditSub").addClass("input-validation-error");
+                $("#spInfo3").html('<strong style="color:red">Invalid Category !</strong>');
+                return;
+            }
+
+
+
+            $("#spInfo3").html('<strong>Please wait ....</strong>');
+            var customerSubCategory = {
+                "CustomerCategoryID": _catID,
+                "CustomerSubCategoryID": _id,
+                "CustomerSubCategoryName": _subCatName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/InsertNewSubCustomerCategory",
+
+                data: JSON.stringify(customerSubCategory),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo3").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtSubCatNameEditSub").val('');
+                        $("#spInfo3").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        ClearControl();
+
+                        BinSubCategoryTable(data.obj)
+                        SUB_CUST_CAT = data.obj;
+                    }
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+
+        /////////////----------------
+        $("#btnSaveDistrict").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr('data-districtid');
+            $("#spInfo4").html('');
+
+            var _disName = $("#txtDistrictNameEdit").val();
+
+            if (_disName == '') {
+                $("#txtDistrictNameEdit").addClass("input-validation-error");
+                $("#spInfo4").html('<strong style="color:red">Invalid Product !</strong>');
+                return;
+            }
+            $("#spInfo4").html('<strong>Please wait ....</strong>');
+            var district = {
+                "DistrictID": _id,
+                "Name": _disName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "District/SaveDistrict",
+
+                data: JSON.stringify(district),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo4").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtDistrictNameEdit").val('');
+                        $("#spInfo4").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindDistrictName(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+
+        function LoadCustCategoryName(_catList) {
+            $("#dltxtCategory option").remove();
+            $.each(_catList, function (i, prodData) {
+
+                $("#dltxtCategory").append(' <option data-id="' + prodData.customerCategoryID + '" data-custID="' + prodData.customerCategoryID + '" value="' + prodData.customerCategoryName + '" />');
+
+
+            });
+
+        }
+
+
+
+        function BindDistrictName(_catList) {
+            $("#dltxtDistrict option").remove();
+            $("#tblDistrict tr:gt(0)").remove();
+            $.each(_catList, function (i, prodData) {
+
+                $("#dltxtDistrict").append(' <option data-id="' + prodData.districtID + '" value="' + prodData.name + '" />');
+                $("#tblDistrict").append('<tr> <td>' + prodData.districtID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-districtID=' + prodData.districtID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button></td><td> <button data-for="delete" data-districtID=' + prodData.districtID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+
+            });
+
+        }
+
+
+
+
+
+        function BinCategoryTable(_catList) {
+            $("#tblCat tr:gt(0)").remove();
+
+            $.each(_catList, function (i, prodData) {
+
+                $("#tblCat").append('<tr> <td>' + prodData.customerCategoryID + '</td> <td>' + prodData.customerCategoryName + '</td> <td>' + '  <button data-for="edit" data-catId=' + prodData.customerCategoryID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button > <button data-for="delete" data-catId=' + prodData.customerCategoryID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+
+            });
+
+        }
+
+        function BinSubCategoryTable(_subcatList) {
+            $("#tblSubCat tr:gt(0)").remove();
+            $.each(_subcatList, function (i, prodData) {
+
+                $("#tblSubCat").append('<tr> <td>' + prodData.customerSubCategoryID + '</td> <td>' + prodData.customerCategory.customerCategoryName + '</td><td>' + prodData.customerSubCategoryName + '</td> <td>' + '  <button data-for="edit" data-catId=' + prodData.customerCategoryID + '  data-subcatId=' + prodData.customerSubCategoryID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button > <button data-for="delete" data-catId=' + prodData.customerCategoryID + ' data-subcatId=' + prodData.customerSubCategoryID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+
+            });
+
+        }
+
+
+
+
+        $("#tblSubCat").on('click', 'tr td button', function (e) {
+
+
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+
+
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-subcatId");
+            var customerSubCategory = {
+                "customerSubCategoryID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadCustSUBCategoryForEdit(customerSubCategory);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Sub Category?')) {
+                    // Save it!
+                    DeleteCustSUBCategory(customerSubCategory)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+
+        });
+
+
+        $("#tblDistrict").on('click', 'tr td button', function (e) {
+
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-districtID");
+            var district = {
+                "districtID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadDistrictFrorEdit(district);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete District?')) {
+                    // Save it!
+                    DeleteDistrict(district)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+        });
+
+
+        $("#tblCat").on('click', 'tr td button', function (e) {
+
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-catId");
+            var customerCategory = {
+                "customerCategoryID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadCustCategoryForEdit(customerCategory);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Category?')) {
+                    // Save it!
+                    DeleteCustCategory(customerCategory)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+        });
+
+
+
+
+
+        function LoadDistrictFrorEdit(_district) {
+            $("#spInfo4").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "District/GetDistrict",
+
+                data: JSON.stringify(_district),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    $("#btnSaveDistrict").val('Update');
+                    $("#btnSaveDistrict").attr('data-districtid', data.districtID);
+
+
+                    $("#txtDistrictNameEdit").val(data.name);
+
+                    $("#spInfo4").html('');
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function DeleteDistrict(_district) {
+            $("#spInfo4").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "District/DeleteDistrict",
+
+                data: JSON.stringify(_district),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+
+                    console.log(data);
+
+                    ClearControl();
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo4").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtDistrictNameEdit").val('');
+                        $("#spInfo4").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindDistrictName(data.obj);
+                    }
+
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+        function LoadCustCategoryForEdit(_obj) {
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/GetCustomerCategory",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    $("#btnSaveCat").val('Update');
+                    $("#btnSaveCat").attr('data-catId', data.customerCategoryID);
+
+
+                    $("#txtCatNameEdit").val(data.customerCategoryName);
+
+                    $("#spInfo2").html('');
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+        function DeleteCustCategory(_customerCategory) {
+
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/DeleteCustomerCategory",
+
+                data: JSON.stringify(_customerCategory),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtCatNameEdit").val('');
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        CUST_CAT = data.obj;
+                        LoadCustCategoryName(data.obj)
+                        BinCategoryTable(data.obj);
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+
+        function LoadCustSUBCategoryForEdit(_obj) {
+            $("#spInfo3").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/GetSubCustomerCategory",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    $("#btnSaveSubCat").val('Update');
+                    $("#btnSaveSubCat").attr('data-subcatId', data.customerSubCategoryID);
+
+
+                    $("#txtSubCatNameEditSub").val(data.customerSubCategoryName);
+
+                    $("#spInfo3").html('');
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        function DeleteCustSUBCategory(_customerSubCategory) {
+
+            $("#spInfo3").html('<strong>Please wait ....</strong>');
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CustomerCategory/DeleteSubCustomerCategory",
+
+                data: JSON.stringify(_customerSubCategory),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo3").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtSubCatNameEditSub").val('');
+                        $("#spInfo3").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        CUST_CAT = data.obj;
+                        BinSubCategoryTable(data.obj)
+                        SUB_CUST_CAT = data.obj;
+                    }
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+
+
+        }
+
+
+
+        function GetDataValue(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[data-id="' + value + '"]');
+            var endval = val.attr('value');
+            return endval;
+        }
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+
+
+
+
+    });
+
+    function editCustomer(id) {
+        ClearControl();
+        var customer = {
+            "CustomerID": id
+        }
+
+
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Customer/GetCustomer",
+
+            data: JSON.stringify(customer),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                $("#btnSaveCust").val('Update');
+                $("#btnSaveCust").attr('data-custid', data.customerID);
+                $("#txtCustCode1").val(data.customerNo);
+                $("#txtCustName").val(data.name);
+                $("#txtShopName").val(data.shopName);
+                $("#txtMobile1").val(data.mobileNo);
+                $("#txtMobile2").val(data.mobileNo2);
+                $("#txtAddress").val(data.address1);
+                $("#txtOpBalance").val(data.openingBalance);
+
+
+                $("#txtOpComm").val(data.openingCommission);
+                $("#txtOpPcs").val(data.openingQty);
+
+                $("#txtDistrict").val(data.district.name);
+
+                console.log(data.customerSubCategoryID);
+                var subCat = SUB_CUST_CAT.find(a => a.customerSubCategoryID == data.customerSubCategoryID);
+                console.log(subCat);
+                // $("#txtCategory").val();
+
+                var _catName = subCat.customerCategory.customerCategoryName;
+                var _catID = subCat.customerCategoryID
+                $("#txtSubCategory").val(subCat.customerSubCategoryName);
+                $("#txtCategory").val(_catName);
+
+
+
+                $("#selStartingYear").val(data.startingYear);
+
+                $("#selActiveStatus").val(data.isBlocked);
+            
+                $("#spInfo").html('');
+
+
+
+
+
+                if (_catID != undefined) {
+                    var _SubCatList = SUB_CUST_CAT.filter(function (_obj) {
+                        return _obj.customerCategoryID == _catID;
+                    });
+
+                    LoadSubCustName(_SubCatList);
+                }
+
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+
+
+    }
+
+    function LoadSubCustName(_subcatList) {
+        $("#dltxtSubCategory option").remove();
+
+        $.each(_subcatList, function (i, prodData) {
+
+            $("#dltxtSubCategory").append(' <option data-id="' + prodData.customerSubCategoryID + '" data-custID="' + prodData.customerSubCategoryID + '" value="' + prodData.customerSubCategoryName + '" />');
+
+
+        });
+
+    }
+    function deleteCustomer(id) {
+
+        ClearControl();
+
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+
+
+
+        var customer = {
+            "CustomerID": id
+        }
+
+
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + "Customer/DeleteCustomer",
+
+            data: JSON.stringify(customer),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    ClearControl();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                    CUST_LIST = data.obj;
+                    // tableCust.fnClearTable();
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+
+                }
+
+
+
+
+
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+    function ClearControl() {
+        $("#btnSaveCust").val('Save');
+        $("#txtCategory").val('');
+        $("#txtSubCategory").val('');
+
+        $("#txtShopName").val('');
+
+        $("#txtCustName").val('');
+
+        $("#txtDistrict").val('');
+        $("#txtDistrictNameEdit").val('');
+
+        $("#txtAddress").val('');
+
+        $("#txtMobile1").val('');
+
+        $("#txtMobile2").val('');
+
+        $("#txtCatNameEdit").val('');
+        $("#txtCatNameEditSub").val('');
+
+        $("#txtSubCatNameEditSub").val('');
+
+        $("#txtOpBalance").val('0');
+
+        $("#txtOpComm").val('0');
+        $("#txtOpPcs").val('0');
+        $("#btnSaveCust").attr('data-custid', '0');
+
+        $("#btnSaveDistrict").attr('data-districtid', '0');
+        $("#btnSaveDistrict").val('Save');
+
+
+        $("#btnSaveCat").attr('data-catId', '0');
+        $("#btnSaveCat").val('Save');
+
+
+
+
+        $("#btnSaveSubCat").attr('data-subcatId', '0');
+        $("#btnSaveSubCat").val('Save');
+    }
+
+</script>

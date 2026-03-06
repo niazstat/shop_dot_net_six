@@ -1,0 +1,442 @@
+﻿
+@{
+    ViewData["Title"] = "View_ALL_Customer_Year_Close";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: All Party Year Closing  Report::.
+    </div>
+
+}
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-3">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+    <div class="col-sm-1">
+
+    </div>
+    <div class="col-sm-2">
+        <input type="button" class="btn btn-info  btn-block" value="All"
+               id="btnAll" />
+    </div>
+
+    <div class="col-sm-2">
+        <input type="button" class="btn btn-success btn-block" value="Active"
+               id="btnActive" />
+    </div>
+
+    <div class="col-sm-2">
+        <input type="button" class="btn btn-dark  btn-block" value="DeActive"
+               id="btnDeActive" />
+    </div>
+    <div class="col-sm-1">
+
+    </div>
+
+
+
+</div>
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+
+<div class="row" id="tab" style="background-color:white !important;">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+            </p>
+        
+            <p style="text-align:center;background-color:darkgrey;">
+
+                <span style="font-weight:900"> @TempData["Title"].ToString()</span>
+
+
+            </p>
+        </div>
+    </div>
+
+
+    <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+    </table>
+
+
+</div>
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var CATEGORYWISE_CUSTOMER = [];
+
+    var ALL_DATA = [];
+    $(document).ready(function () {
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+
+
+            return vars;
+        }
+
+        var queryStrings = getUrlVars();
+
+        LoadData();
+
+        function LoadData() {
+            $("#spInfo").html('');
+
+            var model = {
+               
+                "dDate": queryStrings["dDate"] == null ? '01-Jan-1900' : queryStrings["dDate"],
+                "YearName": queryStrings["_yearName"] == null ? '0' : queryStrings["_yearName"],
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/Get_SP_View_ALL_Customer_Year_Close",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data.obj);
+                    $("#spInfo").html('');
+
+                    ALL_DATA = data.obj;
+
+                    BindData(ALL_DATA);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+
+
+        $("#btnActive").click(function () {
+
+            var _allData = ALL_DATA.filter(_a => _a.isBlocked==0)
+
+
+            BindData(_allData);
+
+        });
+
+
+
+        $("#btnDeActive").click(function () {
+
+            var _allData = ALL_DATA.filter(_a => _a.isBlocked == 1)
+
+
+            BindData(_allData);
+
+        });
+
+
+        $("#btnAll").click(function () {
+
+
+
+            BindData(ALL_DATA);
+
+        });
+
+
+
+        function BindData(_obj) {
+            $('#tblOrder').empty()
+
+            $("#tblOrder").append(`<thead>
+                <tr>
+                                              <td>SL</td>
+                                                <td>ID</td>
+                                                <td>Name</td>
+                                                <td>Shop Name</td>
+                                                <td>সেলস</td>
+                                                <td>ক্রয়</td>
+                                                <td>লাভ</td>
+                                               
+                                                <td>কম/বেশি</td>
+                                             
+                                                <td>এডজাস্ট</td>
+                                                <td>রিটার্ন </td>
+                                                <td> ক্রয় <br>(রিটার্ন)</td>
+                                                <td>শর্ট</td>
+                                                <td>রিজেক্ট</td>
+    <td>সেলস <br> এডজাস্ট</td>
+   <td>Net Profit</td>
+                                            </tr >
+                                        </thead >`);
+
+            var _totSalesAmount = 0;
+            var _totBuyAmount = 0;
+ 
+            var _totaddLessAmount = 0;
+       
+  
+            var _totadjustAmount = 0;
+
+            var _totreturnAmount = 0;
+
+            var _totreturnPurAmount = 0;
+
+            var _totclosingShortAmount = 0;
+
+            var _totrejectGoodsAmount = 0;
+            var _profLossAmnt = 0;
+
+            var _totSalesAdjustAmount = 0;
+
+            var _netProfitAmount = 0;
+
+          
+            $.each(_obj, function (i, prodData) {
+
+
+                _totSalesAmount += prodData.salesAmount;
+
+                _totBuyAmount += prodData.buyAmount;
+
+                _profLossAmnt += (prodData.salesAmount - prodData.buyAmount);
+
+                _totaddLessAmount += prodData.addLess;
+
+                _totreturnAmount += prodData.returnAmount;
+
+                _totadjustAmount += prodData.adjustAmont;
+
+
+                _totreturnPurAmount += prodData.buyReturn;
+
+                _totclosingShortAmount += prodData.shortAmount;
+
+                _totrejectGoodsAmount += prodData.rejectAmount;
+
+                _netProfitAmount += prodData.netProfit;
+
+
+                _totSalesAdjustAmount += prodData.salesAdjustAmount;
+
+                $("#tblOrder").append(` <tr>
+                    <td>`+ (i + 1) +`</td>
+   <td>`+ prodData.customerID +`</td>
+                                                <td>`+ prodData.name+`</td>
+                                               <td>`+ prodData.shopName +`</td>
+                                                <td style="text-align:right">`+ prodData.salesAmount.toFixed(2) +`</td>
+                                                <td style="text-align:right">`+ prodData.buyAmount.toFixed(2) +`</td>
+                                                <td style="text-align:right">`+ (parseFloat(prodData.salesAmount) - parseFloat(prodData.buyAmount)).toFixed(2) +`</td>
+                                                
+                                                <td style="text-align:right">`+ prodData.addLess.toFixed(2)  +`</td>
+                                               
+                                                <td style="text-align:right">`+ prodData.adjustAmont.toFixed(2)  +`</td>
+                                                <td style="text-align:right">`+ prodData.returnAmount.toFixed(2) +` </td>
+                                                <td style="text-align:right">`+ prodData.buyReturn.toFixed(2) +` </td>
+                                                <td style="text-align:right">`+ prodData.shortAmount.toFixed(2)  +`</td>
+                                                <td style="text-align:right">`+ prodData.rejectAmount.toFixed(2) +`</td>
+
+                                                 <td style="text-align:right">`+ prodData.salesAdjustAmount.toFixed(2) +`</td>
+                                                <td style="text-align:right">`+ prodData.netProfit.toFixed(2) +`</td>
+                                            </tr >`);
+
+
+            });
+
+            $("#tblOrder").append(` <tr>
+                    <td colspan="4">Total :</td>
+
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totSalesAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totBuyAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _profLossAmnt.toFixed(2) + `</td>
+                                                
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totaddLessAmount.toFixed(2) + `</td>
+                                                
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totadjustAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totreturnAmount.toFixed(2) + ` </td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totreturnPurAmount.toFixed(2) + ` </td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totclosingShortAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totrejectGoodsAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _totSalesAdjustAmount.toFixed(2) + `</td>
+                                                <td style="text-align:right;   font-weight: bolder;">`+ _netProfitAmount.toFixed(2)+`</td>
+                                            </tr >`);
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    });
+
+
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Party_Year_Closing_List_Report</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>
+
+

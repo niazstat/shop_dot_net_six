@@ -1,0 +1,937 @@
+﻿
+@{
+    ViewData["Title"] = "ChequeTransactionEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label">একাউন্ট নং  :</label>
+
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtAccNoSearch">
+    </div>
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label">গ্রহনকারীর/প্রদানকারী :</label>
+    </div>
+    <div class="col-md-2">
+        <select class="form-control-sm form-control" id="selCustSuppTypeSearch">
+            <option value="">-</option>
+          
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtRecPayNameSearch">
+    </div>
+    <div class="col-md-1">
+        <input type="text" disabled class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtInvoiceNoSearch">
+    </div>
+    <div class="col-md-1">
+        <button id="btnSearch" class="btn btn-danger"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form autocomplete="off">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">ইনভয়েস নং  :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtInvoiceNo">
+                        </div>
+
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">তারিখ :</label>
+                        <div class="col-sm-3">
+                            <input type="text" autocomplete="off" class="form-control" data-date-format="dd-mm-yyyy" id="txtDate"/>
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">গ্রহন/প্রদান</label>
+                        <div class="col-sm-3">
+                            <select class="form-control-sm form-control" id="selPayRecType">
+                                <option value="">-</option>
+                             
+                            </select>
+
+                        </div>
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">একাউন্ট নং :</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" autocomplete="off" id="txtAccNo" placeholder="" list="dltxtAccNo">
+                            <datalist id="dltxtAccNo"></datalist>
+                        </div>
+                        <div class="col-sm-1">
+
+                            <button style="display:none;" type="button" class="btn  btn-primary"
+                                    data-toggle="modal" data-target="#modalCategory" id="btnEditCat">
+                                Edit
+                            </button>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মাধ্যম :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtMedium" list="dltxtMedium">
+                            <datalist id="dltxtMedium">
+                            </datalist>
+                        </div>
+                    
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">গ্রহনকারীর/প্রদানকারী:</label>
+                        <div class="col-sm-3">
+                            <select class="form-control-sm form-control" id="selCustSuppType">
+                                <option value="">-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> নাম :</label>
+                        <div class="col-sm-6">
+                            <input type="text" autocomplete="off" class="form-control" id="txtCustSupName" list="dltxtCustSupName" />
+                            <datalist id="dltxtCustSupName">
+
+                            </datalist>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">পূর্বের ব্যালান্স :</label>
+                        <div class="col-sm-4">
+                            <input type="number" disabled class="form-control" id="txtRevBalance"/>
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">চেক/টিটি নং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtChekNo"/>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">টাকা :</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="txtAmount"/>
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">চেক পাশ তাং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" autocomplete="off" class="form-control" data-date-format="dd-mm-yyyy" id="txtChekPassDate"/>
+                        
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বর্তমান ব্যালান্স :</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="txtCurrentBalance"/>
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> :</label>
+                        <div class="col-sm-2">
+
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+
+                                    <input type="checkbox" id="chkChekPass" class="form-check-input"/>
+                                    চেক পাশ
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">নোট :</label>
+                        <div class="col-sm-10">
+                            <input type="text" autocomplete="off" class="form-control" id="txtNote"/>
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-chequeTransactionID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>সি নং</th>
+
+                            <th>ইনভয়েস নং</th>
+                            <th>তারিখ</th>
+                            <th>গ্রহন/প্রদান</th>
+                            <th>Cust নাম</th>
+                            <th>Supp নাম</th>
+                          
+                            <th>টাকা</th>
+                            <th>একাউন্ট নং</th>
+
+                            <th>চেক পাশ তাং</th>
+
+                            <th>চেক পাশ</th>
+
+                            <th>নোট</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section HeadingText {
+    <div class="page-title-heading">
+        ..::   চেক লেনদেন    ::..
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+<script type="text/javascript">
+
+    const CONTROLLERANME = "ChequeTransaction";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var CUST_LIST = [];
+    var SUPP_LIST = [];
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+    var tableCust;
+    $(document).ready(function () {
+
+
+ 
+
+
+
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate");
+        });
+
+        $("#txtChekPassDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtChekPassDate");
+        });
+
+     
+      
+        $("#txtDate").val(today);
+        $("#txtChekPassDate").val(today);
+        LoadDefaultData();
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "invoicNoSL" },
+
+                { "data": "generatedInvoicNo" },
+                { "data": "tranDateFormatted" },
+                { "data": "type" },
+                {
+                    "data": "customer",
+                     "mRender": function (data, type, full) {
+                        return data == null ? '<span >N/A</span>' : '<span>'+data.name+'</span>';
+                    }
+
+
+                },
+
+
+                {
+                    "data": "supplier",
+                    "mRender": function (data, type, full) {
+                        return data == null ? '<span >N/A</span>' : '<span>' + data.name + '</span>';
+                    }
+
+
+                },
+                { "data": "amount" },
+                { "data": "bankAccount.accountNo" },
+                { "data": "chequePassDateFormatted" },
+                {
+                    "data": "isChequePassed",
+                    "mRender": function (data, type, full) {
+                        return data == true ? '<span style="color:green">Y</span>' : '<span style="color:red">N</span>';
+                    }
+
+
+                },
+                { "data": "note" },
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.chequeTransactionID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.chequeTransactionID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/GetChequeTrasactionViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+                    BindTypes(data.types);
+                    BindRecvPayer(data.receiverPayer);
+                    BindPaymentMedium(data.paymentMedium);
+                    BindAccounts(data.bankAccounts);
+                    SUPP_LIST = data.suppliers;
+                    CUST_LIST = data.customers;
+                    tableCust.rows.add(data.chequeTransactions).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        function BindTypes(_obj) {
+            $.each(_obj, function (i, prodData) {
+
+                $("#selPayRecType").append(' <option  value="' + prodData + '" >' + prodData+'</option>');
+            });
+        }
+
+        function BindRecvPayer(_obj) {
+            $.each(_obj, function (i, prodData) {
+
+                $("#selCustSuppType").append(' <option  value="' + prodData + '" >' + prodData + '</option>');
+                $("#selCustSuppTypeSearch").append(' <option  value="' + prodData + '" >' + prodData + '</option>');
+            });
+        }
+
+        function BindPaymentMedium(_obj) {
+            console.log(_obj);
+            $("#txtMedium").val(_obj.name);
+            $("#dltxtMedium").append(' <option data-id="' + _obj.paymentMediumID + '" data-custID="' + _obj.paymentMediumID + '" value="' + _obj.name + '" />');
+
+        }
+
+
+        function BindAccounts(_obj) {
+            $.each(_obj, function (i, prodData) {
+                $("#dltxtAccNo").append(' <option data-id="' + prodData.bankAccountID + '" data-custID="' + prodData.bankAccountID + '" value="' + prodData.accountNo + "_" + prodData.bankName+ '" />');
+
+            });
+        }
+
+
+
+        $('#selCustSuppType').on('change', function () {
+            $("#dltxtCustSupName option").remove();
+            $("#txtCustSupName").val('');
+            let _val = this.value;
+
+            LoadNames(_val);
+
+        });
+
+        function LoadNames(_val) {
+
+            if (_val == "Customer") {
+                BindCustomers();
+               // LoadCustomers();
+            }
+           else if (_val == "Supplier") {
+               // LoadSuppliers();
+                BindSuppliers();
+            }
+
+        }
+
+ 
+
+
+    
+
+
+
+        $("#txtCustSupName").on('input', function () {
+
+            $("#txtRevBalance").val('');
+
+            let _custName = $("#txtCustSupName").val();
+
+            if (_custName == '') {
+                return;
+            }
+
+            let _cstID = GetCustID(_custName, "#dltxtCustSupName");
+            let _suppID = GetSuppID(_custName, "#dltxtCustSupName");
+            let _custORSupp = $("#selCustSuppType").val();
+
+            if ((_cstID == null || _cstID == undefined) && (_suppID == null || _suppID == undefined)) {
+                return;
+            }
+
+            let _cust = {};
+
+            let _supp = {};
+            if (_custORSupp == "Customer") {
+         
+                _cust = {
+                    "CustomerID": parseInt(_cstID)
+                };
+
+            }
+            else if (_custORSupp == "Supplier") {
+                _supp = {
+                    "SupplierId": parseInt(_suppID)
+                };
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+
+
+            let _url = "";
+
+
+            let _obj={ }
+
+            if( _custORSupp == "Customer") {
+                _url = WEB_URL + "Customer/GetCustomerCurrentBalalce";
+                _obj = _cust;
+            }
+            else if (_custORSupp == "Supplier")  {
+                _url = WEB_URL + "Supplier/GetSupplierCurrentBalalce";
+                _obj = _supp;
+            }
+
+
+
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(_obj),
+                url: _url,
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    $("#txtRevBalance").val(data.currentBalance);
+
+                        $("#spInfo").html('');
+                    
+                    // BindSuppliers(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+      
+
+
+        });
+
+
+
+
+        $("#btnSaveCust").on('click', function () {
+
+            let _chequeTransactionID = $(this).attr("data-chequeTransactionID");
+            let _tranDate = $("#txtDate").val();
+            let _type = $("#selPayRecType").val();
+            let _custORSupp = $("#selCustSuppType").val();
+            let _payName2 = $("#txtMedium").val();
+            let _paymentID = GetDataID(_payName2, "#dltxtMedium");
+
+            let _ledgerName = $("#txtCustSupName").val();
+
+            let _amount = $("#txtAmount").val();
+
+            let _accNo = $("#txtAccNo").val();
+            let _accNoID = GetDataID(_accNo, "#dltxtAccNo");
+
+            let _note = $("#txtNote").val();
+            let _chkTTNo = $("#txtChekNo").val();
+            let _chkChekPass = $("#chkChekPass").is(':checked');
+
+            let _chequePassDate = $("#txtChekPassDate").val();
+
+            let _custName = $("#txtCustSupName").val();
+            let _cstID = GetCustID(_custName, "#dltxtCustSupName");
+
+          
+            let _suppID = GetSuppID(_custName, "#dltxtCustSupName");
+
+
+            let _cust = {};
+
+            let _supp = {};
+
+
+            if (_type == '' || _type == '-') {
+                $("#spInfo").html('<strong style="color:red">Invalid Type Receive or Payment</strong>');
+                $("#selPayRecType").focus()
+                return;
+            }
+
+            if (_custORSupp == '' || _custORSupp == '-') {
+                $("#spInfo").html('<strong style="color:red">Select Valid Supplier or Customer !</strong>');
+                $("#selCustSuppType").focus()
+                return;
+            }
+
+
+            if (_custORSupp == "Customer") {
+               // BindCustomers();
+                _cust = {
+                    "CustomerID": parseInt(_cstID)
+                   
+                };
+
+                _supp = {
+                    "SupplierId": 0
+                };
+            }
+            else if (_custORSupp == "Supplier") {
+              //  BindSuppliers();
+                _cust = {
+                    "CustomerID":0
+                };
+
+                _supp = {
+                    "SupplierId": parseInt(_suppID)
+                };
+            }
+
+            else {
+
+                $("#spInfo").html('<strong style="color:red">Invalid Supplier or Customer!</strong>');
+                $("#txtCustSupName").focus()
+                return;
+            }
+
+            if (_amount == '' || parseFloat(_amount)  == 0) {
+                $("#spInfo").html('<strong style="color:red">Invalid Amount !</strong>');
+                $("#txtAmount").focus()
+                return;
+            }
+            if (_accNoID == undefined || _accNoID == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Account !</strong>');
+                $("#txtAccNo").focus()
+                return;
+            }
+
+            let chequeTransaction = {
+
+                "ChequeTransactionID": parseInt( _chequeTransactionID),
+                "TranDate": _tranDate,
+                "Type": _type,
+                "PaymentMedium": { "PaymentMediumID":parseInt( _paymentID) },
+                "Supplier": _supp,
+                "Customer": _cust,
+                "LedgerName": _ledgerName,
+                "Amount": _amount,
+                "BankAccount": {
+                    "BankAccountID": _accNoID
+                },
+                "Note": _note,
+                "ChequeTTNo": _chkTTNo ,
+                "IsChequePassed": _chkChekPass,
+                "ChequePassDate": _chequePassDate,
+            }
+
+            console.log(chequeTransaction);
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(chequeTransaction),
+                url: WEB_URL + CONTROLLERANME + "/SaveChequeTransaction",
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                   
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtInvoiceNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+                       // $("#btnSaveCust").attr('disabled', 'disabled');
+                   
+                       // BindData(data.obj, 'disabled');
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                   // BindSuppliers(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+        });
+
+
+        $("#btnAddNewCust").on('click', function () {
+
+            ClearControlAfterSave();
+        });
+
+
+    });
+
+
+
+    function editCustomer(id) {
+        // ClearControl();
+        ClearControlAfterSave();
+        var chequeTransaction = {
+            "chequeTransactionID": id
+        }
+        // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/GetChequeTransaction",
+
+            data: JSON.stringify(chequeTransaction),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                }
+                else {
+
+                    let _obj = data.obj;
+                    $("#spInfo").html(data.resultMessage);
+                    $("#btnSaveCust").val('Update');
+                    $("#btnSaveCust").attr('data-chequeTransactionID', _obj.chequeTransactionID);
+
+                    $("#txtInvoiceNo").val(_obj.generatedInvoicNo);
+
+                    $("#txtDate").val(_obj.tranDateFormatted);
+                    $("#selPayRecType").val(_obj.type);
+
+                    let _custOrSupp = '-';
+                    if (_obj.customer) {
+                        BindCustomers();
+                        _custOrSupp = "Customer";
+                        
+                        $("#txtCustSupName").val(_obj.customer.name);
+                    }
+                    else if (_obj.supplier) {
+                        BindSuppliers();
+                        _custOrSupp = "Supplier";
+                        $("#txtCustSupName").val(_obj.supplier.name);
+                    }
+                    else {
+                        _custOrSupp = '-';
+                    }
+                    $("#selCustSuppType").val(_custOrSupp);
+
+                    $("#txtAccNo").val(_obj.bankAccount.accountNo + '_' + _obj.bankAccount.bankName );
+                    $("#txtChekNo").val(_obj.chequeTTNo);
+
+                    $("#txtChekPassDate").val(_obj.chequePassDateFormatted);
+
+
+                    if (_obj.isChequePassed) {
+                        $("#chkChekPass").prop("checked", true);
+
+                    }
+                    else {
+                        $("#chkChekPass").prop("checked", false);
+                    }
+
+
+                   // $("#txtCustomer").val(data.obj.supplier.name);
+                    $("#txtAmount").val(_obj.amount);
+                    $("#txtNote").val(_obj.note);
+                }
+
+
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+
+
+    }
+
+
+    function deleteCustomer(id) {
+
+        ClearControlAfterSave();
+        var chequeTransaction = {
+            "chequeTransactionID": id
+        }
+
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/DeleteChequeTransaction",
+
+            data: JSON.stringify(chequeTransaction),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    ClearControlAfterSave();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                 
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+                }
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+
+
+    function BindCustomers() {
+        $("#dltxtCustSupName option").remove();
+        $.each(CUST_LIST, function (i, prodData) {
+            $("#dltxtCustSupName").append(' <option  data-custID="' + prodData.customerID + '" value="' + prodData.name + '" />');
+
+        });
+    }
+
+
+    function BindSuppliers() {
+        $("#dltxtCustSupName option").remove();
+        $.each(SUPP_LIST, function (i, prodData) {
+            $("#dltxtCustSupName").append(' <option  data-suppID="' + prodData.supplierId + '" value="' + prodData.name + '" />');
+
+        });
+    }
+
+    function ClearControlAfterSave() {
+
+        $("#btnSaveCust").attr("data-chequeTransactionID", "0");
+        $("#btnSaveCust").val('Save');
+        $("#txtDate").val(today);
+        $("#selPayRecType").val('-');
+        $("#selCustSuppType").val('-');
+        $("#txtCustSupName").val('');
+        $("#txtRevBalance").val('0');
+        $("#txtAmount").val('0');
+        $("#txtCurrentBalance").val('0');
+        $("#txtAccNo").val('');
+
+
+        $("#txtNote").val('');
+        $("#txtChekNo").val('');
+        $("#chkChekPass").is(':checked');
+
+        $("#txtChekPassDate").val(today);
+
+     
+
+    }
+
+    function GetCustID(value, dataList) {
+        var z = $(dataList);
+        var val = $(z).find('option[value="' + value + '"]');
+        var endval = val.attr('data-custid');
+        return endval;
+    }
+    function GetSuppID(value, dataList) {
+        var z = $(dataList);
+        var val = $(z).find('option[value="' + value + '"]');
+        var endval = val.attr('data-suppid');
+       
+        return endval;
+    }
+
+    function GetDataID(value, dataList) {
+        var z = $(dataList);
+        var val = $(z).find('option[value="' + value + '"]');
+        var endval = val.attr('data-id');
+        return endval;
+    }
+</script>

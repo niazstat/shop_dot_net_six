@@ -1,0 +1,402 @@
+﻿
+@{
+    ViewData["Title"] = "DeletePurchseItemClose";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::ক্রয় প্রোডাক্ট ক্লোস্ Delete::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-2">
+        <label for="inputEmail3" class="col-form-label"> পূর্বের  ক্লোজ তারিখ :</label>
+
+    </div>
+    <div class="col-md-2">
+        <select class="form-control-sm form-control" id="selLastYearList">
+            <option value="">-</option>
+        </select>
+
+
+
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearchdate"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="col-md-2">
+        <input type="button" data-editstatus="0" value="Delete" class="btn btn-block btn-danger" id="btnSaveCust" />
+    </div>
+    @*<div class="col-md-2">
+            <input class="btn btn-gradient-success" type="button" value="Edit or New Entry" id="btnEditorNewEntry" />
+        </div>*@
+
+    @*<div class="col-md-2">
+            <input class="btn btn-danger" type="button" value="View Last Entry" id="btnLastEntry" />
+        </div>*@
+
+
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+        Modal View
+    </button>
+    <button type="button" class="btn  btn-primary" style="display:none;"
+            data-toggle="modal" data-target="#modalInvoiceSales" id="btnViewModel2">
+        Modal View
+    </button>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+<div class="row" id="tab" style="background-color:white !important;">
+
+    <style>
+        .CSSTableGenerator {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            border: thin solid #000000;
+        }
+
+            .CSSTableGenerator table {
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+            }
+
+
+            .CSSTableGenerator tr:nth-child(odd) {
+            }
+
+            .CSSTableGenerator tr:nth-child(even) {
+            }
+
+            .CSSTableGenerator td {
+                vertical-align: middle;
+                border: thin solid #000000;
+                border-width: 0px thin thin 0px;
+                text-align: left;
+                padding: 2px;
+                font-size: .8em;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: normal;
+            }
+
+            .CSSTableGenerator tr:last-child td {
+                border-width: 0px thin 0px 0px;
+            }
+
+            .CSSTableGenerator tr td:last-child {
+                border-width: 0px 0px thin 0px;
+            }
+
+            .CSSTableGenerator tr:last-child td:last-child {
+                border-width: 0px 0px 0px 0px;
+            }
+
+            .CSSTableGenerator tr:first-child td {
+                border: 0px solid #000000;
+                text-align: center;
+                border-width: 0px 0px thin thin;
+                font-size: 0.8em;
+                font-family: Arial;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                color: black;
+            }
+
+                .CSSTableGenerator tr:first-child td:first-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td:last-child {
+                    border-width: 0px 0px thin thin;
+                }
+
+        .CSSTableGenerator2 {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+        }
+
+            .CSSTableGenerator2 tr:nth-child(odd) {
+                text-align: center;
+            }
+
+            .CSSTableGenerator2 tr:nth-child(even) {
+                text-align: center;
+            }
+
+
+        .tdClass {
+            color: #666;
+            font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+            font-weight: bold;
+            text-align: left;
+        }
+    </style>
+
+
+
+    <div class="col-md-12">
+
+        <table id="tblOrder" class="table table-hover table-striped table-bordered CSSTableGenerator" style="margin:auto 5px auto 5px;">
+
+
+            <thead>
+                <tr>
+                    <th>Sl</th>
+                    <th>Article</th>
+                    <th>Size</th>
+                    <th>FromDate</th>
+                    <th>ToDate</th>
+                    <th>PurQty</th>
+                    <th>PurAmount </th>
+                    <th>Commission</th>
+                    <th>NetPurAmount</th>
+                    <th>AvgAmount </th>
+
+
+                </tr>
+            </thead>
+
+
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    var ReportDate = "";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+
+
+
+
+    ReportDate = today;
+
+    $(document).ready(function () {
+
+
+
+
+
+
+
+
+
+        LoadDefaultData();
+
+        function LoadDefaultData() {
+            $("#spInfo").html('');
+            //  ClearData();
+            $("#selLastYearList option").remove();
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/GetLastEntryDated",
+
+                //data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+                    $(data).each(function (i, _singleObj) {
+
+                        $("#selLastYearList").append('<option value=' + _singleObj.lastEntryDate + '>' + _singleObj.lastEntryDate + ' </option>');
+
+                    });
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        $("#btnSearchdate").click(function () {
+            $("#spInfo").html('');
+            let _date = $("#selLastYearList").val();
+            if (_date == '-') {
+                $("#spInfo").html('<strong style="color:red">Invalid Date !!!</strong>');
+
+                return;
+            }
+
+            SelectDayClose(_date);
+        });
+
+        function SelectDayClose(_date) {
+            // ClearData();
+            var model = {
+                'toDate': _date
+            }
+
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/Get_View_Item_Close_List",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    console.log(data);
+                    var _obj = data.obj;
+                    BindData(_obj);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        $("#btnSaveCust").click(function () {
+
+            $("#spInfo").html('');
+            let _date = $("#selLastYearList").val();
+            if (_date == '-') {
+                $("#spInfo").html('<strong style="color:red">Invalid Date !!!</strong>');
+
+                return;
+            }
+
+ 
+            var hi = confirm("Do you want to Save ?");
+
+            if (!hi) {
+
+                return;
+            }
+
+            var model = {
+                'toDate': _date
+            }
+
+            console.log(model);
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "CompanyProduct/Delete_Item_Close_List",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    console.log(data);
+                    var _obj = data.obj;
+                    BindData(_obj);
+                    if (parseInt(data.resultID) == 1) {
+                        LoadDefaultData();
+                    }
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+        });
+
+
+
+ 
+
+
+
+        function BindData(_obj) {
+
+            $("#tblOrder tr:gt(0)").remove();
+
+
+            $.each(_obj, function (i, prodData) {
+
+                $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>' + prodData.articleName + '</td><td>' + prodData.sizeName + '</td><td>' + prodData.fromDateFormated + '</td><td style="text-align:right;">' + prodData.toDateFormated + '</td><td style="text-align:right;">' + prodData.totalPurQty.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalPurAmount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalDiscount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalPurNetPurAmount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.avgAmount.toFixed(2) + '</td></tr>');
+
+
+            });
+
+
+        }
+
+
+
+    });
+
+</script>

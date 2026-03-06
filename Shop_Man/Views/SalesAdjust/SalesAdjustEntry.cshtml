@@ -1,0 +1,672 @@
+﻿
+@{
+    ViewData["Title"] = "SalesAdjustEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 2mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Sales Adjust Entry ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বিক্রয় বিল :</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="mb-2 form-control-sm form-control" id="txtBIllNo">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" value="Load/New" class="btn btn-warning btn-block" id="btnLoad" />
+                        </div>
+                        <div class="col-sm-1"><input type="button" value="Clear" class="btn btn-danger btn-block" id="btnAddNewCust" /></div>
+
+
+                        <div class="col-sm-1">পার্টি বিল</div>
+                        <div class="col-sm-1"><input type="text" disabled class="mb-2 form-control-sm form-control" id="txtBIllNoParty"></div>
+
+                        <label for="inputEmail3"  style="display:none" class="col-sm-1 col-form-label">এডজাস্ট বিল :</label>
+                        <div class="col-sm-1">
+                            <input type="text" style="display:none" class="mb-2 form-control-sm form-control" id="txtBIllNoRet">
+                        </div>
+
+
+
+                        <div class="col-sm-1">
+                            <input type="button" style="display:none" value="View" class="btn btn-dark btn-block" id="btnView" />
+                            <button type="button" class="btn  btn-primary" style="display:none;"
+                                    data-toggle="modal" data-target="#modalInvoice" id="btnViewModel">
+                                Modal View
+                            </button>
+
+                        </div>
+
+                        <div class="col-sm-1">
+                            <input type="button"  style="display:none" value="Edit" class="btn btn-danger btn-block" id="btnEdit" />
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                    <div class="form-row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">বিক্রয় তারিখ:</label>
+                        <div class="col-sm-2">
+                            <input type="text" disabled data-tab="1" autocomplete="off" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2" />
+
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-1 col-form-label"> কাস্টমার নাম:</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtCustName" />
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-1 col-form-label"> শপ নাম:</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtShopName" />
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-row">
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> মোট এডজাস্ট :</label>
+
+                        <div class="col-sm-2">
+                            <input type="text" disabled autocomplete="off" data-tab="4" class="form-control-sm form-control" id="txtTotAdjAmount" />
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">  এডজাস্ট তারিখ:</label>
+
+                        <div class="col-sm-2">
+                            <input type="text" autocomplete="off" data-tab="4" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtAdjustDate" />
+
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="button" data-salesreturndetailsid="0" data-salesdetailsid"="0" data-salesheadid="0" value="Save" class="btn btn-gradient-secondary btn-block" id="btnSaveCust" />
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+
+                <table id="tblProdItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                    <thead>
+                        <tr>
+                            <th style="display:none">CommProductID</th>
+                            <th>সি নং</th>
+                            <th>পণ্যের নাম</th>
+                            <th>আর্টিকেল</th>
+
+                            <th>সাইজ</th>
+
+                            <th>জোড়া/ডজন</th>
+                            <th>ডজন</th>
+                            <th>জোড়া</th>
+                            <th> কমিঃ</th>
+                            <th>বিক্রয় মূল্য</th>
+                            <th>মোট বিক্রয় মূল্য</th>
+                            <th>কোঃ কমিঃ</th>
+
+                            <th>এডজাস্ট</th>
+                            <th> মোট এডজাস্ট</th>
+
+
+                            <th>
+
+                            </th>
+                       
+                        </tr>
+
+
+
+
+                    </thead>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    var ReportDate = "";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+
+
+
+
+    ReportDate = today;
+
+
+    var SALES_DATA = {}
+    //var REGEXP_NUM = new RegExp("^[a-zA-Z0-9]+$");
+    var specialChars = [
+        '০',
+        '১',
+        '২',
+        '৩',
+        '৪',
+        '৫',
+        '৬',
+        '৭',
+        '৮',
+        '৯',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '.',
+        '.',
+        '-',
+        '-'
+    ];
+    var BeagaliToEnglish = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '.': '.',
+        '.': '.',
+
+        '-': '-',
+        '-': '-'
+
+    }
+
+    var EnglisgToBengali = {
+        '০': '০',
+        '১': '১',
+        '২': '২',
+        '৩': '৩',
+        '৪': '৪',
+        '৫': '৫',
+        '৬': '৬',
+        '৭': '৭',
+        '৮': '৮',
+        '৯': '9',
+        '0': '০',
+        '1': '১',
+        '2': '২',
+        '3': '৩',
+        '4': '৪',
+        '5': '৫',
+        '6': '৬',
+        '7': '৭',
+        '8': '৮',
+        '9': '৯',
+        '.': '.',
+        '.': '.',
+        '-': '-',
+        '-': '-'
+
+    }
+
+
+    function ConvertBanglaToEnglish(_str) {
+        var res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            res += BeagaliToEnglish[_arr[i]];
+        }
+        return res;
+    }
+
+    function ConvertEnglishToBengali(_str) {
+        var _res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            _res += EnglisgToBengali[_arr[i]];
+        }
+        return _res;
+    }
+    //$("#txtPair").bind("keypress", function (event) {
+    //    // prevent if in array
+    //    if ($.inArray(event.which, specialChars) == -1) {
+    //        event.preventDefault();
+    //    }
+    //});
+    //alert(ConvertBanglaToEnglish('৫৪৩৮৯০'));
+    var BillNo_PDF = '';
+    var CUST_LIST = [];
+    var CUST_CAT = [];
+    var SUB_CUST_CAT = [];
+    var PROD_NAMES = [];
+    var COMP_PRODUCTS = [];
+    $(document).ready(function () {
+
+
+        datePicker = flatpickr("#txtAdjustDate", { dateFormat: "d-M-Y" });
+        datePicker.setDate(date);
+
+
+        $("#btnLoad").click(function () {
+
+            $("#spInfo").html('');
+            let _salesNo = ConvertBanglaToEnglish($("#txtBIllNo").val());
+            if (_salesNo == '' || _salesNo == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Sales No</strong>');
+                $("#txtBIllNo").focus();
+                return;
+            }
+            var salesHead22 = {
+                "GeneratedSalesNo": _salesNo
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Sales/GetSalesBySalesNo",
+
+                data: JSON.stringify(salesHead22),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (data.resultID == -1) {
+                        ClearControlAfterSave();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#btnSaveCust").removeAttr('disabled');
+                       // $("#btnAdd").removeAttr('disabled');
+                        $("#txtBIllNo").val(data.obj.generatedSalesNo);
+                        $("#spInfo").html('');
+                        ClearControlAfterSave();
+
+                       // $("#btnSaveCust").val('Update');
+                        SALES_DATA = data.obj;
+                        BindData(data.obj, 'disabled');
+
+
+                        LoadSalesAdjust(salesHead22);
+
+                    }
+
+
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        });
+
+
+        function LoadSalesAdjust(_obj) {
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Adjusted Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "SalesAdjust/GetSalesAdjustFromSalesNo",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (data.resultID == -1) {
+                    
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                      
+                        // $("#btnAdd").removeAttr('disabled');
+                        //$("#txtBIllNo").val(data.obj.generatedSalesNo);
+
+                        if (data.obj != null) {
+
+                            datePicker.setDate(data.obj.salesAdjustFormated);
+                        }
+                        $("#spInfo").html('');
+            
+
+                    }
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+
+        }
+
+
+
+        function BindData(_obj, _disabledStr) {
+
+            console.log(_obj);
+            $("#txtBIllNo").val(_obj.generatedSalesNo);
+            $("#txtDate2").val(_obj.salesDateFormated);
+            $("#txtBIllNoParty").val(_obj.custwiseSalesNo);
+   
+            $("#btnSaveCust").attr('data-salesheadid', _obj.salesHeadID);
+
+        
+     
+
+                if (_obj.customer != null) {
+
+                    $("#txtCustName").val(_obj.customer.name + '-' + _obj.customer.customerID);
+                   
+                    $("#txtShopName").val(_obj.customer.shopName + ',' + _obj.customer.address1);
+
+
+                }
+            
+
+           BindTableRows(_obj, _disabledStr)
+
+           // CalculateGrandTotal();
+           // CalculateDueAmount();
+        }
+
+
+
+        function ClearControlAfterSave() {
+
+            SALES_DATA = {};
+            $("#btnSaveCust").val('Save');
+            $("#btnSaveCust").attr('data-salesheadid', "0");
+            $("#btnSaveCust").attr('data-salesdetailsid', "0");
+            $("#txtBIllNoParty").val('');
+
+            $("#tblProdItem tr:gt(0)").remove();
+            $("#txtCustName").val('');
+            $("#txtShopName").val('');
+
+
+            $("#txtTotAdjAmount").val('0');
+
+           
+
+ 
+
+        }
+
+
+
+        function BindTableRows(_objFull, disabledStr) {
+
+            let _objlist = _objFull.salesDetailsList
+
+            console.log(_objlist);
+            $("#tblProdItem tr:gt(0)").remove();
+
+            $(_objlist).each(function (i, _singleObj) {
+
+                $("#tblProdItem").append('<tr> <td style="display:none;" controlname="salesheadid">' + _singleObj.salesHeadID + '</td>  <td style="display:none;" controlname="salesdetailsid">' + _singleObj.salesDetailsID + '</td> <td style="display:none;" controlname="custid">' + _objFull.customer.customerID + '</td> <td style="display:none;" controlname="CommProductID">' + _singleObj.companyProduct.companyProductID + '</td> <td controlname="SlNo">' + (i + 1) + '</td> <td  controlname="ProdName">' + _singleObj.prodName.name + '</td> <td controlname="ArticleName">' + _singleObj.article.name + '</td><td controlname="SizeName">' + _singleObj.size.name + '</td> <td  controlname="UOMName">' + _singleObj.uom.name + '</td> <td controlname="DozenQty">' + _singleObj.salesQtyInDozen + '</td><td controlname="PairQty">' + _singleObj.salesQtyInPair + '</td><td controlname="Comm"> ' + _singleObj.commissionRate + '</td><td controlname="SellPrice">' + _singleObj.salesRate + '</td><td controlname="TotPrice">' + _singleObj.salesAmount + '</td> <td controlname="TotComm">' + _singleObj.commissionAmount + '</td><td controlname="adjRate"> <input  class="form-control-sm form-control" type="number" data-inputfor="adjRateInp"  value="' + _singleObj.salesAdjustRate + '" /></td>  <td controlname="adjRateTot"> ' + (_singleObj.salesAdjustRate * _singleObj.salesQtyInPair) + ' </td>  <td><input type="button" data-salesheadid="' + _singleObj.salesHeadID + '" data-salesdetailsid="' + _singleObj.salesDetailsID + '"  data-custid="' + _objFull.customer.customerID+'" data-companyproductid="' + _singleObj.companyProduct.companyProductID + '"  data-for="edit" class="mb-2 mr-2 btn-dashed btn btn-outline-info"  ' + disabledStr + ' value="Edit" /></td></tr>');
+            });
+
+            CalculateTotalAdjustAmount();
+
+        }
+
+
+        function CalculateTotalAdjustAmount() {
+            var _adjAmount = 0;
+     
+
+            $("#tblProdItem tr:gt(0)").each(function () {
+                _adjAmount += parseFloat($(this).children('td[controlname="adjRateTot"]').text());
+
+
+            });
+            $("#txtTotAdjAmount").val(_adjAmount.toFixed(2));
+        }
+
+
+
+
+        $("#tblProdItem").on('input', 'tr td input[type="number"]', function () {
+
+            let _adjQty = parseFloat($(this).closest('td').closest('tr').find("td").find('input[type="number"][data-inputfor="adjRateInp"]').val());
+            let _salesQty = parseFloat($(this).closest('td').closest('tr').children('td[controlname="PairQty"]').text());
+
+
+         //  let retAmount = retQty * retRate;
+
+          //  let retComAmount = retQty * retCommRate;
+
+            let _totAdsAmnt = _salesQty * _adjQty;
+            $(this).closest('td').closest('tr').children('td[controlname="adjRateTot"]').text((_totAdsAmnt.toFixed(2)));
+    
+            CalculateTotalAdjustAmount();
+        });
+
+
+
+
+        $("#btnSaveCust").on('click', function () {
+            //SalesReturnID
+            $("#spInfo").html('');
+
+
+            if (SALES_DATA == null) {
+                $("#spInfo").html('<strong style="color:red">invalid Data !</strong>');
+
+                return;
+            }
+            if (SALES_DATA.customer == null || SALES_DATA.customer == undefined) {
+                $("#spInfo").html('<strong style="color:red">invalid Customer !</strong>');
+
+                return;
+
+            }
+            var adjDetails = [];
+
+            var _customerMissmatch = false;
+
+            var singleAdj = {}
+            $("#tblProdItem tr:gt(0)").each(function () {
+               
+
+                var _adjRate = parseFloat($(this).find('td input[type="number"][data-inputfor="adjRateInp"]').val());
+                var _salesheadid = parseInt($(this).children('td[controlname="salesheadid"]').text());
+                var _salesDetID = parseInt($(this).children('td[controlname="salesdetailsid"]').text());
+                var _adjQty = parseFloat($(this).children('td[controlname="PairQty"]').text());
+                var _custid =parseInt( $(this).children('td[controlname="custid"]').text());
+
+
+
+
+                if (parseInt(_custid) != parseInt(SALES_DATA.customer.customerID)) {
+
+                    _customerMissmatch = true;
+                }
+
+                singleAdj = {
+                        'SalesAdjustDetailsID': 0,
+                    'SalesDetailsID': _salesDetID,
+                    'SalesHeadID': _salesheadid,
+                    'SalesAdjustInPair': _adjQty,
+                    "SalesAdjustRate": _adjRate
+                 
+
+                    }
+
+                adjDetails.push(singleAdj);
+            });
+
+            var salesAdjust = {
+                'SalesAdjustID':0,
+                'SalesAdjustDate': $("#txtAdjustDate").val(),
+                "SalesAdjustNo": SALES_DATA.generatedSalesNo2,
+                'Customer': {
+                    'CustomerID': SALES_DATA.customer.customerID,
+
+                },
+                'SalesAdjustDetailsList': adjDetails
+            }
+
+            if (_customerMissmatch) {
+                $("#spInfo").html('<strong style="color:red">Customer Missmatch !</strong>');
+
+                return;
+            }
+
+            if (adjDetails == null || adjDetails == undefined) {
+                $("#spInfo").html('<strong style="color:red">No data found !</strong>');
+
+                return;
+
+            }
+
+            console.log(salesAdjust);
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "SalesAdjust/SaveSalesAdjust",
+
+                data: JSON.stringify(salesAdjust),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+
+                        $("#spInfo").html('');
+
+                        $("#txtBIllNoRet").val(data.resultNo);
+
+                        $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                    }
+                    else {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+            
+
+        });
+
+    });
+
+
+</script>

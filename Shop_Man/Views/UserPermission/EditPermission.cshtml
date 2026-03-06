@@ -1,0 +1,348 @@
+﻿
+@{
+    ViewData["Title"] = "EditPermission";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::EDIT PERMISSION::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Type:</label>
+                        <div class="col-sm-3">
+
+                            <select class="form-control" id="selRecvPay">
+                                <option value=""></option>
+                                <option value="SALES">
+                                    সেলস
+                                </option>
+                                <option value="PURCHASE">
+                                    ক্রয়
+                                </option>
+
+                                <option value="EXPENSES">
+                                    খরচ
+                                </option>
+                                <option value="CASHPAYMENT">
+                                    ক্যাশ পেমেন্ট
+                                </option>
+                                <option value="CASHRECEIVE">
+                                    ক্যাশ রিসিভ
+                                </option>
+                                <option value="ADJUST">
+                                    এডজাস্ট
+                                </option>
+                                <option value="SALESRETURN">
+                                    বিক্রয় রিটার্ন
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+                                    <input   name="typestatus" checked  id="rdID" type="radio" value="ID" class="form-check-input">
+
+                                    by Challan ID
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+                                    <input  name="typestatus" id="rdDate" type="radio" value="dDate" class="form-check-input">
+                                    by Challan Date
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Challan ID :</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txtInvoiceNo" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">তারিখ :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" data-date-format="dd-mm-yyyy" id="txtDateEntry" />
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="button" data-expenseID="0" value="Search" class="btn btn-block btn-dark" id="btnSearch" />
+                        </div>
+                        <div class="col-sm-3">
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+  
+</div>
+
+<div class="row flex-sm-row">
+    <div class="col-md-12" style="padding-top:0em; padding-bottom:0em;">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+
+                <table id="tblProdItem" class="table table-sm table-bordered" style="margin-bottom:0 !important ">
+                    <thead>
+                        <tr>
+
+                            <th>SL</th>
+                            <th>Type</th>
+                            <th>Chall No</th>
+                            <th>Date</th>
+                            <th></th>
+
+                            <th></th>
+                           
+
+                        </tr>
+
+
+
+
+                    </thead>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+    $(document).ready(function () {
+
+
+        $("#txtDateEntry").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateEntry");
+        });
+
+        $("#txtDateEntry").val(today);
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+            
+            }
+        };
+
+
+        $('input:radio[name=typestatus]').change(function () {
+
+            let valName = $(this).val();
+            if (valName == 'ID') {
+
+                $("#txtInvoiceNo").removeAttr('disabled');
+                $("#txtDateEntry").attr('disabled','disabled');
+            }
+            if (valName == 'dDate') {
+                $("#txtDateEntry").removeAttr('disabled');
+                $("#txtInvoiceNo").attr('disabled', 'disabled');
+            }
+
+        });
+
+        $("#btnSearch").click(function () {
+            $("#spInfo").html('');
+            let _type = $("#selRecvPay").val();
+
+            let _id = $("#txtInvoiceNo").val();
+            let _dDate = $("#txtDateEntry").val();
+            let _isSearchByDate = $('#rdDate').is(':checked')
+         
+            let _model = {
+
+                "Type": _type,
+                "IsSearchByDate": _isSearchByDate,
+                "ChallanNo": _id,
+                "dDate": _dDate
+            }
+
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "UserPermission/GetEditDateForPerimission",
+
+                data: JSON.stringify(_model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                     
+
+                        $("#spInfo").html('');
+
+                        BindData(data.obj)
+
+                    }
+                    else {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+
+        function BindData(_obj) {
+           
+            $("#tblProdItem tr:gt(0)").remove();
+            $.each(_obj, function (i, prodData) {
+
+                let isLocked = prodData.isAllowEdit ? 'Unlocked' : 'Locked'
+                let isLockedID = prodData.isAllowEdit ? '1' : '0'
+
+                let isLockedName = prodData.isAllowEdit ? 'Lock' : 'Unlock'
+
+                $("#tblProdItem").append('<tr><td>' + (i + 1) + '</td><td>' + prodData.type + '</td><td>' + prodData.challanNo + '</td><td>' + prodData.dDateFormated + '</td><td>' + isLocked + '</td><td><button   data-type="' + prodData.type + '" data-challanid="' + prodData.challanID + '"  data-isAllowEdit="' + isLockedID+'"   class="mb-2 mr-2  btn-dashed btn btn-outline-info"> ' + isLockedName+'</button></td></tr>');
+              
+            });
+
+        }
+
+
+
+
+        $("#tblProdItem").on('click', 'tr td button', function (e) {
+
+            $("#spInfo").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+
+            let _type = $(this).attr("data-type");
+            let _challanID = $(this).attr("data-challanid");
+
+            let _model = {
+
+                "Type": _type,
+               
+                "challanID": parseInt(_challanID),
+              
+            }
+
+
+            let _isAllowEdit = $(this).attr("data-isAllowEdit");
+
+            let MethodName = '';
+            if (_isAllowEdit == '1') {
+                MethodName = 'UpdateEditPermissionBlock';
+            }
+            else if (_isAllowEdit == '0') {
+                MethodName = 'UpdateEditPermissionUnBlock';
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL +"UserPermission/" + MethodName,
+
+                data: JSON.stringify(_model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+
+                        $("#spInfo").html('');          
+                        //trigger second button
+                        $("#btnSearch").click()
+
+                    }
+                    else {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+
+   
+    });
+</script>

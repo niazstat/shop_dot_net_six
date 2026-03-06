@@ -1,0 +1,65 @@
+﻿@model List<PermittedController>
+
+
+<div class="scrollbar-sidebar scrollbar-container">
+    <div class="app-sidebar__inner">
+        <ul class="vertical-nav-menu">
+            <li class="app-sidebar__heading">Menu</li>
+
+
+            @foreach (PermittedController item in Model)
+            {
+              
+
+
+                <li>
+
+
+                    <a href="#">
+                        <i class="@item.ProjController.ControllerIcon"></i>
+                        @item.ProjController.ControllerDes
+                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                    </a>
+
+                    <ul>
+
+                        @foreach (PermittedProjAction item2 in item.PermittedProjActions)
+                        {
+
+                        
+
+                            <li><a href="@Url.Action(item2.ProjAction.ActionName,item2.ProjAction.ActionController)">@item2.ProjAction.ActionDes</a></li>
+                        }
+
+
+
+                       
+                    </ul>
+                </li>
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </ul>
+    </div>
+</div>
+
+
+

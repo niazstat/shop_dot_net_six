@@ -1,0 +1,1082 @@
+﻿
+@{
+    ViewData["Title"] = "ExpensesEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::বিবিধ খরচ এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-1">
+        <label for="inputEmail3" class="col-form-label">তারিখ :</label>
+
+    </div>
+    <div class="col-md-3">
+        <input type="text" disabled class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDateEntrySearch">
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearchdate"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="col-md-3">
+        <input type="text" disabled class="form-control-sm form-control"   id="txtInvoiceNoSearch">
+    </div>
+
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearchInvoiceNo"><i class="fa fa-search"></i></button>
+    </div>
+
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">সিরিয়াল নং :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtInvoiceNo" />
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">তারিখ :</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" data-date-format="dd-mm-yyyy" id="txtDateEntry" />
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" disabled class="form-control" id="txtDateEntryTime" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> খরচের নাম:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtExpensesName" list="dlExpensesHead" />
+
+                            <datalist id="dlExpensesHead"></datalist>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    data-toggle="modal" data-target="#modalDesignation" id="btnExpensesEdit">
+                                Edit
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">  :</label>
+                        <div class="col-sm-6">
+
+
+
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+
+                                    <input data-tab="2" type="checkbox" id="chkEmployeeExpenses" class="form-check-input">
+                                    কর্মচারী বেতন
+                                </label>
+                            </div>
+                        </div>
+                   
+
+                    </div>
+
+                    <div class="form-group row">
+
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Name:</label>
+
+                        <div class="col-sm-8">
+
+
+                            <select id="selEmp" disabled
+                                    class="form-control">
+                            </select>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> বিবরন:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtNote">
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> প্রদান / গ্রহন:</label>
+                        <div class="col-sm-3">
+
+                            <select class="form-control" id="selRecvPay">
+                                <option value=""></option>
+                                <option value="Receive">
+                                    Receive
+                                </option>
+                                <option value="Payment">
+                                    Payment
+                                </option>
+                            </select>
+                        </div>
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">মোট টাকা :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtAmount">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-expenseID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>সি নং</th>
+                            <th>ইনভয়েস নং</th>
+                            <th>তারিখ</th>
+                            <th>প্রদান/গ্রহন</th>
+                            <th> খরচের নাম</th>
+                            <th>মোট টাকা</th>
+                            <th>বিবরন</th>
+
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalDesignation" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">খরচের নাম</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">খরচের নাম :</label>
+                                <input name="CategoryName" id="txtExpensesNameEdit"  autocomplete="off"  type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-expensesheadid="0" type="button" id="btnSavedHead" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblExpensesHead" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    const CONTROLLERANME = "Expenses";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var specialChars = [
+        '০',
+        '১',
+        '২',
+        '৩',
+        '৪',
+        '৫',
+        '৬',
+        '৭',
+        '৮',
+        '৯',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '.',
+        '.',
+        '-',
+        '-'
+    ];
+    var BeagaliToEnglish = {
+        '০': '0',
+        '১': '1',
+        '২': '2',
+        '৩': '3',
+        '৪': '4',
+        '৫': '5',
+        '৬': '6',
+        '৭': '7',
+        '৮': '8',
+        '৯': '9',
+        '0': '0',
+        '1': '1',
+        '2': '2',
+        '3': '3',
+        '4': '4',
+        '5': '5',
+        '6': '6',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '.': '.',
+        '.': '.',
+
+        '-': '-',
+        '-': '-'
+
+    }
+
+    var EnglisgToBengali = {
+        '০': '০',
+        '১': '১',
+        '২': '২',
+        '৩': '৩',
+        '৪': '৪',
+        '৫': '৫',
+        '৬': '৬',
+        '৭': '৭',
+        '৮': '৮',
+        '৯': '9',
+        '0': '০',
+        '1': '১',
+        '2': '২',
+        '3': '৩',
+        '4': '৪',
+        '5': '৫',
+        '6': '৬',
+        '7': '৭',
+        '8': '৮',
+        '9': '৯',
+        '.': '.',
+        '.': '.',
+        '-': '-',
+        '-': '-'
+
+    }
+
+
+    function ConvertBanglaToEnglish(_str) {
+        var res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            res += BeagaliToEnglish[_arr[i]];
+        }
+        return res;
+    }
+
+    function ConvertEnglishToBengali(_str) {
+        var _res = '';
+
+        if (_str == '') return '';
+
+        var _arr = _str.split('');
+        for (var i = 0; i < _arr.length; i++) {
+            _res += EnglisgToBengali[_arr[i]];
+        }
+        return _res;
+    }
+
+
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+    var tableCust;
+    $(document).ready(function () {
+
+
+        $("#txtDateEntry").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDateEntry");
+        });
+
+        $("#txtDateEntry").val(today);
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+                LoadCurrentMonthExpensesData();
+            }
+        };
+
+
+        function currentTime() {
+            let date = new Date();
+            let hh = date.getHours();
+            let mm = date.getMinutes();
+            let ss = date.getSeconds();
+            let session = "AM";
+
+            if (hh === 0) {
+                hh = 12;
+            }
+            if (hh > 12) {
+                hh = hh - 12;
+                session = "PM";
+            }
+
+            hh = (hh < 10) ? "0" + hh : hh;
+            mm = (mm < 10) ? "0" + mm : mm;
+            ss = (ss < 10) ? "0" + ss : ss;
+
+            let time = hh + ":" + mm + ":" + ss + " " + session;
+
+            //document.getElementById("clock").innerText = time;
+
+            $("#txtDateEntryTime").val(time)
+            let t = setTimeout(function () { currentTime() }, 1000);
+        }
+
+        currentTime();
+
+
+        LoadDefaultData();
+
+ 
+
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "autoSLNo" },
+                { "data": "generatedAutoSLNo2" },
+                { "data": "tranDateFormated" },
+                { "data": "type" },
+             
+            
+                { "data": "expensesHead.name" },
+                { "data": "amount" },
+                {
+                    "data": null,
+                    render: function (data, type, row) {
+                        return data.employee == null ? data.note : '( ' + data.employee.name + ' )' + data.note ;
+                    }
+                }
+                    ,
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.expenseID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.expenseID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/ExpensesEntryViewModel",
+
+               //data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    BindEmployees(data.employees);
+                    BindExpensesHead(data.expensesHeads);
+                    tableCust.rows.add(data.expenses).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        $("#chkEmployeeExpenses").change(function () {
+            if ($(this).is(':checked')) {
+                $("#txtExpensesName").attr('disabled', 'disabled');
+        
+                $("#selEmp").removeAttr('disabled');
+
+
+                $("#txtExpensesName").val('');
+          
+            }
+
+            else {
+                $("#txtExpensesName").removeAttr('disabled');
+
+                $("#selEmp").attr('disabled', 'disabled');
+                $("#selEmp").val('');
+            }
+        });
+
+
+        function LoadCurrentMonthExpensesData() {
+            //ClearControl();
+            var expense = {
+                'TranDate': $("#txtDateEntry").val()
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME + "/LoadCurrentMonthExpensesData",
+
+                data: JSON.stringify(expense),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                 
+           
+                   
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+
+
+        function BindExpensesHead(_obj) {
+            $("#dlExpensesHead option").remove();
+            $("#tblExpensesHead tr:gt(0)").remove();
+            $.each(_obj, function (i, prodData) {
+
+                $("#dlExpensesHead").append(' <option data-id="' + prodData.expensesHeadID + '" data-custID="' + prodData.expensesHeadID + '" value="' + prodData.name + '" />');
+                $("#tblExpensesHead").append('<tr> <td>' + prodData.expensesHeadID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-expensesheadid=' + prodData.expensesHeadID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button > <button data-for="delete" data-expensesheadid=' + prodData.expensesHeadID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+
+            });
+
+        }
+
+        function BindEmployees(_obj) {
+            console.log(_obj);
+            $("#selEmp option").remove();
+            $("#selEmp").append(' <option></option>');
+
+            $.each(_obj, function (i, prodData) {
+
+                $("#selEmp").append(' <option data-salary="' + prodData.salary + '" data-id="' + prodData.employeeID + '" data-custID="' + prodData.employeeID + '" value="' + prodData.employeeID + '" > ' + prodData.name + '</option>');
+
+            });
+
+        }
+
+
+        $("#btnAddNewCust").on('click', function () {
+
+            ClearControlAfterSave();
+        });
+
+        $("#btnSavedHead").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr('data-expensesheadid');
+            $("#spInfo2").html('');
+
+
+            var _headName = $("#txtExpensesNameEdit").val();
+
+            if (_headName == '') {
+                $("#txtExpensesNameEdit").addClass("input-validation-error");
+                $("#spInfo2").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+            var designation = {
+                "ExpensesHeadID": _id,
+                "Name": _headName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME + "/SaveExpensesHead",
+
+                data: JSON.stringify(designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        ClearExpenseHeadControl();
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindExpensesHead(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+    
+        function ClearExpenseHeadControl() {
+            $("#btnSavedHead").attr('data-expensesheadid', '0');
+            $("#btnSavedHead").val('Save');
+            $("#txtExpensesNameEdit").val('');
+        }
+  
+
+     
+
+        $("#btnSaveCust").on('click', function () {
+
+            let _expenseID = $(this).attr("data-expenseID");
+            let _tranDate = $("#txtDateEntry").val();
+            let _type = $("#selRecvPay").val();
+     
+
+            let _headName = $("#txtExpensesName").val();
+            let _isEmployeeExpenses = $("#chkEmployeeExpenses").is(':checked');
+              
+            var _empId = $("#selEmp").val();
+
+
+            let _headID = GetDataID(_headName, "#dlExpensesHead");
+
+            let _note = $("#txtNote").val();
+
+            let _amount = ConvertBanglaToEnglish($("#txtAmount").val())
+            if (_type == '' || _type == '-') {
+                $("#spInfo").html('<strong style="color:red">Invalid Type Receive or Payment</strong>');
+                $("#selRecvPay").focus()
+                return;
+            }
+
+      
+            if (_isEmployeeExpenses!=true &&(  _headID == undefined || _headID == null)) {
+                $("#spInfo").html('<strong style="color:red">Invalid Account !</strong>');
+                $("#txtExpensesName").focus()
+                return;
+            }
+            if (_isEmployeeExpenses == true && (_empId == undefined || _empId == '' || _empId==null) ) {
+                $("#spInfo").html('<strong style="color:red">Invalid Employee !</strong>');
+                $("#selEmp").focus()
+                return;
+            }
+            if (_amount == '' || parseFloat(_amount)  == 0) {
+                $("#spInfo").html('<strong style="color:red">Invalid Amount !</strong>');
+                $("#txtAmount").focus()
+                return;
+            }
+         
+            if (_isEmployeeExpenses) {
+                _headID='0'
+            }
+            else {
+                _empId='0'
+            }
+
+
+
+            let expense = {
+                "ExpenseID": parseInt(_expenseID),
+                "IsEmployeeExpenses": _isEmployeeExpenses,
+                "Employee": {
+                    "EmployeeID": parseInt(_empId)
+                },
+                "TranDate": _tranDate,
+                "Type": _type,
+                "ExpensesHead": { "ExpensesHeadID": parseInt(_headID) },     
+                "Amount":parseFloat( _amount),
+                "Note": _note,
+           
+            }
+
+            console.log(expense);
+
+            $("#spInfo").html('<strong style="color:blue">Saving Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(expense),
+                url: WEB_URL + CONTROLLERANME + "/SaveExpenses",
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtInvoiceNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+                       // $("#btnSaveCust").attr('disabled', 'disabled');
+
+                       // BindData(data.obj, 'disabled');
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                   // BindSuppliers(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+        });
+
+
+        $("#tblExpensesHead").on('click', 'tr td button', function (e) {
+
+            ClearExpenseHeadControl();
+
+            $("#spInfo2").html('');
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-expensesheadid");
+            var designation = {
+                "ExpensesHeadID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadExpensesHeadForEdit(designation);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Category?')) {
+                    // Save it!
+                    DeleteExpensesHead(designation)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+        });
+
+
+
+
+        function LoadExpensesHeadForEdit(_obj) {
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/GetExpensesHead",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                 
+                    
+                    $("#spInfo2").html('');
+
+                    $("#btnSavedHead").attr('data-expensesheadid', data.expensesHeadID);
+                    $("#btnSavedHead").val('Update');
+                    $("#txtExpensesNameEdit").val(data.name);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        function DeleteExpensesHead(_designation) {
+
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/DeleteExpensesHead",
+
+                data: JSON.stringify(_designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtCatNameEdit").val('');
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                        BindExpensesHead(data.obj);
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+    });
+
+
+
+    function editCustomer(id) {
+        // ClearControl();
+        ClearControlAfterSave();
+        var expense = {
+            "ExpenseID": id
+        }
+        // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/GetExpenses",
+
+            data: JSON.stringify(expense),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                }
+                else {
+
+                    let _obj = data.obj;
+                    $("#spInfo").html(data.resultMessage);
+                    $("#btnSaveCust").val('Update');
+                    $("#btnSaveCust").attr('data-expenseID', _obj.expenseID);
+
+                    $("#txtInvoiceNo").val(_obj.generatedAutoSLNo);
+
+                    $("#txtDate").val(_obj.tranDateFormatted);
+                    $("#selRecvPay").val(_obj.type);
+                    $("#txtExpensesName").val(_obj.expensesHead.name);
+               
+               
+
+                   // $("#txtCustomer").val(data.obj.supplier.name);
+                    $("#txtAmount").val(_obj.amount);
+                    $("#txtNote").val(_obj.note);
+                    $("#txtDateEntry").val(_obj.tranDateFormated);
+
+                    if (_obj.isEmployeeExpenses) {
+
+                        $("#selEmp").removeAttr('disabled');
+                        $("#txtExpensesName").attr('disabled', 'disabled');
+                        $("#chkEmployeeExpenses").prop("checked", true);
+                    }
+                    else {
+                        $("#selEmp").attr('disabled', 'disabled');
+                        $("#txtExpensesName").removeAttr('disabled');
+                        $("#chkEmployeeExpenses").prop("checked", false);
+                    }
+
+
+                    if (_obj.employee != null) {
+
+                        $("#selEmp").val(_obj.employee.employeeID);
+
+                    }
+                    else {
+                        $("#selEmp").val('');
+                    }
+          
+
+                }
+
+
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+
+
+    }
+
+
+    function deleteCustomer(id) {
+
+        ClearControlAfterSave();
+        var expense = {
+            "ExpenseID": id
+        }
+
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/DeleteExpenses",
+
+            data: JSON.stringify(expense),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    ClearControlAfterSave();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+                }
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+    function ClearControlAfterSave() {
+        $("#btnSaveCust").attr("data-expenseID", "0");
+        $("#txtDate").val(today);
+        $("#txtExpensesName").val('');
+        $("#txtNote").val('');
+        $("#selRecvPay").val('');
+        $("#txtAmount").val('0');
+       
+        $("#selEmp").val('');
+        $("#chkEmployeeExpenses").prop("checked", false);
+        $("#txtExpensesName").removeAttr('disabled');
+        $("#selEmp").attr('disabled', 'disabled');
+        $("#btnSaveCust").val("Save");
+
+    }
+
+
+    function GetDataID(value, dataList) {
+        var z = $(dataList);
+        var val = $(z).find('option[value="' + value + '"]');
+        var endval = val.attr('data-id');
+        return endval;
+    }
+</script>

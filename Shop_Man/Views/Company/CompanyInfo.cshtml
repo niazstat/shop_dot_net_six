@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewData["Title"] = "CompanyInfo";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <p> ..::Company Information Entry/Update::..</p>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtName" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Short Des :</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtShortDes" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Proprietor Name :</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtProName" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Address:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtAddress" />
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Mobile 1:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txtMobile1" />
+
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Mobile 2:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txtMobile2" />
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label"> Shop Name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtShopName">
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label"> Shop Address:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="txtShopAddress">
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-companyid="0" value="Update" class="btn btn-block btn-info" id="btnSaveCust" />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    const CONTROLLERANME = "Company";
+
+    $(document).ready(function () {
+    LoadDefaultData();
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/GetCompanyInfo",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    var _obj = data.obj;
+                    BindData(_obj);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+
+
+
+      
+
+  
+
+
+
+        $("#btnSaveCust").on('click', function () {
+
+            let _companyID = $(this).attr("data-companyid");
+            let _name = $("#txtName").val();
+
+            let _propName = $("#txtProName").val();
+            let _shortDesc = $("#txtShortDes ").val();
+            let _address = $("#txtAddress").val();
+            let _mobile1 = $("#txtMobile1").val();
+            let _mobile2 = $("#txtMobile2").val();
+
+            let _shopName = $("#txtShopName").val();
+
+            let _shopAddress = $("#txtShopAddress").val();
+
+        
+
+
+            let model = {
+                "CompanyID": parseInt(_companyID),
+                "Name": _name,
+                "Address": _address,
+                "Shopname": _shopName,
+                "ShopAddress": _shopAddress,
+                "Proprietor": _propName,
+                "ShortDescription": _shortDesc,
+
+                "MobileNo1": _mobile1,
+                "MobileNo2": _mobile2,
+
+            }
+
+           
+
+            $("#spInfo").html('<strong style="color:blue">Saving Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(model),
+                url: WEB_URL + CONTROLLERANME + "/UpdateCompanyInfo",
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                    
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        var _obj = data.obj;
+                        BindData(_obj);
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                   // BindSuppliers(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+
+        function BindData(_obj) {
+            $("#txtName").val(_obj.name);
+            $("#txtAddress").val(_obj.address);
+            $("#txtAddress").val(_obj.address);
+            $("#txtMobile1").val(_obj.mobileNo1);
+            $("#txtMobile2").val(_obj.mobileNo2);
+            $("#txtProName").val(_obj.proprietor);
+            $("#txtShortDes ").val(_obj.shortDescription);
+
+            $("#txtShopName").val(_obj.shopname);
+            $("#txtShopAddress").val(_obj.shopAddress);
+
+            $("#btnSaveCust").attr("data-companyid", _obj.companyID);
+        }
+
+
+    });
+
+
+
+
+
+
+
+</script>

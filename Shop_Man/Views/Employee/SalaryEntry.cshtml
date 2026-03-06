@@ -1,0 +1,926 @@
+﻿
+@{
+    ViewData["Title"] = "SalaryEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::স্টাফ স্যালারি এন্ট্রি::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+<div class="row flex-sm-row">
+    <div class="col-md-1">
+        <label for="inputEmail3" class="col-form-label">নাম :</label>
+
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtNameSearch">
+    </div>
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtCustomerSearch" list="dltxtCustName" />
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearch"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="col-md-2">
+        <input type="text" disabled class="form-control-sm form-control" id="txtCustomerSearch" list="dltxtCustName" />
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-dark" id="btnSearch"><i class="fa fa-search"></i></button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form>
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">তারিখ:</label>
+                        <div class="col-sm-2">
+                            <input type="text" data-tab="1" autocomplete="off" class="form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate" />
+
+                        </div>
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">SL No:</label>
+                        <div class="col-sm-2">
+                            <input type="text" autocomplete="off" class="form-control-sm form-control" disabled id="txtSLNo" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Head Name:</label>
+
+                        <div class="col-sm-8">
+
+
+                            <select id="selHead"
+                                    class="form-control">
+                            </select>
+
+
+                        </div>
+
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-danger btn-sm"
+                                    data-toggle="modal" data-target="#modalDesignation" id="btnExpensesEdit">
+                                Edit
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Name:</label>
+
+                        <div class="col-sm-8">
+
+
+                            <select id="selEmp"
+                                    class="form-control">
+                            </select>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Salary:</label>
+                        <div class="col-sm-3">
+
+                            <input disabled type="text" class="form-control" id="txtAmount">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Amount (+/-):</label>
+                        <div class="col-sm-3">
+
+                            <input type="text" class="form-control" id="txtAddAmount">
+
+                        </div>
+
+                     
+                        <div class="col-sm-3">
+
+                            <div class="position-relative form-check">
+                                <label class="form-check-label">
+
+                                    <input type="checkbox" id="chkDedAmount" class="form-check-input">
+                                    Deduct Amount (-)
+                                </label>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group row">
+
+
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> Remarks:</label>
+
+                        <div class="col-sm-8">
+
+                            <input autocomplete="nope" value="" name="" id="txtRemarks" type="text" class="form-control">
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-group row">
+
+                        <div class="col-sm-6">
+
+                            <span id="spInfo">
+
+                            </span>
+
+                        </div>
+                        <div class="col-sm-3">
+                            <input data-salarysheetid="0" type="button" value="Save" class="btn btn-info" id="btnSaveSalary" />
+                        </div>
+                        <div class="col-sm-3">
+
+                            <input type="button" value="Clear" class="btn btn-danger" id="btnClear" />
+                        </div>
+
+
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-condensed table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Inv No</th>
+                            <th>Date</th>
+
+                            <th> Name</th>
+
+                            <th>Head</th>
+
+
+                            <th>Add (+)</th>
+                            <th>Deduction(-)</th>
+
+
+                            <th>Remarks</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modalDesignation" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">খরচের নাম</h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">খরচের নাম :</label>
+                                <input name="CategoryName" id="txtExpensesNameEdit" autocomplete="off" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-expensesheadid="0" type="button" id="btnSavedHead" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <table style="width: 100%;" id="tblExpensesHead" class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseCat" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var EMPLOYEES = [];
+
+
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+
+
+    $(document).ready(function () {
+        var specialChars = [
+            '০',
+            '১',
+            '২',
+            '৩',
+            '৪',
+            '৫',
+            '৬',
+            '৭',
+            '৮',
+            '৯',
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '.',
+            '.',
+            '-',
+            '-'
+        ];
+        var BeagaliToEnglish = {
+            '০': '0',
+            '১': '1',
+            '২': '2',
+            '৩': '3',
+            '৪': '4',
+            '৫': '5',
+            '৬': '6',
+            '৭': '7',
+            '৮': '8',
+            '৯': '9',
+            '0': '0',
+            '1': '1',
+            '2': '2',
+            '3': '3',
+            '4': '4',
+            '5': '5',
+            '6': '6',
+            '7': '7',
+            '8': '8',
+            '9': '9',
+            '.': '.',
+            '.': '.',
+
+            '-': '-',
+            '-': '-'
+
+        }
+
+        var EnglisgToBengali = {
+            '০': '০',
+            '১': '১',
+            '২': '২',
+            '৩': '৩',
+            '৪': '৪',
+            '৫': '৫',
+            '৬': '৬',
+            '৭': '৭',
+            '৮': '৮',
+            '৯': '9',
+            '0': '০',
+            '1': '১',
+            '2': '২',
+            '3': '৩',
+            '4': '৪',
+            '5': '৫',
+            '6': '৬',
+            '7': '৭',
+            '8': '৮',
+            '9': '৯',
+            '.': '.',
+            '.': '.',
+            '-': '-',
+            '-': '-'
+
+        }
+
+
+        function ConvertBanglaToEnglish(_str) {
+            var res = '';
+
+            if (_str == '') return '';
+
+            var _arr = _str.split('');
+            for (var i = 0; i < _arr.length; i++) {
+                res += BeagaliToEnglish[_arr[i]];
+            }
+            return res;
+        }
+
+        function ConvertEnglishToBengali(_str) {
+            var _res = '';
+
+            if (_str == '') return '';
+
+            var _arr = _str.split('');
+            for (var i = 0; i < _arr.length; i++) {
+                _res += EnglisgToBengali[_arr[i]];
+            }
+            return _res;
+        }
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate");
+        });
+
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+            LoadSalaryByYearAndName();
+        };
+
+        $("#txtDate").val(today);
+        LoadDefaultData();
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/SalaryEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    console.log(data);
+                    $("#spInfo").html('');
+                    EMPLOYEES = data.obj.employees;
+                    BindEmployees(data.obj.employees);
+                    BindHeads(data.obj.salarySheetHeads)
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+        LoadSalaryByYearAndName();
+
+        function BindEmployees(_obj) {
+            $("#selEmp option").remove();
+            $("#selEmp").append(' <option></option>');
+
+            $.each(_obj, function (i, prodData) {
+
+                $("#selEmp").append(' <option data-salary="' + prodData.salary + '" data-id="' + prodData.employeeID + '" data-custID="' + prodData.employeeID + '" value="' + prodData.employeeID + '" > ' + prodData.name + '</option>');
+
+            });
+
+        }
+
+        function BindHeads(_obj) {
+            $("#selHead option").remove();
+            $("#tblExpensesHead tr:gt(0)").remove();
+            $("#selHead").append(' <option></option>');
+
+            $.each(_obj, function (i, prodData) {
+
+                $("#selHead").append(' <option  data-id="' + prodData.salarySheetHeadID + '" value="' + prodData.salarySheetHeadID + '" > ' + prodData.name + '</option>');
+                $("#tblExpensesHead").append('<tr> <td>' + prodData.salarySheetHeadID + '</td> <td>' + prodData.name + '</td> <td>' + '  <button data-for="edit" data-expensesheadid=' + prodData.salarySheetHeadID + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button > <button data-for="delete" data-expensesheadid=' + prodData.salarySheetHeadID + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> </tr> ');
+            });
+
+        }
+
+        $("#btnSaveSalary").click(function () {
+            $("#spInfo").html('');
+            var _salarySheetID = $(this).attr('data-salarysheetid');
+            var _empID = $("#selEmp").val();
+            var _headID = $("#selHead").val();
+     
+            var _isDedAmount = $("#chkDedAmount").is(':checked');
+            //var _salAmount = $("#txtAmount").val();
+            var _PayDate = $("#txtDate").val();
+            var _addAmount = ConvertBanglaToEnglish( $("#txtAddAmount").val());
+            var _dedAmount =0;
+            var _remarks = $("#txtRemarks").val();
+
+            if (_headID == '' || _headID == undefined || _headID == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Head Name !!</strong>');
+                $("#selHead").focus();
+                return;
+            }
+
+
+            if (_empID == '' || selEmp == undefined || selEmp == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Employee Name !!</strong>');
+                $("#selEmp").focus();
+                return;
+            }
+       
+
+          
+
+            if (isNaN(_addAmount)) {
+                _addAmount = 0;
+            }
+
+            if (_isDedAmount) {
+
+                _dedAmount = _addAmount;
+                _addAmount = 0;
+                
+            }
+
+
+            var salarySheet = {
+                "SalarySheetID": _salarySheetID,
+                "EmployeeID": _empID,
+                "PayDate": _PayDate,
+                "SalarySheetHeadID": _headID,
+                "Amount": 0,
+                "AddAmount": _addAmount,
+                "DeductAmount": _dedAmount,
+                "Remarks": _remarks
+
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/SaveSalary",
+
+                data: JSON.stringify(salarySheet),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    if (parseInt(data.resultID) > 0) {
+                        console.log(data);
+                        ClearItem();
+                        $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindData(data.obj);
+
+                    }
+                    else {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        });
+
+        $("#selEmp").on('change', function () {
+
+            $("#txtAmount").val($("#selEmp ").find(":selected").attr('data-salary'));
+        });
+
+
+        $("#selYear").on('change', function () {
+            $("#dataTable tr:gt(0)").remove();
+            if ($(this).val() != '0') {
+                LoadSalaryByYearAndName();
+            }
+        });
+
+        $("#selMonth").on('change', function () {
+            $("#dataTable tr:gt(0)").remove();
+
+            if ($(this).val() != '') {
+                LoadSalaryByYearAndName();
+            }
+
+        });
+
+        function LoadSalaryByYearAndName() {
+
+      
+         
+
+            var salarySheet = {
+                "SalarySheetID": 0,
+                "PayDate": $("#txtDate").val(),
+            
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/LoadSalaryByYearAndName",
+
+                data: JSON.stringify(salarySheet),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+                    // HideGateOverlay();
+                    BindData(data.obj)
+                    $("#spInfo").html('');
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function BindData(_obj) {
+
+            $("#dataTable tr:gt(0)").remove();
+            $(_obj).each(function (i, _singleObj) {
+
+                $("#dataTable").append(' <tr><td controlname="invNo">' + _singleObj.generatedSalarySheetNo2 + ' </td><td controlname="data">' + _singleObj.payDateFormated + ' </td><td controlname="name"> ' + _singleObj.employee.name + '</td><td controlname="head"> ' + _singleObj.salarySheetHead.name + '</td><td controlname="add">' + _singleObj.addAmount + '</td><td controlname="ded">' + _singleObj.deductAmount + '</td> <td controlname="rem">' + _singleObj.remarks + '</td><td><button  data-employeeid="' + _singleObj.employee.employeeID + '"  data-headID="' + _singleObj.salarySheetHead.salarySheetHeadID + '" data-salarysheetid="' + _singleObj.salarySheetID + '"   data-for="edit" class="mb-2 mr-2  btn-dashed btn btn-outline-info"> Edit</button>  </td><td><button data-employeeid="' + _singleObj.employee.employeeID + '"   data-salarysheetid="' + _singleObj.salarySheetID + '"   data-for="delete" class="mb-2 mr-2  btn-dashed btn btn-outline-danger"> Delete</button> </td></tr>');
+
+                
+
+            });
+        }
+
+  
+
+
+
+
+        $("#dataTable").on('click', 'tr td button', function (e) {
+
+            $("#spInfo").html('');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+            //ClearControl();
+            ClearItem();
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            let _for = $(this).attr("data-for");
+            let _empID = $(this).attr("data-employeeid");
+
+
+
+            let _salarysheetid = $(this).attr("data-salarysheetid");
+            let _headID = $(this).attr("data-headID");
+            let _name = parseFloat($(this).parent("td").parent("tr").find('td[controlname="name"]').text());
+            let _date = $(this).parent("td").parent("tr").find('td[controlname="data"]').text();
+          
+            let _add = parseFloat($(this).parent("td").parent("tr").find('td[controlname="add"]').text());
+            let _ded = parseFloat($(this).parent("td").parent("tr").find('td[controlname="ded"]').text());
+
+
+            let _rem = $(this).parent("td").parent("tr").find('td[controlname="rem"]').text();
+            if (_for == 'edit') {
+                $("#btnSaveSalary").attr('data-salarysheetid', _salarysheetid);
+                $("#btnSaveSalary").val('Update');
+
+              
+               
+             
+                $("#txtRemarks").val(_rem);
+                $("#selEmp").val(_empID);
+                $("#selHead").val(_headID);
+
+                if (_ded > 0) {
+                    $("#chkDedAmount").prop("checked", true);
+                    $("#txtAddAmount").val(_ded);
+
+                }
+                else {
+                    $("#chkDedAmount").prop("checked", false);
+                    $("#txtAddAmount").val(_add);
+                }
+                
+
+               
+
+            }
+            if (_for == 'delete') {
+
+                if (confirm('Are you sure to delete This Item?')) {
+                    //
+                    var _salarySheet = {
+                        "SalarySheetID": parseInt(_salarysheetid),
+                        "PayDate": _date,
+
+                  
+                        "EmployeeID": 0,
+                  
+                        "SalarySheetHeadID": 0,
+                        "Amount": 0,
+                        "AddAmount": 0,
+                        "DeductAmount": 0
+                 
+                      
+                    }
+
+
+                    console.log(_salarySheet);
+                    $("#spInfo").html('<strong style="color:blue">Deleting Data Please wait.. !</strong>');
+                    $.ajax({
+                        type: "POST",
+                        url: WEB_URL + "Employee/DeleteSalarySheet",
+
+                        data: JSON.stringify(_salarySheet),
+                        dataType: "JSON",
+                        contentType: "application/json;charset=utf-8",
+                        success: function (data) {
+                            if (parseInt(data.resultID) > 0) {
+                                console.log(data);
+                                ClearItem();
+                                $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                                BindData(data.obj);
+
+                            }
+                            else {
+                                $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                            }
+
+                        },
+                        error: function (a, b, c) {
+                            //  HideGateOverlay();
+                            alert(a, c);
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+        $("#btnClear").click(function () {
+            ClearItem();
+
+        });
+
+        function ClearItem() {
+            $("#btnSaveSalary").attr('data-salarysheetid', '0');
+            $("#btnSaveSalary").val('Save');
+
+            $("#txtAmount").val('0');
+            $("#txtAddAmount").val('0');
+            $("#txtDedAmount").val('0');
+            $("#txtNetAmount").val('0');
+            $("#txtRemarks").val('');
+            $("#selEmp").val(0);
+            $("#selHead").val(0);
+            $("#chkDedAmount").prop("checked", false);
+
+        }
+
+
+        $("#btnSavedHead").on('click', function () {
+
+            $("input").each(function () {
+                $(this).removeClass("input-validation-error");
+            });
+
+            var _id = $(this).attr('data-expensesheadid');
+            $("#spInfo2").html('');
+
+            var _headName = $("#txtExpensesNameEdit").val();
+
+            if (_headName == '') {
+                $("#txtExpensesNameEdit").addClass("input-validation-error");
+                $("#spInfo2").html('<strong style="color:red">Invalid Name !</strong>');
+                return;
+            }
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+            var designation = {
+                "SalarySheetHeadID": _id,
+                "Name": _headName
+            }
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/SaveSalarySheetHead",
+
+                data: JSON.stringify(designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        ClearExpenseHeadControl();
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        BindHeads(data.obj);
+                    }
+
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+        $("#tblExpensesHead").on('click', 'tr td button', function (e) {
+
+            ClearExpenseHeadControl();
+
+            $("#spInfo2").html('');
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-expensesheadid");
+            var designation = {
+                "SalarySheetHeadID": _id
+            }
+
+
+
+            if (_for == 'edit') {
+                LoadExpensesHeadForEdit(designation);
+            }
+
+            if (_for == 'delete') {
+
+
+                if (confirm('Are you sure to delete Category?')) {
+                    // Save it!
+                    DeleteExpensesHead(designation)
+                }
+                else {
+                    return;
+                }
+
+
+            }
+        });
+
+        function LoadExpensesHeadForEdit(_obj) {
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/GetSalarySheetHead",
+
+                data: JSON.stringify(_obj),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data);
+
+
+                    $("#spInfo2").html('');
+
+                    $("#btnSavedHead").attr('data-expensesheadid', data.salarySheetHeadID);
+                    $("#btnSavedHead").val('Update');
+                    $("#txtExpensesNameEdit").val(data.name);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+        function DeleteExpensesHead(_designation) {
+
+            $("#spInfo2").html('<strong>Please wait ....</strong>');
+
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/DeleteSalarySheetHead",
+
+                data: JSON.stringify(_designation),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                    else {
+                        $("#txtCatNameEdit").val('');
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                        BindHeads(data.obj);
+                    }
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+        function ClearExpenseHeadControl() {
+            $("#btnSavedHead").attr('data-expensesheadid', '0');
+            $("#btnSavedHead").val('Save');
+            $("#txtExpensesNameEdit").val('');
+        }
+
+    });
+
+</script>

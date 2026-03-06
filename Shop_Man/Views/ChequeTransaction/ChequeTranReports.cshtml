@@ -1,0 +1,366 @@
+﻿
+@{
+    ViewData["Title"] = "ChequeTranReports";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Cheque Transaction Report ::.
+    </div>
+
+}
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label"> Receive / Payment:</label>
+                    <div class="col-sm-3">
+
+                        <select class="form-control" id="selRecvPay">
+                            <option value="All">All</option>
+                            <option value="Receive">
+                                Receive
+                            </option>
+                            <option value="Payment">
+                                Payment
+                            </option>
+                        </select>
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">
+
+                        <span id="spCust">
+                            Supplier/Customer:
+                        </span>
+
+                    </label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="selCustSupp">
+                            <option value="All">All</option>
+                            <option value="Customer">
+                                Customer
+                            </option>
+                            <option value="Supplier">
+                                Supplier
+                            </option>
+                        </select>
+
+
+                    </div>
+
+
+                </div>
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Supplier/Customer Name:</label>
+                    <div class="col-sm-6">
+                        <select multiple="multiple" id="selCustSuppName"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkCashSales" class="form-check-input">
+                                All Supplier/Custome
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+    <div class="card-body">
+
+        <div class="form-group row">
+
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnDatewise" data-type="date">Date wise Report</a>
+            </div>
+
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btnToday" data-type="day">Today</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnSeven" data-type="week">7 Days</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btnOneMonth" data-type="month">1 Month</a>
+            </div>
+            <div class="col-md-2">
+                <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btnYear" data-type="year">1 Year</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    $(document).ready(function () {
+
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+        $("#txtDate2").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate2");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtDate");
+        });
+
+        $("#txtDate").datepicker({
+            autoclose: true,
+        });
+
+        $("#txtDate2").val(today);
+        $("#txtDate").val(today);
+
+
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+
+        };
+
+    //    $("#selCust").attr('disabled', 'disabled');
+
+
+        $("#selCustSupp").change(function () {
+            if ($(this).val() === 'All') {
+                $("#selCustSuppName").attr('disabled', 'disabled');
+                $("#selCustSuppName").val('');
+                $("#selCustSuppName").text('');
+            
+            }
+            else if ($(this).val() === 'Customer') {
+                $("#selCustSuppName").removeAttr('disabled');
+                $("#selCustSuppName").val('');
+                $("#selCustSuppName").text('');
+                LoadData('Customer');
+            }
+            else if ($(this).val() === 'Supplier') {
+         
+                $("#selCustSuppName").removeAttr('disabled');
+                $("#selCustSuppName").val('');
+                $("#selCustSuppName").text('');
+                LoadData('Supplier');
+            }
+            else {
+
+
+            }
+        });
+
+
+
+        // Select Supplier / Customer:
+
+        $("#chkCashSales").change(function () {
+            if ($(this).is(':checked')) {
+                $("#selCustSuppName").attr('disabled', 'disabled');
+                $("#selCustSuppName").val('');
+            }
+
+            else {
+                $("#selCustSuppName").removeAttr('disabled', 'disabled');
+
+            }
+        });
+
+
+        function LoadData(_param) {
+            var _url = "";
+
+            if (_param === 'Customer') {
+
+                _url = WEB_URL + "Customer/GetCustomers";
+            }
+            if (_param === 'Supplier') {
+
+                _url = WEB_URL + "Supplier/GetSuppliers";
+            }
+
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: _url,
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+
+
+
+                    if (_param === 'Customer') {
+
+                        BindCustName(data)
+                    }
+                    if (_param === 'Supplier') {
+
+                        BindSuppName(data)
+                    }
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+        function BindSuppName(_custList) {
+            $("#selCustSuppName option").remove();
+
+            $.each(_custList, function (i, prodData) {
+
+                $("#selCustSuppName").append(' <option data-id="' + prodData.supplierId + '" data-custID="' + prodData.supplierId + '" value="' + prodData.supplierId + '" > ' + prodData.name + '</option>');
+
+
+            });
+
+        }
+
+        function BindCustName(_custList) {
+            $("#selCustSuppName option").remove();
+
+            $.each(_custList, function (i, prodData) {
+
+                $("#selCustSuppName").append(' <option data-id="' + prodData.customerID + '" data-custID="' + prodData.customerID + '" value="' + prodData.customerID + '" > ' + prodData.name + '</option>');
+
+
+            });
+
+        }
+
+
+        $("a.reports").on('click', function () {
+            $("#spInfo").html('');
+
+
+            var _fromDate = $("#txtDate").val();
+            var _toDate = $("#txtDate2").val();
+            var _custIDs = $("#selCust").val();
+            if (_custIDs == '') {
+                _custIDs = "0";
+            }
+
+
+            var recvPayType = $("#selRecvPay").val();
+
+            var customerOrSupplier = $("#selCustSupp").val();
+
+            if ($("chkCashSales").is(':checked')) {
+
+                _custIDs = "0";
+            }
+
+            var IsDetails = "0";
+
+
+
+
+
+            var type = $(this).attr('data-type');
+
+
+
+            $(this).attr('href', WEB_URL + 'ChequeTransaction/ChequeTranReportView?fromDate=' + _fromDate + "&&toDate=" + _toDate + "&&customerIDs=" + _custIDs + "&&IsDetails=" + IsDetails + "&&type=" + type + "&&recvPayType=" + recvPayType + "&&customerOrSupplier=" + customerOrSupplier);
+        });
+
+
+    });
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Bill</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>

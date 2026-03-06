@@ -1,0 +1,406 @@
+﻿
+@{
+    ViewData["Title"] = "DaycloseReportView";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: View Day Close Report ::.
+    </div>
+
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+
+    <div class="col-sm-3">
+        <input type="button" class="btn btn-outline-info" value="Excel"
+               id="btPrint" onclick="exportReport('tab')" />
+
+    </div>
+   
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <span id="spInfo">
+
+            </span>
+        </div>
+    </div>
+
+
+    <div class="row" id="tab">
+        <div class="col-sm-12">
+            <style>
+                .CSSTableGenerator {
+                    margin: 0px;
+                    padding: 0px;
+                    width: 100%;
+                    border: thin solid black;
+                }
+                .CSSTableGenerator table {
+                        border-collapse: collapse;
+                        border-spacing: 0;
+                        width: 100%;
+                        height: 100%;
+                        margin: 0px;
+                        padding: 0px;
+                    }
+
+                    .CSSTableGenerator td {
+                            vertical-align: middle;
+                            border: thin solid black;
+                            border-width: 0px thin thin 0px;
+                            text-align: left;
+                            padding: 2px;
+                            font-size: .8em;
+                            font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                            font-weight: normal;
+                        }
+
+                    .CSSTableGenerator tr:last-child td {
+                        border-width: 0px thin 0px 0px;
+                    }
+
+                    .CSSTableGenerator tr td:last-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:last-child td:last-child {
+                        border-width: 0px 0px 0px 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td {
+                        border: 0px solid black;
+                        text-align: center;
+                        border-width: 0px 0px thin thin;
+                        font-size: 0.8em;
+                        font-family: Arial;
+                        font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                        color: black;
+                    }
+
+                        .CSSTableGenerator tr:first-child td:first-child {
+                            border-width: 0px 0px thin 0px;
+                        }
+
+                        .CSSTableGenerator tr:first-child td:last-child {
+                            border-width: 0px 0px thin thin;
+                        }
+
+                .CSSTableGenerator2 {
+                    margin: 0px;
+                    padding: 0px;
+                    width: 100%;
+                }
+
+                    .CSSTableGenerator2 tr:nth-child(odd) {
+                        text-align: center;
+                    }
+
+                    .CSSTableGenerator2 tr:nth-child(even) {
+                        text-align: center;
+                    }
+
+
+                .tdClass {
+                
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: bold;
+                    text-align: left;
+                }
+            </style>
+         
+
+            <div class="col-sm-12" style="text-align:center">
+
+                <p>
+                    <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                    @TempData["CompanyAddress"].ToString();<br>
+                    <span id="spTitle"></span><br />
+                    <span id="spFilter"></span>
+                </p>
+
+            </div>
+        </div>
+
+
+        <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+        </table>
+
+
+    </div>
+
+
+    <script type="text/javascript">
+        var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+        $(document).ready(function () {
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                console.log(vars);
+
+                if (vars["customerIDs"] != '0') {
+
+                    $("#spFilter").text('FIlter by Customer ');
+                }
+                return vars;
+            }
+
+            var queryStrings = getUrlVars();
+
+            LoadData();
+
+            function LoadData() {
+                $("#spInfo").html('');
+
+                var model = {
+                    "FromDate": queryStrings["fromDate"],
+                    "ToDate": queryStrings["toDate"],
+                    "CustomerIds": queryStrings["customerIDs"],
+                    "ArticleNames": queryStrings["fromDate"],
+                    "IsDetails": queryStrings["IsDetails"],
+                    "Type": queryStrings["type"],
+                "Type2": queryStrings["type2"],
+                }
+
+                $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "Dayclose/GetDaycloseReport",
+
+                    data: JSON.stringify(model),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data.obj);
+                        $("#spInfo").html('');
+                        $("#spTitle").text(data.resultNo);
+
+                        BindData(data.obj);
+
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+            }
+
+
+            //<tr>
+            //    <td>SL</td>
+            //    <td>Invoice No</td>
+            //    <td>Date</td>
+            //    <td>Customer</td>
+            //    <td>Total Sales</td>
+            //    <td>Commission</td>
+            //    <td>Pay Type</td>
+            //    <td>Receive Amount</td>
+            //</tr>
+            function BindData(_obj) {
+
+
+                $("#tblOrder").append(`<thead> <tr><td>SL</td><td>Date</td><td>Prev Bal</td>  <td>Total <br>Sales</td>
+                    <td> Total Pur</td > <td> Total <br>Sales Qty</td> <td> Total <br>Pur Qty</td><td> Cash Rec</td>
+                    <td> Bkash Rec</td> <td> Cheq Rec</td> <td> Oth Rec</td>
+                    <td> Cash Pay</td><td> Bkash pay</td><td> Cheq Pay</td> <td> Oth Pay</td>
+                    <td> Tot Sales<br> Ret Amntt</td> <td> Tot Pur <br> Ret Amnt</td><td> Tot Sal<br> Ret Qty</td>
+                    <td> Tot Pur <br>Ret Qty</td> <td> Add/Less </td> <td> Balance</td> <td> Tot Sales <br> Adj Amnt</td> <td> Note</td></tr ></thead >`);
+
+
+
+                var _totSales = 0;
+
+                var _totPur = 0;
+
+
+                var _totSalesQty = 0;
+
+                var _totPurQty = 0;
+
+                var _totCashRec = 0;
+
+
+                var _totbkashRec = 0;
+                var _totcheqRec = 0;
+                var _totOthRec = 0;
+
+                var _totCashPay = 0;
+                var _totBkashPay = 0;
+
+                var _totChqpay = 0;
+
+                var _totOthPay = 0;
+
+                var _totSalesRetAmount = 0;
+
+
+                var _totPurRetAmount = 0;
+
+
+                var _totSalesRetQty = 0;
+
+
+                var _totPurRetQty = 0;
+
+                var _addLessAmount = 0;
+
+                var _addTotSalesAdj = 0;
+
+                $.each(_obj, function (i, prodData) {
+
+
+
+                    _totSales += prodData.totalSales;
+
+                    _totPur += prodData.totalPurchase;
+
+
+                    _totSalesQty += prodData.totalSalesQty;
+
+                    _totPurQty += prodData.totalPurchaseQty;
+
+                    _totCashRec += prodData.cashReceive;
+
+
+                    _totbkashRec += prodData.bkashReceive;
+                    _totcheqRec += prodData.chequeReceive;
+                    _totOthRec += prodData.othersReceive;
+
+                    _totCashPay += prodData.cashPayment;
+                    _totBkashPay += prodData.bkashpayment;
+
+                    _totChqpay += prodData.chequePayment;
+
+                    _totOthPay += prodData.othersPayment;
+
+                    _totSalesRetAmount += prodData.totalSalesReturnAmount;
+
+
+                    _totPurRetAmount += prodData.totalPurchaseReturnAmount;
+
+
+                    _totSalesRetQty += prodData.totalSalesReturnQty;
+
+
+                    _totPurRetQty += prodData.totalPurchaseReturnQty;
+
+                    _addLessAmount += prodData.addLess;
+
+                    _addTotSalesAdj += prodData.totalSalesAdjustAmount;
+
+
+
+
+
+                    $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>' + prodData.dDateFormated + '</td><td>' + prodData.prevBalance + '</td ><td style="text-align:right;">' + prodData.totalSales + '</td><td style="text-align:right;">' + prodData.totalPurchase.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalSalesQty.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalPurchaseQty + '</td><td style="text-align:right;">' + prodData.cashReceive.toFixed(2) + '</td><td>' + prodData.bkashReceive + '</td><td style="text-align:right;">' + prodData.chequeReceive.toFixed(2) + '</td> <td style = "text-align:right;" > ' + prodData.othersReceive.toFixed(2) + '</td > <td style="text-align:right;">' + prodData.cashPayment.toFixed(2) + '</td><td style="text-align:right;">' + prodData.bkashpayment.toFixed(2) + '</td><td style="text-align:right;">' + prodData.chequePayment.toFixed(2) + '</td><td style="text-align:right;">' + prodData.othersPayment.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalSalesReturnAmount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.totalPurchaseReturnAmount.toFixed(2) + '</td> <td style="text-align:right;">' + prodData.totalSalesReturnQty.toFixed(2) + '</td> <td style="text-align:right;">' + prodData.totalPurchaseReturnQty.toFixed(2) + '</td> <td style="text-align:right;">' + prodData.addLess.toFixed(2) + '</td><td style="text-align:right;">' + prodData.balance.toFixed(2) + '</td> <td style="text-align:right;">' + prodData.totalSalesAdjustAmount.toFixed(2) + '</td> <td style="text-align:right;">' + prodData.note + '</td></tr > ');
+
+
+                });
+
+
+                $("#tblOrder").append('<tr><td colspan="3">Total : </td><td style="text-align:right;">' + _totSales + '</td><td style="text-align:right;">' + _totPur + '</td><td style="text-align:right;">' + _totSalesQty + '</td><td style="text-align:right;">' + _totPurQty + '</td><td style="text-align:right;">' + _totCashRec + '</td><td>' + _totbkashRec + '</td><td style="text-align:right;">' + _totcheqRec + '</td> <td style = "text-align:right;" > ' + _totOthRec + '</td > <td style="text-align:right;">' + _totCashPay + '</td><td style="text-align:right;">' + _totBkashPay + '</td><td style="text-align:right;">' + _totChqpay + '</td><td style="text-align:right;">' + _totOthPay + '</td><td style="text-align:right;">' + _totSalesRetAmount + '</td><td style="text-align:right;">' + _totPurRetAmount + '</td> <td style="text-align:right;">' + _totSalesRetQty + '</td> <td style="text-align:right;">' + _totPurRetQty + '</td> <td style="text-align:right;">' + _addLessAmount + '</td><td style="text-align:right;"></td> <td style="text-align:right;">' + _addTotSalesAdj + '</td> <td style="text-align:right;"></td></tr > ');
+
+            }
+
+
+        });
+
+
+
+        function exportReport(tableName) {
+
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById('tab');
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+
+            var ReportDate = 'Day_Close_report';
+            // Specify file name
+            var filename = ReportDate + '.xls';
+
+            // Create download link element
+            downloadLink = document.createElement("a");
+
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+                // Setting the file name
+                downloadLink.download = filename;
+
+                //triggering the function
+                downloadLink.click();
+
+            }
+
+        }
+
+
+
+
+
+
+        function createPDF() {
+            var sTable = document.getElementById('tab').innerHTML;
+
+            var style = "<style>";
+            //style = style + "table {width: 100%;font: 17px Calibri;}";
+            //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+            style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+            style = style + "</style>";
+
+            // CREATE A WINDOW OBJECT.
+            var win = window.open('', '', 'height=595,width=842');
+
+            win.document.write('<html><head>');
+            win.document.write('<title>Day_Close_report</title>');   // <title> FOR PDF HEADER.
+            win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+            win.document.write('</body></html>');
+
+            win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+            win.print();    // PRINT THE CONTENTS.
+        }
+    </script>

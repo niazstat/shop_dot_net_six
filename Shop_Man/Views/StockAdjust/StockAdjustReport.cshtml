@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewData["Title"] = "StockAdjustReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+@{
+    ViewData["Title"] = "SalesAdjustReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: স্টক এডজাস্ট Report ::.
+    </div>
+
+}
+
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row flex-sm-row">
+
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnDatewise" data-type="date">Date wise Report</a>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btnToday" data-type="day">Today</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnSeven" data-type="week">7 Days</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btnOneMonth" data-type="month">1 Month</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btnYear" data-type="year">1 Year</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var datePicker1;
+
+    var datePicker2;
+    $(document).ready(function () {
+
+        var date = new Date();
+        var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+
+
+        datePicker1 = flatpickr("#txtDate", { dateFormat: "d-M-Y" });
+        datePicker1.setDate(date);
+
+        datePicker2 = flatpickr("#txtDate2", { dateFormat: "d-M-Y" });
+        datePicker2.setDate(date);
+
+        $("a.reports").on('click', function () {
+            $("#spInfo").html('');
+
+
+            var _fromDate = $("#txtDate").val();
+            var _toDate = $("#txtDate2").val();
+
+
+            var type = $(this).attr('data-type');
+
+            $(this).attr('href', WEB_URL + 'StockAdjust/StockAdjustReportView?fromDate=' + _fromDate + "&&toDate=" + _toDate + "&&type=" + type);
+
+        });
+    });
+
+
+</script>
+

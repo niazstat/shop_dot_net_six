@@ -1,0 +1,685 @@
+﻿
+@{
+    ViewData["Title"] = "NewUser";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        New User Entry
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+<div class="row flex-sm-row">
+
+    <div class="col-md-2">
+        <input type="button" value="Add User" class="btn btn-block btn-success" id="btnAddNewUser" data-toggle="modal" data-target="#modalProName" />
+
+        <input type="button" value="" class="btn btn-block btn" id="btnOpenPermission" data-toggle="modal" data-target="#modalOrdDetails" />
+    </div>
+</div>
+
+
+
+<div class="row" id="showDiv">
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <span id="spInfo">
+
+            </span>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dtUser" class="table table-responsive table-condensed table-hover">
+                    <thead>
+                        <tr>
+
+
+
+                            <th>ID</th>
+                            <th>User Name</th>
+                            <th>Employee Name</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modalProName" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                  User Entry
+                </h5>
+                <button type="button" class="close reset" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="" class="col-md-12 mx-auto">
+                    <input name="partyCode" id="partyCode" type="hidden" class="form-control">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Name :</label>
+                                <input autocomplete="nope" value="" name="" id="txtNewUserName" type="text" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="opBalance">Opening Balance:</label>
+                                <input autocomplete="off" name="" id="txtOpBalance" type="number" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="opBalance">Employee:</label>
+                                <input autocomplete="off" name="" id="txtEmpmName" type="text" class="form-control" list="dlEmployee" />
+                               <datalist id="dlEmployee">
+
+                               </datalist>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Pass :</label>
+                                <input autocomplete="new-password" value="" name="" id="txtPasswordnew1" type="password" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="position-relative form-group">
+                                <label for="customerName">Confirm Password :</label>
+                                <input autocomplete="new-password" name="" id="txtPasswordnew2" type="password" class="form-control">
+                                <em id="concernNameBengali-error" class="error invalid-feedback">Please enter name</em>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+
+                            <span id="spInfo2">
+
+                            </span>
+
+                        </div>
+                        <div class="col-md-6">
+                            <input data-userId="0" type="button" id="btnSaveUser" class="btn btn-success" value="Save" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="modalCloseProName" class="btn btn-outline-secondary reset" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalOrdDetails" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel">Permitted Pages</h6>
+
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div id="tblPermittedPages" class="col-6">
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-3"> <input type="button" class="btn btn-primary btn-sm" value="Submit" id="btnSavePermission" data-userid="0" /> </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        LoadDefaultData();
+        LoadEmplpoyees();
+
+        function LoadDefaultData() {
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "UserPermission/GetAllUser",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+                    BindUserTable(data);
+
+
+                },
+                error: function (xhr, status, error) {
+                    //  HideGateOverlay();
+                    console.error("AJAX Error Details:");
+                    console.error("Status:", status);
+                    console.error("Error:", error);
+                    console.error("HTTP Status Code:", xhr.status);
+                    console.error("Status Text:", xhr.statusText);
+                    console.error("Response Text:", xhr.responseText);
+                }
+            });
+        }
+
+
+        function LoadEmplpoyees() {
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Employee/GetAllEmployees",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+
+                    BindEmployees(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+        function BindUserTable(_catList) {
+            $("#dtUser tr:gt(0)").remove();
+
+            $.each(_catList, function (i, prodData) {
+
+                $("#dtUser").append('<tr> <td>' + prodData.userId + '</td> <td>' + prodData.userName + '</td> <td>' + prodData.fullName + '</td><td>' + '  <button data-for="edit" data-userId=' + prodData.userId + ' class= "mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info"  > <i class="pe-7s-pen btn-icon-wrapper"> </i>Edit</button ></td><td> <button data-for="delete" data-userId=' + prodData.userId + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Delete</button>' + '</td> <td> <button data-for="permission" data-userId=' + prodData.userId + ' class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" ><i class="pe-7s-trash btn-icon-wrapper"> </i>Permission</button>' + '</td></tr> ');
+
+
+            });
+
+        }
+
+        function BindEmployees(_catList) {
+
+            $("#dlEmployee option").remove();
+        
+            $.each(_catList, function (i, prodData) {
+
+                $("#dlEmployee").append(' <option data-id="' + prodData.employeeID + '" value="' + prodData.name + '" />');
+
+            });
+
+        }
+
+
+        function ClearControl() {
+
+            $("#btnSaveUser").attr("data-userid", "0");
+            $("#txtNewUserName").val("");
+            $("#txtPasswordnew1").val("");
+            $("#txtPasswordnew2").val("");
+            $("#txtOpBalance").val("0");
+            $("#txtEmpmName").val("");
+
+            $("#spInfo").html('');
+            $("#spInfo2").html('');
+        }
+
+
+        $("#btnAddNewUser").click(function () {
+            ClearControl();
+        });
+
+        $("#btnSaveUser").click(function () {
+           var uName= $("#txtNewUserName").val().trim();
+            var pass1 = $("#txtPasswordnew1").val();
+            var pass2 = $("#txtPasswordnew2").val();
+            var userId = $("#btnSaveUser").attr("data-userid");
+            var empName = $("#txtEmpmName").val();
+            var opBalance = $("#txtOpBalance").val();
+            var _empID = GetDataID(empName, "#dlEmployee");
+
+
+            if (uName == '') {
+                $("#spInfo2").html('<strong style="color:red">Invalid User Name</strong>');
+                $("#txtNewUserName").focus();
+                return;
+            }
+
+            if (empName == '') {
+                $("#spInfo2").html('<strong style="color:red">Invalid Employee Name</strong>');
+                $("#txtEmpmName").focus();
+                return;
+            }
+
+            if (_empID == undefined || _empID==null) {
+                $("#spInfo2").html('<strong style="color:red">Invalid Employee Name</strong>');
+                $("#txtEmpmName").focus();
+                return;
+            }
+
+            if (pass1 == '') {
+                $("#spInfo2").html('<strong style="color:red">Invalid User Name</strong>');
+                $("#txtPasswordnew1").focus();
+                return;
+            }
+            if (pass2 == '') {
+                $("#spInfo2").html('<strong style="color:red">Invalid User Name</strong>');
+                $("#txtPasswordnew2").focus();
+                return;
+            }
+
+            if (pass1!=pass2) {
+                $("#spInfo2").html('<strong style="color:red">password not matched !</strong>');
+                $("#txtPasswordnew2").focus();
+                return;
+            }
+
+            if (opBalance == '') {
+                opBalance = '0';
+            }
+
+
+            var model = {
+                "UserId": parseInt(userId),
+                "UserName": uName,
+                "Password": pass1,
+                "Opbalance": opBalance,
+                "EmpId": _empID
+            }
+
+
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "UserPermission/AddUser",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+             
+                    console.log(data);
+
+                   
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo2").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                    }
+                    else {
+                        ClearControl();
+                        $("#spInfo2").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                       
+                        BindUserTable(data.obj);
+
+                    }
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+
+        $("#dtUser").on('click', 'tr td button', function (e) {
+
+            ClearControl();
+
+            //alert('working in Progress');
+            //var thisTxtBox = $(this);
+            e.preventDefault();
+
+            var _for = $(this).attr("data-for");
+            var _id = $(this).attr("data-userId");
+            var model = {
+                "UserId": _id
+            }
+
+
+
+            if (_for == 'edit') {
+
+                console.log(model);
+
+                $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "UserPermission/GetAuser",
+
+                    data: JSON.stringify(model),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+
+                        console.log(data);
+
+                        var _obj = data.obj;
+
+
+                        if (parseInt(data.resultID) == -1) {
+                            $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                        }
+                        else {
+                            ClearControl();
+                            $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                            $('#btnAddNewUser').click();
+
+
+                            $("#btnSaveUser").attr("data-userid", _obj.userId);
+                            $("#txtNewUserName").val(_obj.userName);
+                            $("#txtPasswordnew1").val(_obj.password);
+                            $("#txtPasswordnew2").val(_obj.password);
+                            $("#txtOpBalance").val(_obj.opbalance);
+                            $("#txtEmpmName").val(_obj.fullName);
+
+
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+            }
+
+            if (_for == 'delete') {
+
+
+                //if (confirm('Are you sure to delete District?')) {
+                //    // Save it!
+                //    DeleteDistrict(district)
+                //}
+                //else {
+                //    return;
+                //}
+
+
+            }
+
+            if (_for == 'permission') {
+
+                $("#tblPermittedPages").html('');
+                $("#btnSavePermission").attr("data-userid", _id);
+
+                $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "UserPermission/GetUserPermittedPages",
+
+                    data: JSON.stringify(model),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+
+                        console.log(data);
+
+
+
+
+                        if (parseInt(data.resultID) == -1) {
+                            $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                        }
+                        else {
+                            ClearControl();
+                            $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                            $('#btnOpenPermission').click();
+                            BindPermissionTable(data.obj);
+
+                        }
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+
+            
+            }
+        });
+
+
+
+
+        function BindPermissionTable(_data) {
+
+            var _userID = 0;
+            var checked = "";
+
+            var str = "";
+            $.each(_data.allPages, function (i, _obj) {
+              var  checked1 = "";
+
+                if (_data.permittedPages != null) {
+
+                    $.each(_data.permittedPages, function (i, _obj3) {
+
+                        if (_obj.projControllerID == _obj3.projController.projControllerID) {
+                            checked1 = 'checked';
+                        }
+
+
+                    });
+
+                }
+
+
+
+              //  $("#tblPermittedPages").append('<tr><td style="width:50px;"><input data-projControllerID="' + _obj.projControllerID + '" data-userID="' + _userID + '" type="checkbox" ' + checked + '/></td> <td>' + _obj.controllerName + '</td><td></td> </tr>');
+
+                str +='<UL  class ="Permission "><input data-projControllerID="' + _obj.projControllerID + '" data-userID="' + _userID + '" type="checkbox" ' + checked1 + '/> ' + _obj.controllerName ;
+
+                if (_obj.projActions != null) {
+
+                   
+
+
+                    $.each(_obj.projActions, function (i, _obj2) {
+                       var checked2 = "";
+                       
+
+                       
+                                if (_data.permittedPages != null) {
+
+                                    $.each(_data.permittedPages, function (i, _obj3) {
+
+                                        if (_obj3.permittedProjActionsList != null) {
+                                            $.each(_obj3.permittedProjActionsList, function (i, _obj4) {
+
+                                                if (_obj2.projActionID == _obj4.projActionID) {
+
+                                                    checked2 = 'checked'
+                                                }
+                                            });
+                                        }
+
+                                    });
+
+
+                                }
+
+                        str +='<li class="list-group-item"><input data-projControllerID="' + _obj2.projControllerID + '" data-userID="' + _userID + '" data-projActionID="' + _obj2.projActionID + '" type="checkbox" ' + checked2 + '/>' + _obj2.actionName + ' </li>';
+
+
+                        //$("#tblPermittedPages").append('<tr><td></td><td style="width:100px;"></td><td style="width:50px;"><input data-projControllerID="' + _obj2.projControllerID + '" data-userID="' + _userID + '" data-projActionID="' + _obj2.projActionID + '" type="checkbox" ' + checked + '/></td> <td>' + _obj2.actionName + '</td> </tr>');
+
+
+                    });
+                }
+
+                str +='</UL>';
+
+            });
+
+            $("#tblPermittedPages").append(str);
+        }
+
+        $("#btnSavePermission").click(function () {
+
+
+            var _userID = $(this).attr("data-userid");
+            var model = [];
+
+            $(".Permission").each(function (i, _obj) {
+                var _ul = $(this);
+                var chkbox1 = $(this).find('input[type="checkbox"]');
+               //
+             
+                if (chkbox1.is(
+                    ":checked")) {
+               // if (chkbox1.prop("checked")) {
+
+                    let _permittedControllerID = (chkbox1).attr("data-projControllerID");
+                  //  alert(_permittedControllerID);
+                    var _permittedProjActions = [];
+
+                    $(_ul).find('li').each(function () {
+                        var chkbox2 = $(this).find('input[type="checkbox"]');
+
+                        if (chkbox2.is(
+                            ":checked")) {
+                       // if (chkbox2.prop("checked")) {
+
+
+                            let _permittedActionID = $(chkbox2).attr("data-projActionID");
+                            var _permittedProjAction = {
+                                "ProjActionID": _permittedActionID,
+                                "User": { "UserId": _userID }
+                            }
+                            _permittedProjActions.push(_permittedProjAction);
+                        }
+
+                        //console.log($(this).find('input[type="checkbox"]').attr("data-projActionID"));
+
+                    });
+
+                    var _permittedController = {
+                        "ProjController":
+                            { "ProjControllerID": _permittedControllerID },
+                        "UserId": _userID,
+                        "PermittedProjActions": _permittedProjActions
+                    };
+                    model.push(_permittedController);
+                }
+
+
+              
+            });
+
+
+            console.log(model);
+
+
+            $("#spInfo2").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "UserPermission/ADDPermission",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+
+                    console.log(data);
+
+
+
+
+                    if (parseInt(data.resultID) == -1) {
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                    }
+                    else {
+                        ClearControl();
+                        $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+                        $('#btnOpenPermission').click();
+                        BindPermissionTable(data.obj);
+
+                    }
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        });
+
+        function GetDataID(value, dataList) {
+            var z = $(dataList);
+            var val = $(z).find('option[value="' + value + '"]');
+            var endval = val.attr('data-id');
+            return endval;
+        }
+
+    });
+
+</script>

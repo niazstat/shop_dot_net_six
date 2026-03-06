@@ -1,0 +1,564 @@
+﻿
+@{
+    ViewData["Title"] = "BankAccountEntry";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+
+@section HeadingText {
+    <div class="page-title-heading">
+        ..::   চেক লেনদেন    ::..
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <form autocomplete="off">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">সিরিয়াল নং  :</label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled class="form-control" id="txtSerialNo">
+                        </div>
+
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">শুরুর তারিখ :</label>
+                        <div class="col-sm-3">
+                            <input type="text" autocomplete="off" class="form-control" data-date-format="dd-mm-yyyy" id="txtStartDate" />
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">ব্যাংক নাম :</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtBank" list="dltxtBank">
+                            <datalist id="dltxtBank">
+                            </datalist>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">একাইন্ট নাম:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtAccName">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">একাইন্ট হোল্ডার:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtAccHolder">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label"> ঠিকানা :</label>
+                        <div class="col-sm-6">
+                            <input type="text" autocomplete="off" class="form-control" id="txtAddress" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">একাইন্ট ধরন :</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtAccType" />
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">একাউন্ট নং:</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtAccNo" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">শুরুর ব্যালান্স :</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="txtStartBalance" />
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <span id="spInfo">
+
+                            </span>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <input type="button" data-bankAccountID="0" value="Save" class="btn btn-block btn-info" id="btnSaveCust" />
+
+                <input type="button" value="Add New" class="btn btn-block btn-danger" id="btnAddNewCust" />
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>সি নং</th>
+                            <th>শুরুর তারিখ </th>
+                            <th>ব্যাংক নাম</th>
+                            <th>একাইন্ট হোল্ডার</th>
+                            <th>একাইন্ট নাম</th>
+                            <th> ঠিকানা</th>
+                            <th>একাইন্ট ধরন</th>
+                            <th>একাউন্ট নং</th>
+                            <th>ব্যাংক শর্ট নাম</th>
+                            <th>শুরুর ব্যালান্স</th>
+
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    const CONTROLLERANME = "ChequeTransaction";
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+    var tableCust;
+    $(document).ready(function () {
+
+        $("#txtStartDate").datepicker({
+            autoclose: true,
+        }).on('changeDate', function (e) {
+            ChangeDt("#txtStartDate");
+        });
+
+        $("#txtStartDate").val(today);
+     
+        LoadDefaultData();
+
+        function ChangeDt(caller) {
+
+            console.log(caller);
+            let _thisVal2 = $(caller).val();
+
+            if (_thisVal2.indexOf('-') > 0) {
+
+                let _existValue = _thisVal2.split('-');
+                console.log(_existValue);
+                $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+
+            }
+        };
+
+
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            "processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [0, "desc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                { "data": "bankAccountID" },
+                { "data": "startdateFormatted" },
+
+              
+                { "data": "bank.name" },
+                { "data": "accountHolderName" },
+
+                { "data": "accountName" },
+                { "data": "address" },
+                { "data": "accountTypeName" },
+                { "data": "accountNo" },
+                { "data": "bank.shortName" },
+                { "data": "startingBalance" },
+      
+
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-info" onclick="editCustomer(\'' + data.bankAccountID + '\')">Edit</button>';
+                    }
+                },
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<button class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-danger" onclick="deleteCustomer(\'' + data.bankAccountID + '\')">Delete</button>';
+                    }
+                }
+            ]
+        });
+
+
+        function LoadDefaultData() {
+            //ClearControl();
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + CONTROLLERANME +"/GetBankAccountEntryViewModel",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    BindBanks(data.banks);
+                    tableCust.rows.add(data.bankAccounts).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+
+
+
+
+        function BindBanks(_obj) {
+            $.each(_obj, function (i, prodData) {
+                $("#dltxtBank").append(' <option data-id="' + prodData.bankID + '" value="' + prodData.name +'" />');
+
+            });
+        }
+
+
+        $("#btnSaveCust").on('click', function () {
+
+            let _bankAccountID = $(this).attr("data-bankAccountID");
+            let _startDate = $("#txtStartDate").val();
+            let _accName = $("#txtAccName").val();
+            let _bankName = $("#txtBank").val();
+            let _bankID = GetDataID(_bankName, "#dltxtBank");
+
+            let _accHolder = $("#txtAccHolder").val();
+
+            let _address = $("#txtAddress").val();
+            let _accType = $("#txtAccType").val();
+
+            let _accno = $("#txtAccNo").val();
+
+            let _startBal = $("#txtStartBalance").val();
+         
+
+
+            if (_bankID == undefined || _bankID == null) {
+                $("#spInfo").html('<strong style="color:red">Invalid Bank Name !</strong>');
+                $("#txtBank").focus()
+                return;
+            }
+
+            if (_accno == '' ) {
+                $("#spInfo").html('<strong style="color:red">Invalid Account No !</strong>');
+                $("#txtAccNo").focus()
+                return;
+            }
+            if (_startBal == '') {
+                _startBal = '0';
+           
+            }
+
+
+
+
+
+            let bankAccount = {
+                "BankAccountID":_bankAccountID,
+                "AccountHolderName": _accHolder,
+                "AccountName": _accName,
+                "AccountNo": _accno,
+                "Bank": { "BankID": parseInt(_bankID) },
+                "AccountTypeName": _accType,
+                "Address": _address,
+                "StartingBalance":parseFloat( _startBal),
+                "Startdate": _startDate,
+            }
+
+            console.log(bankAccount);
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(bankAccount),
+                url: WEB_URL + CONTROLLERANME + "/SaveBankAccount",
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+
+                    console.log(data);
+                    if (parseInt(data.resultID) > 0) {
+                        $("#txtSerialNo").val(data.resultNo);
+                        $("#spInfo").html('<strong style="color:blue">' + data.resultMessage + '</strong>');
+                        ClearControlAfterSave();
+                        tableCust.clear().draw();
+                        tableCust.rows.add(data.obj).draw();
+                       // $("#btnSaveCust").attr('disabled', 'disabled');
+
+                       // BindData(data.obj, 'disabled');
+                    }
+                    else {
+                        // HideGateOverlay();
+                        $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                    }
+                   // BindSuppliers(data);
+
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+
+        });
+
+
+    });
+
+
+
+    function editCustomer(id) {
+        // ClearControl();
+        ClearControlAfterSave();
+        let bankAccount = {
+            "BankAccountID": id
+        }
+        // alert(id);
+        $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/GetBankAccount",
+
+            data: JSON.stringify(bankAccount),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+                }
+                else {
+
+                    let _obj = data.obj;
+                    $("#spInfo").html(data.resultMessage);
+                    $("#btnSaveCust").val('Update');
+                    $("#btnSaveCust").attr('data-bankAccountID', _obj.bankAccountID);
+                    $("#txtStartDate").val(_obj.startdateFormatted);
+                    $("#txtAccName").val(_obj.accountName);
+                    $("#txtBank").val(_obj.bank.name);
+                
+
+                    $("#txtAccHolder").val(_obj.accountHolderName);
+
+                    $("#txtAddress").val(_obj.address);
+                    $("#txtAccType").val(_obj.accountTypeName);
+
+                    $("#txtAccNo").val(_obj.accountNo);
+
+                    $("#txtStartBalance").val(_obj.startingBalance);
+                }
+
+
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+
+
+    }
+
+
+    function deleteCustomer(id) {
+
+        ClearControlAfterSave();
+        let bankAccount = {
+            "BankAccountID": id
+        }
+        // alert(id);
+     
+        if (confirm('Are you sure to delete Customer?')) {
+            // Save it!
+            console.log('Thing was saved to the database.');
+        }
+        else {
+            return;
+        }
+
+        $("#spInfo").html('<strong style="color:blue"> Please wait.. !</strong>');
+        $.ajax({
+            type: "POST",
+            url: WEB_URL + CONTROLLERANME +"/DeleteBankAccount",
+
+            data: JSON.stringify(bankAccount),
+            dataType: "JSON",
+            contentType: "application/json;charset=utf-8",
+            success: function (data) {
+                console.log(data);
+
+
+
+                if (parseInt(data.resultID) == -1) {
+                    $("#spInfo").html('<strong style="color:red">' + data.resultMessage + '</strong>');
+
+                }
+                else {
+                    ClearControlAfterSave();
+                    $("#spInfo").html('<strong style="color:green">' + data.resultMessage + '</strong>');
+
+                    tableCust.clear().draw();
+                    tableCust.rows.add(data.obj).draw();
+                }
+                $("#spInfo").html('');
+
+            },
+            error: function (a, b, c) {
+                //  HideGateOverlay();
+                alert(a, c);
+            }
+        });
+
+    }
+
+
+
+ 
+
+    function ClearControlAfterSave() {
+
+
+
+
+
+        $("#btnSaveCust").attr("data-bankaccountid", "0");
+        $("#btnSaveCust").val("Save");
+        $("#txtStartDate").val(today);
+        $("#txtAccName").val('');
+        $("#txtBank").val('');
+
+
+        $("#txtAccHolder").val('');
+
+        $("#txtAddress").val('');
+        $("#txtAccType").val('');
+
+        $("#txtAccNo").val('');
+
+        $("#txtStartBalance").val('0');
+
+
+    }
+
+
+    function GetDataID(value, dataList) {
+        var z = $(dataList);
+        var val = $(z).find('option[value="' + value + '"]');
+        var endval = val.attr('data-id');
+        return endval;
+    }
+</script>

@@ -1,0 +1,776 @@
+﻿
+@{
+    ViewData["Title"] = "YearlyReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Yearly Report ::.
+    </div>
+
+}
+
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-1">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+<div class="row" id="tab">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 80%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 90%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: right;
+                    padding: 2px;
+                    font-size: 1em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 1em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: right;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+
+            </p>
+
+        </div>
+    </div>
+
+
+    <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+        <tr>
+            <td class="auto-style2" colspan="8">Yearly&nbsp; ক্রয়/বিক্রয়&nbsp; হিসাব</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">মোট ক্রয় পরিমান (Qty) :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spPurQty">000000.00</span></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;বিক্রয় পরিমান (Qty) :</td>
+            <td>+</td>
+            <td><span id="spSellQty">000000.00</span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>বিক্রয় ফেরত পরিমান (Qty) :</td>
+            <td>-</td>
+            <td><span id="spSellRetQty">000000.00</span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>নীট পরিমান (Qty) :</td>
+            <td>=</td>
+            <td><span id="spNetSellQty">000000.00</span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">মোট ক্রয় হিসাব :</td>
+            <td class="auto-style3">+</td>
+            <td><span id="spPurAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>বিক্রয় হিসাব :</td>
+            <td>+</td>
+            <td><span id="spSalesAmount"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">ক্রয় কমিশন হিসাব :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spPurCommAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>বিক্রয় ফেরত হিসাব :</td>
+            <td>-</td>
+            <td><span id="spSalesRetAmount"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">ক্রয় ফেরত হিসাব :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spPurRetAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>Add/Less :</td>
+            <td>+</td>
+            <td><span id="spAddLess"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;ক্রয় হিসাব :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spNetPurAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>বিক্রয় ডিসকাউন্ট হিসাব : </td>
+            <td>-</td>
+            <td><span id="spSalesCommission"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">এডজাস্ট হিসাব :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spSuppAdjustAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>(Customer)বিক্রয় এডজাস্ট :</td>
+            <td>-</td>
+            <td><span id="spAdjustCust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">ক্লোজিং শর্ট এ্যমাউন্ট :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spCloseShortAmountSupp"></span></td>
+            <td>&nbsp;</td>
+            <td>(Customer)ক্লোজিং শর্ট এ্যমাউন্ট :</td>
+            <td>-</td>
+            <td><span id="spCloseShortCust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">রিজেক্ট গুড্স এ্যমাউন্ট :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spRejectGoodAmountSupp"></span></td>
+            <td>&nbsp;</td>
+            <td>(Customer)রিজেক্ট গুড্স এ্যমাউন্ট :</td>
+            <td>-</td>
+            <td><span id="spRejectGoodsAmountCust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">নীট ক্রয় হিসাব :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spActualNetPurAmount"></span></td>
+            <td>&nbsp;</td>
+            <td>নীট বিক্রয় হিসাব :</td>
+            <td>=</td>
+            <td><span id="spNetSalesAmount"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট স্টক্ : </td>
+            <td>=</td>
+            <td><span id="spStockQty"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট স্টক্ এ্যমাউন্ট :</td>
+            <td>=</td>
+            <td><span id="spStockAmount"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;font-weight:bold;" colspan="8">ক্যাশ লেনদেন হিসাব</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">নীট ক্রয় হিসাব :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spActualNetPurAmount2"></span></td>
+            <td>&nbsp;</td>
+            <td>কাস্টমার থেকে গ্রহন(Sales) :</td>
+            <td>+</td>
+            <td><span id="spRecvSales"></span></td>
+
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">কোম্পানি পেমেন্ট (Cash):</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spCashPayment"></span></td>
+            <td>&nbsp;</td>
+            <td>কাস্টমার থেকে গ্রহন (Cash):</td>
+            <td>+</td>
+            <td><span id="spRecvCash"></span></td>
+
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">কোম্পানি পেমেন্ট (Cheq) :</td>
+            <td class="auto-style3">-</td>
+            <td><span id="spChecqPayment"></span></td>
+            <td>&nbsp;</td>
+            <td>কাস্টমার থেকে গ্রহন (Cheq):</td>
+            <td>+</td>
+            <td><span id="spRecvCheck"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট বস্তা খরচ:</td>
+            <td>+</td>
+            <td><span id="sp_sackCost"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট :</td>
+            <td>=</td>
+            <td><span id="spTotRecvCust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>অন্যান্য মোট খরচ:</td>
+            <td>-</td>
+            <td><span id="spExpenses"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>স্টাফ স্যালারি :</td>
+            <td>-</td>
+            <td><span id="spSalary"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>স্টক এডজাস্ট :</td>
+            <td>-</td>
+            <td><span id="sp_stockAdjust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>বিক্রয় এডজাস্ট :</td>
+            <td>-</td>
+            <td><span id="spSalesAdjust"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট :</td>
+            <td>=</td>
+            <td><span id="spNetReceiveFromCustomer"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">বর্তমান বছর ক্রয়কৃত টাকা দেনা :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spCurrentYearSupplierBalance"></span></td>
+            <td>&nbsp;</td>
+            <td>ডে ক্লোজ টাকা :</td>
+            <td>=</td>
+            <td><span id="spDayClose1"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="text-align:center;" colspan="7">দেনা পাওনা হিসাব </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">বিগত বছর ক্রয়কৃত টাকা দেনা :</td>
+            <td class="auto-style3">+</td>
+            <td><span id="spTotalAllSupplierPrevBalanceYear"></span></td>
+            <td>&nbsp;</td>
+            <td>বিগত বৎসর কাস্টমার থেকে পাওনা হিসাব :</td>
+            <td>+</td>
+            <td><span id="spTotalAllCustomerPrevBalanceYear"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">বর্তমান বছর ক্রয়কৃত টাকা দেনা :</td>
+            <td class="auto-style3">+</td>
+            <td><span id="spCurrentYearSupplierBalance2"></span></td>
+            <td>&nbsp;</td>
+            <td>বর্তমান বৎসর কাস্টমার থেকে পাওনা হিসাব :</td>
+            <td>+</td>
+            <td><span id="spCustomerBalanceCurrentYear"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট পাওনা :</td>
+            <td>=</td>
+            <td><span id="spTotalCustomerBalance"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>ডে ক্লোজ টাকা :</td>
+            <td></td>
+            <td><span id="spDayClose2"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট স্টক  :</td>
+            <td></td>
+            <td><span id="spTotalStockQty"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট স্টক মালের হিসাব :</td>
+            <td>+</td>
+            <td><span id="spTotalStockValue"></span></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">মোট দেনা টাকা হিসাব :</td>
+            <td class="auto-style3">=</td>
+            <td><span id="spTotalSupplierBalance"></span></td>
+            <td>&nbsp;</td>
+            <td>স্টক এডজাস্ট :</td>
+            <td>-</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">&nbsp;</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট মূলধন :</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2" colspan="8">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">কাস্টমার বিক্রয় লাভ :</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>মোট মূলধন :</td>
+            <td>=</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">বিগত বছরের মূলধন :</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="auto-style2">মোট মূলধন :</td>
+            <td class="auto-style3">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    $(document).ready(function () {
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+
+            if (vars["customerIDs"] != '0') {
+
+                $("#spFilter").text('FIlter by Customer ');
+            }
+            return vars;
+        }
+
+        var queryStrings = getUrlVars();
+
+        LoadData();
+
+        function LoadData() {
+            $("#spInfo").html('');
+
+            var model = {
+                "FromDate": queryStrings["fromDate"],
+                "ToDate": queryStrings["ToDate"],
+                "CustomerIds": "0",
+                "ArticleNames": "",
+                "IsDetails":"",
+                "Type": queryStrings["Type"],
+                "Type2":""
+         
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Dayclose/GetYearlyProfitLoss",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data.obj);
+                    $("#spInfo").html('');
+                    $("#spTitle").text(data.resultNo);
+
+                   BindData(data.obj);
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+
+        //<tr>
+        //    <td>SL</td>
+        //    <td>Invoice No</td>
+        //    <td>Date</td>
+        //    <td>Customer</td>
+        //    <td>Total Sales</td>
+        //    <td>Commission</td>
+        //    <td>Pay Type</td>
+        //    <td>Receive Amount</td>
+        //</tr>
+        function BindData(_obj) {
+
+            let singleObj = _obj[0];
+
+
+            $('#spPurQty').text(singleObj.purchaseQty.toFixed(2));
+
+            $('#spSellQty').text(singleObj.salesQty.toFixed(2));
+            $('#spSellRetQty').text(singleObj.returnQty.toFixed(2));
+
+            $('#spNetSellQty').text(singleObj.netSalesQty.toFixed(2));
+
+
+            $('#spPurAmount').text(singleObj.purchaseAmount.toFixed(2));
+            $('#spPurCommAmount').text(singleObj.purchaseCommission.toFixed(2));
+            $('#spPurRetAmount').text(singleObj.retPurchaseAmount.toFixed(2));
+            $('#spNetPurAmount').text(singleObj.totalPurchaseAmount.toFixed(2));
+
+            $('#spActualNetPurAmount').text(singleObj.netPurchaseAmount.toFixed(2));
+            $('#spActualNetPurAmount2').text(singleObj.netPurchaseAmount.toFixed(2));
+            $('#spCurrentYearSupplierBalance').text(singleObj.currentYearSupplierBalance.toFixed(2));
+            $('#spCurrentYearSupplierBalance2').text(singleObj.currentYearSupplierBalance.toFixed(2));
+            $('#spTotalAllSupplierPrevBalanceYear').text(singleObj.totalAllSupplierPrevBalanceYear.toFixed(2));
+            $('#spTotalSupplierBalance').text(singleObj.totalSupplierBalance.toFixed(2));
+
+
+
+
+            $('#spSuppAdjustAmount').text(singleObj.totalAdjustAmountSupplier.toFixed(2));
+            $('#spCloseShortAmountSupp').text(singleObj.totalClosingShortAmountSupplier.toFixed(2));
+            $('#spRejectGoodAmountSupp').text(singleObj.totalRejectGoodsAmountSupplier.toFixed(2));
+
+
+
+            $('#spSalesAmount').text(singleObj.salesAmount.toFixed(2));
+            $('#spSalesCommission').text(singleObj.salesCommision.toFixed(2));
+            $('#spSalesRetAmount').text(singleObj.returnAmount.toFixed(2));
+            $('#spSalesAdjust').text(singleObj.salesAdjustAmount.toFixed(2));
+
+            $('#spNetSalesAmount').text(singleObj.netSales.toFixed(2));
+
+
+           
+            $('#spReturnItemCost').text(singleObj.totalcostAmountOfReturnedItems.toFixed(2));
+            $('#spItemCost').text(singleObj.totalcostAmountOfsoldItems.toFixed(2));
+            $('#spProfit').text(singleObj.profit.toFixed(2));
+            
+            
+            
+
+            $('#sp_stockAdjust').text(singleObj.stockAdjustAmount.toFixed(2));
+           
+            $('#spCashPayment').text(singleObj.cashPayment.toFixed(2));
+            $('#spChecqPayment').text(singleObj.checkPayment.toFixed(2));
+
+            $('#spTotRecvCust').text(singleObj.receiveFromCustomer.toFixed(2));
+
+            $('#spNetReceiveFromCustomer').text(singleObj.netReceiveFromCustomer.toFixed(2));
+
+
+
+            $('#spRecvSales').text(singleObj.totalAllRecvSales.toFixed(2));
+            $('#spRecvCash').text(singleObj.cashReceiveAmount.toFixed(2));
+            $('#spRecvCheck').text(singleObj.checkRecev.toFixed(2));
+            $('#spAddLess').text(singleObj.addLessAmount.toFixed(2));
+            $('#sp_sackCost').text(singleObj.totalSackNoFee.toFixed(2));
+
+            $('#spSalary').text(singleObj.salaryAmount.toFixed(2));
+            $('#spExpenses').text(singleObj.expensesAmount.toFixed(2));
+
+            $('#spAdjustCust').text(singleObj.totalAdjustAmountCustomer.toFixed(2));
+            $('#spCloseShortCust').text(singleObj.totalClosingShortAmountCustomer.toFixed(2));
+            $('#spRejectGoodsAmountCust').text(singleObj.totalRejectGoodsAmountCustomer.toFixed(2));
+
+            $('#spNetProfit').text(singleObj.netProfit.toFixed(2));
+
+            $('#spTotalAllCustomerPrevBalanceYear').text(singleObj.totalAllCustomerPrevBalanceYear.toFixed(2));
+            $('#spCustomerBalanceCurrentYear').text(singleObj.customerBalanceCurrentYear.toFixed(2));
+            $('#spTotalCustomerBalance').text(singleObj.totalCustomerBalance.toFixed(2));
+            $('#spTotalStockQty').text(singleObj.totalStockQty.toFixed(2));
+            $('#spTotalStockValue').text(singleObj.totalStockValue.toFixed(2));
+            $('#spDayClose1').text(singleObj.dayclose.toFixed(2));
+            $('#spDayClose2').text(singleObj.dayclose.toFixed(2));
+        }
+
+
+    });
+
+
+
+    function exportReport(tableName) {
+
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById('tab');
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+
+        var ReportDate = 'Day_Close_report';
+        // Specify file name
+        var filename = ReportDate + '.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+
+        }
+
+    }
+
+
+
+
+
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>Day_Close_report</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>

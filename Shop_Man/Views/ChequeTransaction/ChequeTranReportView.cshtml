@@ -1,0 +1,342 @@
+﻿
+@{
+    ViewData["Title"] = "ChequeTranReportView";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Cheque Transaction Report ::.
+    </div>
+
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-12">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+
+
+<div class="row" id="tab">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p style=" font-family: Trebuchet MS,Arial,Helvetica,sans-serif;">
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+                <span id="spFilter"></span>
+            </p>
+
+        </div>
+    </div>
+
+
+    <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+
+        @*<tr><td>SL</td><td>Invoice No:</td><td>invoice2</td><td>Date</td><td>Date2</td><td>Pair ty Name :</td><td colspan="5">Pair ty Name2</td></tr>
+
+
+
+            <tr><td>SL</td><td>Name</td><td>Article</td><td>Size</td><td>Dozen/Pair</td><td>Pair</td><td>Sales Rate</td><td>Comm Rate</td><td>SalesAmount</td><td>Comm Amount</td><td>Net Amount</td></tr>*@
+
+    </table>
+
+
+</div>
+
+
+
+<script type="text/javascript">
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var ReportType = "Cash-Trasaction-report";
+    $(document).ready(function () {
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+
+            if (vars["customerIDs"] != '0') {
+
+                $("#spFilter").text('FIlter by Supplier ');
+            }
+            return vars;
+        }
+
+        var queryStrings = getUrlVars();
+
+       // LoadData();
+
+        function LoadData() {
+            $("#spInfo").html('');
+
+            var model = {
+                "FromDate": queryStrings["fromDate"],
+                "ToDate": queryStrings["toDate"],
+                "CustomerIds": queryStrings["customerIDs"],
+                "IsDetails": queryStrings["IsDetails"],
+                "Type": queryStrings["type"],
+                "RecvPayType": queryStrings["recvPayType"],
+                "CustomerOrSupplier": queryStrings["customerOrSupplier"],
+            }
+
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Cashpayment/GetCashTransactionReport",
+
+                data: JSON.stringify(model),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    console.log(data.obj);
+                    $("#spInfo").html('');
+                    $("#spTitle").text(data.resultNo);
+                    if (queryStrings["recvPayType"]== "All") {
+                        BindDataAll(data.obj);
+                    }
+                    else if (queryStrings["recvPayType"] == "Receive") {
+                        BindDataReceive(data.obj);
+
+                    }
+
+                    else if (queryStrings["recvPayType"] == "Payment") {
+                        BindDataPayment(data.obj);
+
+                    }
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+
+        }
+
+
+        function BindDataAll(_obj) {
+
+
+            $("#tblOrder").append(' < tr ><td>SL</td><td>Type</td><td>Date</td><td>Invoice No</td><td>Recceive From</td><td>Pay To</td><td>Recv Amount</td><td>Pay Amount</td><td>Remarks</td></tr >');
+
+            var _totPayAmountAll = 0;
+            var _totRecvAmountAll = 0;
+
+
+
+
+
+            $.each(_obj, function (i, prodData) {
+
+                _totPayAmountAll += prodData.payAmount
+                _totRecvAmountAll += prodData.recvAmount
+
+                $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>' + prodData.type + '</td><td>' + prodData.formatedDdate + '</td><td>' + prodData.invoicNo + '</td><td>' + prodData.custName + '</td><td>' + prodData.suppName + '</td><td style="text-align:right;">' + prodData.recvAmount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.payAmount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.note + '</td></tr>');
+
+
+            });
+
+
+            $("#tblOrder").append('<tr><td colspan="6">ToTal :</td><td style="text-align:right;">' + _totRecvAmountAll.toFixed(2) + '</td><td style="text-align:right;">' + _totPayAmountAll.toFixed(2) + '</td><td></td></tr>');
+
+        }
+
+
+
+        function BindDataPayment(_obj) {
+
+
+            $("#tblOrder").append(' < tr ><td>SL</td><td>Type</td><td>Date</td><td>Invoice No</td><td>Pay To</td><td>Pay Amount</td><td>Remarks</td></tr >');
+
+
+            var _totPayAmount = 0;
+
+            $.each(_obj, function (i, prodData) {
+
+                _totPayAmount += prodData.amount
+
+
+                $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>Payment</td><td>' + prodData.paymentDateDateFormated + '</td><td>' + prodData.generatedInvoicNo + '</td><td>' + prodData.supplier.name + '</td><td style="text-align:right;">' + prodData.amount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.note + '</td></tr>');
+
+
+            });
+
+
+            $("#tblOrder").append('<tr><td colspan="5">ToTal :</td><td style="text-align:right;">' + _totPayAmount.toFixed(2) + '</td><td></td></tr>');
+
+        }
+
+
+        function BindDataReceive(_obj) {
+
+
+            $("#tblOrder").append(' < tr ><td>SL</td><td>Type</td><td>Date</td><td>Invoice No</td><td>Recv From</td><td>Recv Amount</td><td>Remarks</td></tr >');
+
+
+            var _totRecvAmount = 0;
+
+            $.each(_obj, function (i, prodData) {
+
+                _totRecvAmount += prodData.amount
+
+
+                $("#tblOrder").append('<tr><td>' + (i + 1) + '</td><td>Receive</td><td>' + prodData.receiveDateFormated + '</td><td>' + prodData.generatedInvoicNo + '</td><td>' + prodData.customer.name + '</td><td style="text-align:right;">' + prodData.amount.toFixed(2) + '</td><td style="text-align:right;">' + prodData.note + '</td></tr>');
+
+
+            });
+
+
+            $("#tblOrder").append('<tr><td colspan="5">ToTal :</td><td style="text-align:right;">' + _totRecvAmount.toFixed(2) + '</td><td></td></tr>');
+
+        }
+    });
+
+
+
+    function createPDF() {
+        var sTable = document.getElementById('tab').innerHTML;
+
+        var style = "<style>";
+        //style = style + "table {width: 100%;font: 17px Calibri;}";
+        //  style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+        style = style + "table, th, td {padding: 2px 3px;border-collapse: collapse;}";
+        style = style + "</style>";
+
+        // CREATE A WINDOW OBJECT.
+        var win = window.open('', '', 'height=595,width=842');
+
+        win.document.write('<html><head>');
+        win.document.write('<title>'+ReportType+'</title>');   // <title> FOR PDF HEADER.
+        win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+        win.document.write('</head>');
+        win.document.write('<body>');
+        win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+        win.document.write('</body></html>');
+
+        win.document.close(); 	// CLOSE THE CURRENT WINDOW.
+
+        win.print();    // PRINT THE CONTENTS.
+    }
+</script>
+

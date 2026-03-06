@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewData["Title"] = "SupplierReport";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Supplier Report ::.
+    </div>
+
+}
+<script src="~/js/views/supplier/supplierreport.js"></script>
+
+<div class="row flex-sm-row">
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate">
+                    </div>
+
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="mb-1 form-control-sm form-control" data-date-format="dd-mm-yyyy" id="txtDate2">
+                    </div>
+
+                </div>
+
+                <div class="form-group row" style="margin-bottom:5px;">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Select Supplier Name:</label>
+                    <div class="col-sm-6">
+                        <select id="selCust"
+                                class="multiselect-dropdown form-control">
+                        </select>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+
+                                <input type="checkbox" id="chkCashSales" class="form-check-input">
+                                All Supplier
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input disabled name="type" id="chkSumm" type="radio" class="form-check-input">
+
+                                Summary
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative form-check">
+                            <label class="form-check-label">
+                                <input d name="type" disabled id="chkDetails" type="radio" class="form-check-input">
+                                Details
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <span id="spInfo">
+
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row flex-sm-row">
+
+    <div class="col-md-12">
+
+        <div class="main-card mb-3 card" style=" margin-bottom: 0em !important;">
+            <div class="card-body">
+
+                <div class="form-group row">
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnDatewise" data-type="date">Date wise Report</a>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-danger reports" id="btnToday" data-type="day">Today</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-dark reports" id="btnSeven" data-type="week">7 Days</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-info reports" id="btnOneMonth" data-type="month">1 Month</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-success reports" id="btnYear" data-type="year">1 Year</a>
+                    </div>
+
+                    <div class="col-md-2">
+                        <a href="#" target="_blank" class="btn btn-block btn-gradient-dark reports" id="btnYear" data-type="all">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

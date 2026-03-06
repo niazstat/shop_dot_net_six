@@ -1,0 +1,369 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerYearClosingViewCurrent";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading">
+        <strong> ..::কাস্টমার বছর/ইয়ার ক্লোজ কারেন্ট ইয়ার::..</strong>
+        <div class="page-title-subheading">
+
+        </div>
+    </div>
+
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 0mm 0mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<style>
+    input[type=text]:focus {
+        background-color: #808080;
+        color: white;
+    }
+
+    input[type=number]:focus {
+        background-color: #808080;
+        color: white;
+    }
+</style>
+
+
+
+<div class="row" id="tab" style="background-color:white !important;">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+            </p>
+
+            <p style="text-align:center;">
+
+                <span style="font-weight:900"> @TempData["Title"].ToString()</span>
+
+
+            </p>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+
+<div class="row" id="showDiv">
+    <div class="col-md-12">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <table style="width: 100%;" id="dataTable" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+
+
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Shop</th>
+                            <th>Last Clos Date</th>
+                            <th>Mobile No</th>
+                            <th>Address</th>
+                            <th></th>
+                          
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var CUSTOMER_ID = 0;
+    var YEAR_NAME = 0;
+    var tableCust;
+    var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+    var datePicker;
+
+    var date = new Date();
+    var today = date.getDate() + '-' + months[date.getMonth()] + '-' + date.getFullYear();
+    $(document).ready(function () {
+
+
+
+
+    
+        //datePicker
+        // $("#txtDateEntry").flatpickr({ enableTime: true, dateFormat: "d-M-Y" });
+        //$("#txtDateEntry").datepicker({
+        //    autoclose: true,
+        //}).on('changeDate', function (e) {
+        //    ChangeDt("#txtDateEntry");
+        //});
+
+        //$("#txtDateEntry").datepicker({
+        //    autoclose: true,
+        //});
+        //$("#txtDateEntry").val(today);
+
+        //function ChangeDt(caller) {
+
+        //    console.log(caller);
+        //    let _thisVal2 = $(caller).val();
+
+        //    if (_thisVal2.indexOf('-') > 0) {
+
+        //        let _existValue = _thisVal2.split('-');
+        //        $(caller).val(_existValue[0] + '-' + months[_existValue[1] - 1] + '-' + _existValue[2]);
+        //        $("#txtYear").val(_existValue[2]);
+
+        //    }
+
+
+
+        //};
+
+
+
+        LoadDefaultData();
+
+
+        tableCust = $('#dataTable').DataTable({
+            data: [],
+            "columnDefs": [
+
+                {
+                    "searchable": true,
+                    "orderable": false,
+                    "targets": 0
+                }
+            ],
+            "language":
+            {
+                "processing": '<div class="font-icon-wrapper float-left mr-3 mb-3" style="margin-left: 9%;">' +
+                    '<div class="loader-wrapper d-flex justify-content-center align-items-center">' +
+                    '<div class="loader">' +
+                    '<div class="line-scale-pulse-out-rapid">' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '<div></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p>Loading</p></div>'
+            },
+            //"responsive": true,
+            //"processing": true,
+            //"serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, -1],
+                [10, 15, 25, 50, 100, "All"]
+            ],
+
+            "order": [1, "asc"],
+            "start": 0,
+            "length": 10,
+            "bFilter": true,
+
+            "columns": [
+                {
+                    "data": "customerID"
+                },
+
+                { "data": "name" },
+                {
+                    "data": "shopName"
+                },
+                {
+                    "data": "yearCloseDateFormated"
+                },
+
+                { "data": "mobileNo" },
+                { "data": "address1" },
+
+           
+
+                {
+                    "data": null,
+                    "mRender": function (data, type, full) {
+                        return '<a class="mb-2 mr-2 btn-icon btn-shadow btn-dashed btn btn-outline-success" href="#" target="_blank" data-custid="' + data.customerID + '">View Current</a>';
+                    }
+                }
+            ]
+        });
+
+        function LoadDefaultData() {
+    
+            $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+            $.ajax({
+                type: "POST",
+                url: WEB_URL + "Customer/CustomersWithLastClosingYearList",
+
+                // data: JSON.stringify(receiveMain),
+                dataType: "JSON",
+                contentType: "application/json;charset=utf-8",
+                success: function (data) {
+                    // HideGateOverlay();
+                    $("#spInfo").html('');
+                    console.log(data);
+                    //RECEIVE = data;
+                    //BindProduct(data);
+                    //$("#spInfo").html('');
+
+                    tableCust.rows.add(data).draw();
+
+                },
+                error: function (a, b, c) {
+                    //  HideGateOverlay();
+                    alert(a, c);
+                }
+            });
+        }
+
+
+
+   
+
+
+
+      
+
+
+
+   
+
+    });
+
+
+
+
+
+
+
+
+
+
+    $("#dataTable").on('click', 'tr td a', function () {
+
+
+        let _id = $(this).attr("data-custid");
+
+        $(this).attr('href', WEB_URL + 'Customer/CustomerClosingList?customerID=' + _id);
+
+
+        let _year2 = date.getFullYear()
+        $(this).attr('href', WEB_URL + 'Customer/CustomerClosingViewCurrentDate?customerID=' + _id + '&&yearName=' + _year2 + '&&_type=VIEW&&dDate=' + today);
+
+    });
+</script>

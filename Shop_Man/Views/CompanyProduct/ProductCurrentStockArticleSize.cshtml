@@ -1,0 +1,280 @@
+﻿
+@{
+    ViewData["Title"] = "ProductCurrentStockArticleSize";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section HeadingText {
+    <div class="page-title-heading text-dark text-center">
+        .:: Article and Size wise Details  Report ::.
+    </div>
+
+}
+
+<style type="text/css" media="print">
+    @@page {
+        size: auto; /* auto is the initial value */
+        margin: 2mm 4mm 2mm 2mm; /* this affects the margin in the printer settings */
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-1">
+        <input type="button" class="btn btn-outline-primary" value="Print/PDF"
+               id="btPrint" onclick="createPDF()" />
+    </div>
+  
+
+</div>
+<div class="form-group row">
+    <div class="col-sm-12">
+        <span id="spInfo">
+
+        </span>
+    </div>
+</div>
+<div class="row" id="tab">
+    <div class="col-sm-12">
+        <style>
+            .CSSTableGenerator {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+                border: thin solid #000000;
+            }
+
+                .CSSTableGenerator table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                }
+
+
+                .CSSTableGenerator tr:nth-child(odd) {
+                }
+
+                .CSSTableGenerator tr:nth-child(even) {
+                }
+
+                .CSSTableGenerator td {
+                    vertical-align: middle;
+                    border: thin solid #000000;
+                    border-width: 0px thin thin 0px;
+                    text-align: left;
+                    padding: 2px;
+                    font-size: .8em;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    font-weight: normal;
+                }
+
+                .CSSTableGenerator tr:last-child td {
+                    border-width: 0px thin 0px 0px;
+                }
+
+                .CSSTableGenerator tr td:last-child {
+                    border-width: 0px 0px thin 0px;
+                }
+
+                .CSSTableGenerator tr:last-child td:last-child {
+                    border-width: 0px 0px 0px 0px;
+                }
+
+                .CSSTableGenerator tr:first-child td {
+                    border: 0px solid #000000;
+                    text-align: center;
+                    border-width: 0px 0px thin thin;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                    color: black;
+                }
+
+                    .CSSTableGenerator tr:first-child td:first-child {
+                        border-width: 0px 0px thin 0px;
+                    }
+
+                    .CSSTableGenerator tr:first-child td:last-child {
+                        border-width: 0px 0px thin thin;
+                    }
+
+            .CSSTableGenerator2 {
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+                .CSSTableGenerator2 tr:nth-child(odd) {
+                    text-align: center;
+                }
+
+                .CSSTableGenerator2 tr:nth-child(even) {
+                    text-align: center;
+                }
+
+
+            .tdClass {
+                color: #666;
+                font-family: Trebuchet MS,Arial,Helvetica,sans-serif;
+                font-weight: bold;
+                text-align: left;
+            }
+        </style>
+        @*<div class="tdClass"><span>Receive Challan No :</span>@Model.ReceiveMain.REceiveNo </div>*@
+
+        <div class="col-sm-12" style="text-align:center">
+
+            <p>
+                <strong>   @TempData["CompanyName"].ToString();</strong><br />
+                @TempData["CompanyAddress"].ToString();<br>
+                <span id="spTitle"></span><br />
+                <span id="spFilter"></span>
+            </p>
+
+        </div>
+    </div>
+
+
+    <table id="tblOrder2" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+
+    
+
+    </table>
+
+    <table id="tblOrder" class="CSSTableGenerator" style="margin:auto 5px auto 5px;">
+    </table>
+
+
+</div>
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                console.log(vars);
+
+                return vars;
+            }
+
+            var queryStrings = getUrlVars();
+
+            LoadData();
+
+
+            function LoadData() {
+                $("#spInfo").html('');
+
+                var model = {
+                    "Article": {
+                        "ArticleID": queryStrings["_articleID"]
+                    },
+                    "Size": {
+                        "SizeID": queryStrings["_sizeID"]
+                    }
+
+
+                }
+
+                $("#spInfo").html('<strong style="color:blue">Loading Data Please wait.. !</strong>');
+                $.ajax({
+                    type: "POST",
+                    url: WEB_URL + "CompanyProduct/GetProductCurrentStockArticleSize",
+
+                    data: JSON.stringify(model),
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    success: function (data) {
+                        console.log(data.obj);
+                        $("#spInfo").html('');
+                        BindData(data);
+                    },
+                    error: function (a, b, c) {
+                        //  HideGateOverlay();
+                        alert(a, c);
+                    }
+                });
+
+            }
+
+            function BindData(_data) {
+
+                $("#tblOrder2 tr").remove();
+                $("#tblOrder tr").remove();
+
+                var _purQty = 0;
+                var _salesQty = 0;
+                var _retQty = 0;
+
+                var _stockQty = 0;
+
+                var _purAmount = 0;
+                var _salesAmount = 0;
+                var _retAmount = 0;
+
+                if (Array.isArray(_data.obj)) {
+
+                    let _dd = _data.obj
+                    if (_dd.length > 0) {
+
+                        $("#tblOrder2").append(' <thead><tr><td style="background-Color:lightblue"> Article Name :</td><td style="background-Color:silver">' + _dd[0].articleName + '</td><td style="background-Color:lightblue">Size Name : </td><td style="background-Color:silver">' + _dd[0].sizeName+'</td></thead>');
+                    }
+                }
+
+               
+
+
+
+                $("#tblOrder").append(' <thead><tr><td>SL</td><td>Date</td><td>Pur Inv</td><td>Pur Qty</td><td>Net Pur Rate</td><td>Net Put Amount</td><td>Sales Inv</td><td>Sales Qty</td><td>Net Sales Rate</td><td>Net Sales Amnt</td><td>Ret Inv.</td><td>Ret Qty</td> <td>Ret Rate</td><td>Ret Amount</td></tr></thead>');
+
+                $.each(_data.obj, function (i, _obj) {
+
+                    $("#tblOrder").append(' <thead><tr><td>' + (i + 1) + '</td><td>' + _obj.dDateFormated + '</td><td>' + _obj.purInvNo + '</td><td>' + _obj.purchaseQtyInPair + '</td><td>' + _obj.netPurchaseRate + '</td><td>' + _obj.netPurAmount + '</td><td>' + _obj.salesInvNo + '</td><td>' + _obj.salesQty + '</td><td>' + _obj.netSalesRate + '</td><td>' + _obj.netSalesAmount + '</td><td>' + _obj.retInvNo + '</td><td>' + _obj.reyurnQtyInPair + '</td> <td>' + _obj.netReturnRate + '</td><td>' + _obj.netReturnAmount + '</td></tr></thead>');
+
+                    _purQty += _obj.purchaseQtyInPair;
+                    _salesQty += _obj.salesQty;
+                    _retQty += _obj.reyurnQtyInPair;
+
+                    _purAmount += _obj.netPurAmount;
+                    _salesAmount += _obj.netSalesAmount;
+                    _retAmount += _obj.netReturnAmount;
+
+                });
+
+                _stockQty = _data.obj2.closingBalance + _purQty - _salesQty + _retQty;
+
+                $("#tblOrder").append(' <thead><tr style="background-Color:silver"><td colspan="3">Total :</td><td>' + _purQty + '</td><td></td><td>' + _purAmount + '</td><td></td><td>' + _salesQty + '</td><td></td><td>' + _salesAmount + '</td><td></td><td>' + _retQty + '</td> <td></td><td>' + _retAmount + '</td></tr></thead>');
+
+                $("#tblOrder").append(' <thead><tr style="background-Color:yellow"><td colspan="3">Total Pur Qty+Sales Ret Qty</td><td>' + (_purQty + _retQty) + '</td><td colspan="3"> Total Pur Value+Ret Value</td><td>' + (_purAmount + _retAmount) + '</td><td>Per Item Rate :</td><td>' + ((_purAmount + _retAmount) / (_purQty + _retQty)).toFixed(2)+'</td><td></td><td></td> <td></td><td></td></tr></thead>');
+                $("#tblOrder").append(' <thead><tr style="background-Color:yellow"><td colspan="3">Total Sales Qty</td><td>' + _salesQty + '</td><td colspan="3"> Total Sales Value</td><td>' + _salesAmount + '</td><td>Per Item Sales Rate</td><td>' + (_salesAmount / _salesQty).toFixed(2)+'</td><td></td><td></td> <td></td><td></td></tr></thead>');
+
+
+                $("#tblOrder").append(' <thead><tr><td colspan="3">Opening Qty:</td><td>' + _data.obj2.closingBalance + '</td><td colspan="10"></td></tr></thead>');
+
+                $("#tblOrder").append(' <thead><tr><td colspan="3">+/- Qty:</td><td>' + (_purQty - _salesQty + _retQty) + '</td><td colspan="10"></td></tr></thead>');
+                $("#tblOrder").append(' <thead><tr><td colspan="3">Stock Qty:</td><td>' + _stockQty + '</td><td colspan="10"></td></tr></thead>');
+
+
+            }
+        });
+
+    </script>
