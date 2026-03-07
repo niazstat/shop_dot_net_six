@@ -9,7 +9,7 @@ namespace Shop_Man.Models
     public class Adjustment
     {
         public int AdjustmentID { get; set; }
-        public string InvoicNo { get; set; }
+        public string? InvoicNo { get; set; }
         public int InvoicNoSL { get; set; }
 
         [NotMapped]
@@ -18,10 +18,10 @@ namespace Shop_Man.Models
         public DateTime PaymentDate { get; set; }
         [NotMapped]
         public string PaymentDateDateFormated { get { return String.Format("{0:dd-MMM-yyyy}", PaymentDate); } }
-        public DateTime EntryDate { get; set; }
-        public DateTime LastUpdateTime { get; set; }
-        public Supplier Supplier { get; set; }
-        public Customer Customer { get; set; }
+        public DateTime EntryDate { get; set; } = DateTime.Now;
+        public DateTime LastUpdateTime { get; set; } = DateTime.Now;
+        public Supplier?  Supplier { get; set; }
+        public Customer? Customer { get; set; }
       
   
         public decimal PreviousDue { get; set; }
@@ -31,7 +31,7 @@ namespace Shop_Man.Models
         public decimal RejectGoodsAmount { get; set; }
         public User User { get; set; }
 
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public Company Company { get; set; }
 
 

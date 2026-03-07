@@ -72,7 +72,7 @@ namespace Shop_Man.Controllers
             }
 
 
-         
+
             //entry.Name = model.Name;
             //entry.Address = model.Address;
             //entry.Shopname = model.Shopname;
@@ -80,8 +80,8 @@ namespace Shop_Man.Controllers
 
             //entry.MobileNo1 = model.MobileNo1;
             //entry.MobileNo2 = model.MobileNo2;
+            model.UpdateUserID = user.UserId;
 
-           
             ResultObj obj = userService.UpdateCompany(model);
           
             return Json(obj);

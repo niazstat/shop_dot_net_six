@@ -10,7 +10,7 @@ namespace Shop_Man.Models
     {
 
         public int CashPaymentID { get; set; }
-        public string InvoicNo { get; set; }
+        public string? InvoicNo { get; set; }
         public int InvoicNoSL { get; set; }
 
         [NotMapped]
@@ -19,22 +19,22 @@ namespace Shop_Man.Models
         public DateTime PaymentDate { get; set; }
         [NotMapped]
         public string PaymentDateDateFormated { get { return String.Format("{0:dd-MMM-yyyy}", PaymentDate); } }
-        public DateTime EntryDate { get; set; }
+        public DateTime EntryDate { get; set; } = DateTime.Now;
 
-        public Supplier Supplier { get; set; }
-        public Customer Customer { get; set; }
-        public PaymentMedium PaymentMedium { get; set; }
-        public BankAccount BankAccount { get; set; }
+        public Supplier? Supplier { get; set; }
+        public Customer? Customer { get; set; }
+        public PaymentMedium? PaymentMedium { get; set; }
+        public BankAccount? BankAccount { get; set; }
         public decimal PreviousDue { get; set; }
         public decimal Amount { get; set; }
 
         public User User { get; set; }
 
-        public string Note { get; set; }
-        public Company Company { get; set; }
+        public string? Note { get; set; }
+        public Company? Company { get; set; }
 
         public bool IsAllowEdit { get; set; }
-        public DateTime LastUpdateTime { get; internal set; }
+        public DateTime LastUpdateTime { get; set; } = DateTime.Now;
 
         public int UpdateUserID { get; set; }
 

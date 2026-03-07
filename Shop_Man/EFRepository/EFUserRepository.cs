@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shop_Man.DB;
@@ -199,59 +200,135 @@ namespace Shop_Man.EFRepository
         //        }
 
 
-        public ResultObj ADDPermission(List<PermittedController> permissionList,int userId)
+        public ResultObj ADDPermission(List<PermittedController> permissionList, int userId)
         {
-            ResultObj obj = new ResultObj();
+            using var transaction = context.Database.BeginTransaction();
 
-           
-
-         
-            using (var transaction = context.Database.BeginTransaction())
+            try
             {
-                try
+                context.Database.ExecuteSqlInterpolated(
+                    $"DELETE FROM PermittedProjAction WHERE UserId = {userId}");
+
+                context.Database.ExecuteSqlInterpolated(
+                    $"DELETE FROM PermittedControllers WHERE UserId = {userId}");
+
+                var connection = context.Database.GetDbConnection();
+
+                if (connection.State != System.Data.ConnectionState.Open)
+                    connection.Open();
+
+                foreach (var item in permissionList)
                 {
-                   
+                    int permittedControllerId;
 
-                    // Delete old permissions
-                    context.Database.ExecuteSqlInterpolated($"DELETE FROM PermittedProjAction WHERE UserId = {userId}");
-                    context.Database.ExecuteSqlInterpolated($"DELETE FROM PermittedControllers WHERE UserId = {userId}");
-
-                    // Fix tracking issue
-                    foreach (var item in permissionList)
+                    using (var cmd = connection.CreateCommand())
                     {
-                        item.User = null;      // prevent EF tracking conflict
-                        item.UserId = userId;  // ensure correct FK
+                        cmd.Transaction = transaction.GetDbTransaction();
+                        cmd.CommandText = @"
+                    INSERT INTO PermittedControllers (UserId, ProjControllerID)
+                    OUTPUT INSERTED.PermittedControllerID
+                    VALUES (@userId, @controllerId)";
 
-                        if (item.ProjController != null)
-                            context.Attach(item.ProjController);
+                        var p1 = cmd.CreateParameter();
+                        p1.ParameterName = "@userId";
+                        p1.Value = userId;
 
-                        context.PermittedControllers.Add(item);
+                        var p2 = cmd.CreateParameter();
+                        p2.ParameterName = "@controllerId";
+                        p2.Value = item.ProjController.ProjControllerID;
+
+                        cmd.Parameters.Add(p1);
+                        cmd.Parameters.Add(p2);
+
+                        permittedControllerId = Convert.ToInt32(cmd.ExecuteScalar());
                     }
 
-                    // Add all permissions at once
-                    //context.PermittedControllers.AddRange(permissionList);
-
-                    context.SaveChanges();
-                    transaction.Commit();
-
-                    return new ResultObj
+                    foreach (var action in item.PermittedProjActions)
                     {
-                        ResultID = 1,
-                        ResultMessage = "Permission Saved"
-                    };
+                        context.Database.ExecuteSqlInterpolated($@"
+                    INSERT INTO PermittedProjAction
+                    (PermittedControllerID, ProjActionID, UserId)
+                    VALUES ({permittedControllerId}, {action.ProjActionID}, {userId})
+                ");
+                    }
                 }
-                catch (Exception ex)
+
+                transaction.Commit();
+
+                return new ResultObj
                 {
-                    transaction.Rollback();
+                    ResultID = 1,
+                    ResultMessage = "Permission Saved"
+                };
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
 
-                    return new ResultObj
-                    {
-                        ResultID = -1,
-                        ResultMessage = ex.Message
-                    };
-                }
+                return new ResultObj
+                {
+                    ResultID = -1,
+                    ResultMessage = ex.Message
+                };
             }
         }
+
+        //public ResultObj ADDPermission(List<PermittedController> permissionList,int userId)
+        //{
+        //    ResultObj obj = new ResultObj();
+
+
+
+
+        //    using (var transaction = context.Database.BeginTransaction())
+        //    {
+        //        try
+        //        {
+
+
+        //            // Delete old permissions
+        //            context.Database.ExecuteSqlInterpolated($"DELETE FROM PermittedProjAction WHERE UserId = {userId}");
+        //            context.Database.ExecuteSqlInterpolated($"DELETE FROM PermittedControllers WHERE UserId = {userId}");
+
+        //            // Fix tracking issue
+        //            foreach (var item in permissionList)
+        //            {
+        //                item.User = null;      // prevent EF tracking conflict
+        //                item.UserId = userId;  // ensure correct FK
+
+        //                if (item.ProjController != null)
+        //                {
+        //                    context.Attach(item.ProjController);
+        //                    //context.Attach(item.User);
+        //                }
+
+        //                context.PermittedControllers.Add(item);
+        //            }
+
+        //            // Add all permissions at once
+        //            //context.PermittedControllers.AddRange(permissionList);
+
+        //            context.SaveChanges();
+        //            transaction.Commit();
+
+        //            return new ResultObj
+        //            {
+        //                ResultID = 1,
+        //                ResultMessage = "Permission Saved"
+        //            };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            transaction.Rollback();
+
+        //            return new ResultObj
+        //            {
+        //                ResultID = -1,
+        //                ResultMessage = ex.Message
+        //            };
+        //        }
+        //    }
+        //}
         public ResultObj UpdateCompany(Company model)
         {
             ResultObj res = new ResultObj();
