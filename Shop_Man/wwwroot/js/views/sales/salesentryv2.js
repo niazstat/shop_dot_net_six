@@ -191,7 +191,9 @@
     //BindProduct(data);
     //$("#spInfo").html('');
     CUST_CAT = data.customerCategorys;
-    CUST_LIST = data.customers;
+        // CUST_LIST = data.customers;
+
+        CUST_LIST = data.customerModels;
     SUB_CUST_CAT = data.customerSubCategorys;
     PROD_NAMES = data.prodNames;
     BindCustCategoryName(data.customerCategorys);
@@ -1356,8 +1358,14 @@ $("#txtCategory").bind('input', function () {
     //}
     var _CustList = [];
     if (_catID != undefined) {
+        //_CustList = CUST_LIST.filter(function (_obj) {
+        //    return _obj.customerSubCategory.customerCategoryID == _catID;
+        //});
+
+        // work Done by Niaz  on 10-June-2026
+
         _CustList = CUST_LIST.filter(function (_obj) {
-            return _obj.customerSubCategory.customerCategoryID == _catID;
+            return _obj.categoryID == _catID;
         });
 
         BindCustName(_CustList);
@@ -1377,8 +1385,13 @@ $("#txtSubCategory").bind('input', function () {
     var _subCatID = GetDataID(_val, "#dltxtSubCategory");
 
     if (_subCatID != undefined) {
+
+        // Work DOne 
+        SubCategoryID
         var _CustList = CUST_LIST.filter(function (_obj) {
-            return _obj.customerSubCategoryID == _subCatID;
+            // return _obj.customerSubCategoryID == _subCatID;
+
+            return _obj.subCategoryID == _subCatID;
         });
 
         BindCustName(_CustList);
@@ -1607,7 +1620,12 @@ function BindCustName(_custList) {
 
     $.each(_custList, function (i, prodData) {
 
+        //$("#dltxtCustName").append(' <option data-id="' + prodData.customerID + '" data-custID="' + prodData.customerID + '"   value="' + prodData.shopName + '-' + prodData.customerNo + '"  custname="' + prodData.name + ', ' + prodData.address1 + '"/>');
+
+
+
         $("#dltxtCustName").append(' <option data-id="' + prodData.customerID + '" data-custID="' + prodData.customerID + '"   value="' + prodData.shopName + '-' + prodData.customerNo + '"  custname="' + prodData.name + ', ' + prodData.address1 + '"/>');
+
 
 
     });

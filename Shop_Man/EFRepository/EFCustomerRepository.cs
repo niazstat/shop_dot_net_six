@@ -28,6 +28,11 @@ namespace Shop_Man.EFRepository
         
 
         public List<Customer> Customers => context.Customer.Include(a=>a.CustomerSubCategory).Include(a=>a.District)?.ToList();
+        public IQueryable<Customer> CustomersQuerable => context.Customer
+    .Include(c => c.CustomerSubCategory)
+    .Include(c => c.District);
+
+
 
         public List<SP_CustomerBalance_ALL> CustomerBalanceALL()
         {

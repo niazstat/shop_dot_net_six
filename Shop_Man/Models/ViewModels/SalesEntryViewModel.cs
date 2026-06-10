@@ -15,9 +15,12 @@ namespace Shop_Man.Models.ViewModels
             CustomerSubCategorys = new List<CustomerSubCategory>();
             ProdNames = new List<ProdName>();
             Articles = new List<Article>();
+            CustomerModels = new List<CustomerModel>();
 
         }
         public List<Customer> Customers { get; set; }
+
+        public List<CustomerModel> CustomerModels { get; set; }
 
         public List<CustomerCategory> CustomerCategorys { get; set; }
         public List<CustomerSubCategory> CustomerSubCategorys { get; set; }

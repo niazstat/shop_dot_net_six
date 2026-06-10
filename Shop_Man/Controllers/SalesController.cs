@@ -53,7 +53,22 @@ namespace Shop_Man.Controllers
             SalesEntryViewModel obj = new SalesEntryViewModel();
             obj.CustomerCategorys = customerCategoryRepo.CustomerCategorys.ToList();
             obj.CustomerSubCategorys = customerSubCategoryRepo.CustomerSubCategorys.ToList();
-            obj.Customers = customerRepository.Customers.ToList();
+            //obj.Customers = customerRepository.Customers.ToList();
+
+            obj.CustomerModels =  customerRepository.CustomersQuerable
+      .Select(c => new CustomerModel
+      {
+          CustomerID = c.CustomerID,
+          CustomerNo = c.CustomerNo,
+           Name = c.Name,
+            Address1= c.Address1,
+          ShopName = c.ShopName,
+          SubCategoryID = c.CustomerSubCategoryID,
+          SUbCategoryName = c.CustomerSubCategory.CustomerSubCategoryName,
+          CategoryID = c.CustomerSubCategory.CustomerCategoryID,
+          CategoryName = c.CustomerSubCategory.CustomerCategory.CustomerCategoryName
+      })
+      .ToList();
             obj.PaymentMediums = paymentMediumRepository.PaymentMediums.ToList();
             obj.ProdNames = productsRepositor.ProdNames.ToList();
             return Json(obj);

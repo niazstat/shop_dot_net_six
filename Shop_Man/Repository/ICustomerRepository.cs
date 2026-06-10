@@ -47,5 +47,7 @@ namespace Shop_Man.Repository
         List<SP_View_Customer_Year_Close> Get_SP_View_Customer_Year_Close( int customerID,  int yearName, string yearcloseDate);
         List<SP_View_ALL_Customer_Year_Close> Get_SP_View_ALL_Customer_Year_Close(string yearcloseDate);
 
+        public IQueryable<Customer> CustomersQuerable { get; }
+
     }
 }
