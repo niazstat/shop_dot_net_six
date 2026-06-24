@@ -181,6 +181,7 @@ namespace Shop_Man.EFRepository
             return context.View_Item_Close
                 .FromSqlInterpolated($"SELECT * FROM [View_Item_Close] WHERE ToDate = {toDate}")
                 .AsNoTracking()
+                   .AsEnumerable()
                 .ToList();
         }
 
@@ -189,6 +190,7 @@ namespace Shop_Man.EFRepository
             return context.View_Item_Close
                 .FromSqlInterpolated($"EXEC SP_Process_View_Items_Year_Close {toDate}")
                 .AsNoTracking()
+                   .AsEnumerable()
                 .ToList();
         }
 
@@ -234,6 +236,7 @@ namespace Shop_Man.EFRepository
                 var resID = context.SP_Process_Customer_Year_Close
                     .FromSqlInterpolated($"EXEC SP_Process_Items_Year_Close {userID}, {compID}, {DateTime.Today}, {toDate}")
                     .AsNoTracking()
+                       .AsEnumerable()
                     .FirstOrDefault();
 
                 res.ResultID = 1;
@@ -281,6 +284,7 @@ namespace Shop_Man.EFRepository
                 var resID = context.SP_Process_Customer_Year_Close
                     .FromSqlInterpolated($"EXEC SP_Delete_Process_Items_Year_Close {userID}, {compID}, {DateTime.Today}, {toDate}")
                     .AsNoTracking()
+                       .AsEnumerable()
                     .FirstOrDefault();
 
                 res.ResultID = 1;
