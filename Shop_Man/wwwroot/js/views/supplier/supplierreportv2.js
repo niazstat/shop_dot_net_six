@@ -90,6 +90,8 @@
     function BindCustName(_custList) {
         $("#selCust option").remove();
 
+        $("#selCust").append(' <option data-id="0" data-custID="0" value="0" > </option>');
+
     $.each(_custList, function (i, prodData) {
 
         $("#selCust").append(' <option data-id="' + prodData.supplierId + '" data-custID="' + prodData.supplierId + '" value="' + prodData.supplierId + '" > ' + prodData.name + '</option>');
@@ -127,24 +129,29 @@
     var _toDate = $("#txtDate2").val();
     var _custIDs ='';
 
-    console.log(_custIDs);
-
-    if ($("#chkCashSales").is(':checked')) {
-        // alert(_custIDs);
-        _custIDs = '0';
-                           // alert(_custIDs);
-                        }
-    else {
-        _custIDs = $("#selCust").val();
-    console.log(_custIDs);
-                        }
-    if (_custIDs == '') {
-        $("#spInfo").html('<strong style="color:red">Please selet a Customer</strong>');
-    e.preventDefault();
-    return;
-                        }
+    
+        if (_custIDs == null || _custIDs == '') {
+            _custIDs = '0';
+        }
 
 
+
+        if ($("#chkCashSales").is(':checked')) {
+            // alert(_custIDs);
+            _custIDs = '0';
+            // alert(_custIDs);
+        }
+        else {
+            _custIDs = $("#selCust").val();
+            console.log(_custIDs);
+        }
+        if (_custIDs == null || _custIDs == '') {
+            $("#spInfo").html('<strong style="color:red">Please selet a Customer</strong>');
+            e.preventDefault();
+            return;
+        }
+
+        console.log(_custIDs);
     var type = $(this).attr('data-type');
 
     $(this).attr('href', WEB_URL + 'Supplier/SupplierrBalance?fromDate=' + _fromDate + "&&toDate=" + _toDate + "&&type=" + type + "&&customerIDs=" + _custIDs);

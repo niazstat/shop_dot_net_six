@@ -33,6 +33,7 @@ namespace Shop_Man.EFRepository
             return context.SP_SupplierBalance_Datewise
             .FromSqlInterpolated($"EXEC SP_SupplierBalance_Datewise {suppId}, {formDate}, {toDate}")
             .AsNoTracking()
+                .AsEnumerable()
             .OrderBy(a => a.dDate)
             .ThenBy(b => b.ID)
             .ToList();

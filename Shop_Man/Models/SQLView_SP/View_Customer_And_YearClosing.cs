@@ -12,16 +12,16 @@ namespace Shop_Man.Models.SQLView_SP
 
       
         public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
         public DateTime YearCloseDate { get; set; }
 
         public string YearCloseDateFormated { get { return String.Format("{0:dd-MMM-yyyy}", YearCloseDate); } }
         public int YearName { get; set; }
         public int CustomerNo { get; set; }
-        public string CustomerSubCategoryName { get; set; }
-        public string Name { get; set; }
-        public string ShopName { get; set; }
-        public string Address { get; set; }
+        public string? CustomerSubCategoryName { get; set; }
+        public string? Name { get; set; }
+        public string? ShopName { get; set; }
+        public string? Address { get; set; }
 
         public decimal OpeningBalance { get; set; }
 
