@@ -9,10 +9,10 @@ namespace Shop_Man.Models.SQLView_SP
     {
         public int ID { get; set; }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
-        public string AutoNo { get; set; }
-        public string Note { get; set; }
+        public string? AutoNo { get; set; }
+        public string? Note { get; set; }
         public DateTime dDate { get; set; }
 
         public string dDateFormated { get { return String.Format("{0:dd-MMM-yyyy}", dDate); } }
